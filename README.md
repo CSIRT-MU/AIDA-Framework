@@ -20,10 +20,28 @@ TODO
 
 ## How to reference
 
+### Bibtex
+
 TODO
+
+### Plain text
+
+TODO
+
+### Related publications
+
+[AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts]()
+
+[Towards Predicting Cyber Attacks Using Information Exchange and Data Mining](http://dx.doi.org/10.1109/IWCMC.2018.8450512)
+
+[On the Sequential Pattern and Rule Mining in the Analysis of Cyber Security Alerts](http://dx.doi.org/10.1145/3098954.3098981)
+
+[Exchanging Security Events: Which And How Many Alerts Can We Aggregate?](http://dx.doi.org/10.23919/INM.2017.7987340)
+
+[A Graph-based Representation of Relations in Network Security Alert Sharing Platforms](http://dx.doi.org/10.23919/INM.2017.7987399)
 
 ## Acknowledgement
 
 The development of the framework and related research were supported by the Security Research Programme of the Czech Republic 2015 - 2020 (BV III / 1 VS) granted by the Ministry of the Interior of the Czech Republic under No. VI20162019029 The Sharing and analysis of security events in the Czech Republic.
 
-Further research was supported by ERDF ``CyberSecurity, CyberCrime and Critical Information Infrastructures Center of Excellence'' (No.CZ.02.1.01/0.0/0.0/16\_019/0000822).
+Further research was supported by ERDF "CyberSecurity, CyberCrime and Critical Information Infrastructures Center of Excellence" (No.CZ.02.1.01/0.0/0.0/16\_019/0000822).
