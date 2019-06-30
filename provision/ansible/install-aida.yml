@@ -1,0 +1,12 @@
+---
+- hosts: aida
+  become: yes
+
+  tasks:
+    - name: Install Java and Maven
+      apt:
+        name: ['openjdk-11-jdk', 'maven']
+        update_cache: yes
+        state: latest
+  roles:
+    - name: kafka

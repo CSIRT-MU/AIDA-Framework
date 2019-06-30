@@ -1,0 +1,69 @@
+---
+
+- name: Create {{ kafka_user }} group
+  group:
+    name: "{{ kafka_user }}"
+    state: present
+
+- name: Create {{ kafka_user }} user
+  user:
+    name: "{{ kafka_user }}"
+    group: "{{ kafka_user }}"
+    shell: "/usr/sbin/nologin"
+    state: present
+
+- name: Install zookeper
+  apt: 
+    name: zookeeperd
+    update_cache: yes
+    state: latest
+
+- name: Check for Kafka binary folder {{ kafka_dir }}
+  stat:
+    path: "{{ kafka_dir }}"
+  changed_when: false
+  register: kafka_binary
+- when: not kafka_binary.stat.exists
+  block:
+    - name: Download binary
+      get_url:
+        url: "{{ kafka_download_url }}"
+        dest: "{{ kafka_tgz }}"
+        checksum: "{{ kafka_checksum }}"
+    - name: Unarchive binary
+      unarchive:
+        remote_src: yes
+        src: "{{ kafka_tgz }}"
+        dest: "/tmp/"
+        mode: "0755"
+    - name: Move binary to {{ kafka_dir }}
+      command: "mv /tmp/{{ kafka_version }} {{ kafka_dir }}"
+      args:
+          creates: "{{ kafka_dir }}"
+    - name: Set {{ kafka_user }} as owner of {{ kafka_dir }}
+      file: 
+        dest: "/opt/kafka"
+        owner: "{{ kafka_user }}"
+        group: "{{ kafka_user }}"
+        recurse: yes
+  always:
+    - name: Remove archive
+      file:
+        path: "{{ kafka_tgz }}"
+        state: absent
+
+- name: Create systemd unit file for Kafka
+  template:
+    src: kafka.systemd.j2
+    dest: /etc/systemd/system/kafka.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Create systemd unit file for Kafka topics
+  template:
+    src: kafka-topic.systemd.j2
+    dest: /etc/systemd/system/kafka-topic@.service
+    mode: 0644
+    owner: root
+    group: root

@@ -1,0 +1,15 @@
+[Unit]
+Description=Managing kafka topic: %I
+Requires=kafka.service
+After=kafka.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+User={{ kafka_user }}
+Group={{ kafka_user }}
+ExecStart=/opt/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic %i
+ExecStop=/opt/kafka/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic %i
+
+[Install]
+WantedBy=multi-user.target
