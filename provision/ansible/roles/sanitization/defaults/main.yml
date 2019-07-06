@@ -1,0 +1,5 @@
+---
+
+sanitization_user: sanitization
+sanitization_dir: /opt/sanitization
+sanitization_repository_location: "{{ services_dir }}/sanitization"

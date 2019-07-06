@@ -1,0 +1,47 @@
+---
+
+- name: Create {{ sanitization_user }} user
+  user:
+    name: "{{ sanitization_user }}"
+    shell: "/usr/sbin/nologin"
+    create_home: no
+    system: yes
+    state: present
+
+- name: Check for folder {{ sanitization_dir }}
+  stat:
+    path: "{{ sanitization_dir }}"
+  changed_when: false
+  register: install_dir
+- when: not install_dir.stat.exists
+  block:
+    - name: Package jar
+      command: mvn clean package
+      args:
+        chdir: "{{ sanitization_repository_location }}"
+    - name: Creates {{ sanitization_dir }} directory
+      file:
+        path: "{{ sanitization_dir }}"
+        state: directory
+    - name: Copy jar into {{ sanitization_dir }}
+      copy:
+        src: "{{ item }}"
+        dest: "{{ sanitization_dir }}/sanitization.jar"
+        mode: '0644'
+        remote_src: yes
+      with_fileglob:
+        - "{{ sanitization_repository_location }}/target/*jar-with-dependencies.jar"
+    - name: Set {{ sanitization_user }} as owner of {{ sanitization_dir }}
+      file: 
+        dest: "{{ sanitization_dir }}"
+        owner: "{{ sanitization_user }}"
+        group: "{{ sanitization_user }}"
+        recurse: yes
+
+- name: Create systemd unit file for Sanitization
+  template:
+    src: sanitization.service.j2
+    dest: /etc/systemd/system/sanitization.service
+    mode: 0644
+    owner: root
+    group: root

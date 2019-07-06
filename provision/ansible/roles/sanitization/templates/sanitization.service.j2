@@ -1,0 +1,15 @@
+[Unit]
+Description=Sanitize IDEA events
+Requires=kafka-topic@input.service kafka-topic@sanitized.service
+After=kafka-topic@input.service kafka-topic@sanitized.service
+
+[Service]
+Type=simple
+User={{ sanitization_user }}
+Group={{ sanitization_user }}
+ExecStart=/usr/bin/env java -jar {{ sanitization_dir }}/sanitization.jar --kafka-brokers localhost:9092 --kafka-input-topic input --kafka-output-topic sanitized
+Restart=on-failure
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

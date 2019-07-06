@@ -2,7 +2,7 @@
 - hosts: aida
   become: yes
 
-  tasks:
+  pre_tasks:
     - name: Install Java and Maven
       apt:
         name: ['openjdk-11-jdk', 'maven']
@@ -10,3 +10,4 @@
         state: latest
   roles:
     - name: kafka
+    - name: sanitization

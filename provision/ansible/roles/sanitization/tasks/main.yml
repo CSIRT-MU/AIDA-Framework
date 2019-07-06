@@ -1,0 +1,10 @@
+---
+- name: Install Sanitization service
+  include_tasks: install.yml
+  become: yes
+
+- name: Start Sanitization
+  service: 
+    name: sanitization
+    state: started
+    enabled: yes

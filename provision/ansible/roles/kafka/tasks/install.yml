@@ -1,15 +1,11 @@
 ---
 
-- name: Create {{ kafka_user }} group
-  group:
-    name: "{{ kafka_user }}"
-    state: present
-
 - name: Create {{ kafka_user }} user
   user:
     name: "{{ kafka_user }}"
-    group: "{{ kafka_user }}"
     shell: "/usr/sbin/nologin"
+    create_home: no
+    system: yes
     state: present
 
 - name: Install zookeper
@@ -54,7 +50,7 @@
 
 - name: Create systemd unit file for Kafka
   template:
-    src: kafka.systemd.j2
+    src: kafka.service.j2
     dest: /etc/systemd/system/kafka.service
     mode: 0644
     owner: root
@@ -62,8 +58,9 @@
 
 - name: Create systemd unit file for Kafka topics
   template:
-    src: kafka-topic.systemd.j2
+    src: kafka-topic.service.j2
     dest: /etc/systemd/system/kafka-topic@.service
     mode: 0644
     owner: root
     group: root
+# 
