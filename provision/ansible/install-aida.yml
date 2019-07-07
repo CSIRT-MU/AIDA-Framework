@@ -3,11 +3,12 @@
   become: yes
 
   pre_tasks:
-    - name: Install Java and Maven
+    - name: Install Java, Maven and pip3
       apt:
-        name: ['openjdk-11-jdk', 'maven']
+        name: ['openjdk-11-jdk', 'maven', 'python3-pip']
         update_cache: yes
         state: latest
   roles:
     - name: kafka
     - name: sanitization
+    - name: spark

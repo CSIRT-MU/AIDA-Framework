@@ -4,7 +4,7 @@ kafka_user: kafka
 kafka_dir: /opt/kafka
 kafka_download_url: https://archive.apache.org/dist/kafka/2.3.0/kafka_2.12-2.3.0.tgz
 kafka_checksum: sha512:A5ED591A B304A1F1 6F7FD641 83871E38 AABF814A 2C1CA86B
-                      B3D064C8 3E85A646 3D3C55F4 D707A29F C3D7994D D7BA1F79
-                      0B5A6219 C6DFFDF4 72AFD99C EE37892E
+                       B3D064C8 3E85A646 3D3C55F4 D707A29F C3D7994D D7BA1F79
+                       0B5A6219 C6DFFDF4 72AFD99C EE37892E
 kafka_version: kafka_2.12-2.3.0
 kafka_tgz: "/tmp/{{ kafka_version }}.tgz"

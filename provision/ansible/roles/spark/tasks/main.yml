@@ -1,0 +1,13 @@
+---
+
+#- name: Install sparkapp requirements - python modules
+
+- name: Install Spark service
+  include_tasks: install.yml
+  become: yes
+
+- name: Start Spark service
+  service:
+    name: spark
+    state: started
+    enabled: yes

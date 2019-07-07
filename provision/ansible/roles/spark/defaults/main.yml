@@ -1,0 +1,12 @@
+---
+
+spark_user: spark
+spark_dir: /opt/spark
+spark_home_dir: "{{ spark_dir }}/spark"
+spark_applications_dir: "{{ spark_dir }}/applications"
+spark_download_url: https://archive.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz
+spark_checksum: sha512:E8B7F9E1DEC868282CADCAD81599038A22F48FB597D44AF1B13FCC76B7DACD2A1CAF431F95E394E1227066087E3CE6C2137C4ABAF60C60076B78F959074FF2AD
+spark_version: spark-2.4.3-bin-hadoop2.7
+spark_tgz: "/tmp/{{ spark_version }}.tgz"
+spark_kafka_assembly: https://search.maven.org/classic/remotecontent?filepath=org/apache/spark/spark-streaming-kafka-0-10-assembly_2.12/2.4.3/spark-streaming-kafka-0-10-assembly_2.12-2.4.3.jar
+spark_kafka_assembly_checksum: sha512:AACE2B32F4D0266483CC91BEB99CEBFFF381799A4B7B7DBB743C5924E9C76D22981DF79C2B8231DF4B893683455E5921595D0E5660E9783529FB7B00DE0790A8

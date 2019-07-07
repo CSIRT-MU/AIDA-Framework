@@ -1,0 +1,51 @@
+---
+
+- name: Create {{ spark_user }} user
+  user:
+    name: "{{ spark_user }}"
+    generate_ssh_key: yes
+    create_home: yes
+    system: yes
+    state: present
+
+- name: Get Spark's public ssh key
+  slurp:
+    src: "/home/{{ spark_user }}/.ssh/id_rsa.pub"
+  register: spark_ssh_key
+
+- name: Add Spark's public ssh key to authorized_keys
+  authorized_key:
+    user: "{{ spark_user }}"
+    key: "{{ spark_ssh_key['content'] | b64decode }}"
+
+- name: Create diretory {{ spark_dir }}
+  file:
+    path: "{{ spark_dir }}"
+    state: directory
+    group: "{{ spark_user }}"
+    owner: "{{ spark_user }}"
+
+- name: Check for Spark installation {{ spark_home_dir }}
+  stat:
+    path: "{{ spark_home_dir }}"
+  changed_when: false
+  register: home_dir
+- when: not home_dir.stat.exists
+  block:
+    - name: Download Spark
+      include_tasks: download.yml
+
+- name: Prepare directory for Spark applications
+  file:
+    path: "{{ spark_applications_dir }}"
+    state: directory
+    group: "{{ spark_user }}"
+    owner: "{{ spark_user }}"
+
+- name: Create systemd unit file for Spark localhost cluster
+  template:
+    src: spark.service.j2
+    dest: /etc/systemd/system/spark.service
+    mode: 0644
+    owner: root
+    group: root

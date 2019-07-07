@@ -1,0 +1,33 @@
+---
+
+- name: Download binary
+  get_url:
+    url: "{{ spark_download_url }}"
+    dest: "{{ spark_tgz }}"
+    checksum: "{{ spark_checksum }}"
+- name: Unarchive binary
+  unarchive:
+    remote_src: yes
+    src: "{{ spark_tgz }}"
+    dest: "/tmp/"
+    mode: "0755"
+- name: Move binary to {{ spark_home_dir }}
+  command: "mv /tmp/{{ spark_version }} {{ spark_home_dir }}"
+  args:
+    creates: "{{ spark_home_dir }}"
+- name: Download spark-streaming-kafka-assembly
+  get_url:
+    url: "{{ spark_kafka_assembly }}"
+    dest: "{{ spark_home_dir }}/jars/"
+    mode: "0755"
+    checksum: "{{ spark_kafka_assembly_checksum }}"
+- name: Set {{ spark_user }} as owner of {{ spark_home_dir }}
+  file:
+    dest: "{{ spark_home_dir }}"
+    owner: "{{ spark_user }}"
+    group: "{{ spark_user }}"
+    recurse: yes
+- name: Remove binary archive
+  file:
+    path: "{{ spark_tgz }}"
+    state: absent

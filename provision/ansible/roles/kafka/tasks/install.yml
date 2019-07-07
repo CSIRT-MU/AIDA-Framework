@@ -38,7 +38,7 @@
           creates: "{{ kafka_dir }}"
     - name: Set {{ kafka_user }} as owner of {{ kafka_dir }}
       file: 
-        dest: "/opt/kafka"
+        dest: "{{ kafka_dir }}"
         owner: "{{ kafka_user }}"
         group: "{{ kafka_user }}"
         recurse: yes

@@ -1,0 +1,21 @@
+[Unit]
+Description=Apache Spark standalone cluster running just on localhost.
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=forking
+User={{ spark_user }}
+Group={{ spark_user }}
+ExecStart=/bin/bash {{ spark_home_dir }}/sbin/start-all.sh
+ExecStop=/bin/bash {{ spark_home_dir }}/sbin/stop-all.sh
+TimeoutSec=30  # time for service to start or stop before marking it as failed
+Restart=on-failure
+
+# Try to start service 5 times at 30 seconds intervals
+RestartSec=30
+StartLimitInterval=300
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
