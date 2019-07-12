@@ -5,9 +5,9 @@ After=network-online.target kafka-topic@input.service
 
 [Service]
 Type=simple
-User={{ aida_input_user }}
-Group={{ aida_input_user }}
-ExecStart=/bin/bash nc -k -l {{ aida_input_port }} | {{ kafka_dir }}/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic input
+User={{ kafka_user }}
+Group={{ kafka_user }}
+ExecStart=/bin/sh -c "nc -k -l {{ aida_input_port }} | {{ kafka_dir }}/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic input"
 Restart=on-failure
 SuccessExitStatus=130
 
