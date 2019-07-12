@@ -19,6 +19,7 @@ TODO
 For a quick start, go to the provision directory and run Vagrant:
 
 `cd provision`
+
 `vagrant up`
 
 AIDA framework will start in few minutes. Then, send your data to the framework using the following command (you need to have netcat installed):
