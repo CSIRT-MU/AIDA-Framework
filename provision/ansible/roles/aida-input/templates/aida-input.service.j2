@@ -1,0 +1,15 @@
+[Unit]
+Description=AIDA input service - listean on {{ aida_input_port }} port for IDEA messages and feeds them into AIDA framework
+Requires=kafka-topic@input.service
+After=network-online.target kafka-topic@input.service
+
+[Service]
+Type=simple
+User={{ aida_input_user }}
+Group={{ aida_input_user }}
+ExecStart=/bin/bash nc -k -l {{ aida_input_port }} | {{ kafka_dir }}/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic input
+Restart=on-failure
+SuccessExitStatus=130
+
+[Install]
+WantedBy=multi-user.target

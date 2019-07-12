@@ -1,0 +1,23 @@
+---
+
+- name: Create {{ aida_input_user }} user
+  user:
+    name: "{{ aida_input_user }}"
+    shell: "/usr/sbin/nologin"
+    create_home: no
+    system: yes
+    state: present
+
+- name: Create systemd unit file for aida-input service
+  template:
+    src: aida-input.service.j2
+    dest: /etc/systemd/system/aida-input.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Start aida-input service
+  service:
+    name: aida-input
+    state: started
+    enabled: yes
