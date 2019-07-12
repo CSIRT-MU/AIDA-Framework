@@ -18,6 +18,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.network :private_network, type: "dhcp"
 
+  # Some version of vagrant do not install pip while using Ansible provisioning
+  config.vm.provision :shell,
+    inline: "apt-get -y install python-pip"
+
   config.vm.provision :ansible_local do |ansible|
     ansible.compatibility_mode = "2.0"
     ansible.install_mode = "pip"
