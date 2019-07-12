@@ -1,0 +1,39 @@
+---
+
+- name: Create directory for Spark applications {{ spark_applications_dir }}
+  file:
+    path: "{{ spark_applications_dir }}"
+    state: directory
+    group: "{{ spark_user }}"
+    owner: "{{ spark_user }}"
+
+- name: Copy commons into {{ spark_modules_dir }} directory
+  command: "cp -r {{ commons_dir }} {{ spark_modules_dir }}"
+  args:
+    creates: "{{ spark_modules_dir }}"
+
+- name: Set {{ spark_user }} as owner of {{ spark_modules_dir }}
+  file:
+    dest: "{{ spark_modules_dir}}"
+    owner: "{{ spark_user }}"
+    group: "{{ spark_user }}"
+    recurse: yes
+
+- name: Install Python modules dependencies
+  pip:
+    requirements: "{{ spark_modules_dir }}/requirements.txt"
+    executable: pip3
+
+- name: Archive modules from {{ spark_modules_dir }} into {{ spark_modules_zip }}
+  archive:
+    path: "{{ spark_modules_dir }}/*"
+    dest: "{{ spark_modules_zip }}"
+    format: zip
+
+- name: Create script for running Spark applications
+  template:
+    src: run-application.sh.j2
+    dest: "{{ spark_run_app_script }}"
+    mode: 0744
+    owner: "{{ spark_user }}"
+    group: "{{ spark_user }}"

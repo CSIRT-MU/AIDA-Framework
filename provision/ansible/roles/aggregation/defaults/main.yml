@@ -1,0 +1,4 @@
+---
+
+aggregation_repo_dir: "{{ services_dir }}/aggregation"
+aggregation_install_dir: "{{ spark_applications_dir }}/aggregation"

@@ -1,0 +1,8 @@
+spark.pyspark.python=python3
+spark.submit.pyFiles={{ spark_modules_zip }}
+
+# TODO enable (have to also create target dir because spark does not create it by itself
+spark.eventLog.enabled=false
+spark.executor.logs.rolling.maxRetainedFiles=3
+spark.executor.logs.rolling.maxSize=1G
+spark.executor.logs.rolling.strategy=size

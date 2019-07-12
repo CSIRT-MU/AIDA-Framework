@@ -5,10 +5,13 @@
   pre_tasks:
     - name: Install Java, Maven and pip3
       apt:
-        name: ['openjdk-11-jdk', 'maven', 'python3-pip']
+        name: ['openjdk-8-jdk', 'maven', 'python3-pip']
         update_cache: yes
         state: latest
+    - name: Set Java 8 as default
+      alternatives:
+        name: java
+        path: /usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/bin/java
   roles:
-    - name: kafka
     - name: sanitization
-    - name: spark
+    - name: aggregation

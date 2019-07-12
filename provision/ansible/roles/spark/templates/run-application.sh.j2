@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ -z "$1" ]
+then
+    echo "You must specify the application with arguments"
+    exit 1;
+fi
+
+echo "[info] Running application $@..."
+{{ spark_home_dir }}/bin/spark-submit $@

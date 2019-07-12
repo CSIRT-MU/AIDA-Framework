@@ -2,3 +2,4 @@
 
 repository_root: "{{ inventory_dir }}/../.."
 services_dir: "{{ repository_root }}/services"
+commons_dir: "{{ services_dir}}/commons"

@@ -1,0 +1,32 @@
+---
+
+- name: Put Aggregation Spark app into {{ aggregation_install_dir }}
+  command: "cp -r {{ aggregation_repo_dir }} {{ aggregation_install_dir }}"
+  args:
+    creates: "{{ aggregation_install_dir }}"
+
+- name: Set {{ spark_user }} as owner of {{ aggregation_install_dir }}
+  file:
+    dest: "{{ aggregation_install_dir }}"
+    owner: "{{ spark_user }}"
+    group: "{{ spark_user }}"
+    recurse: yes
+
+- name: Install Python dependencies
+  pip:
+    requirements: "{{ aggregation_install_dir }}/requirements.txt"
+    executable: pip3
+
+- name: Create systemd unit file for Aggregation service
+  template:
+    src: aggregation.service.j2
+    dest: /etc/systemd/system/aggregation.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Start Aggregation
+  service:
+    name: aggregation
+    state: started
+    enabled: yes
