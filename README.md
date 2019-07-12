@@ -14,9 +14,18 @@ TODO
 
 TODO
 
-## Getting stated
+## Getting started
 
-TODO
+For a quick start, go to the provision directory and run Vagrant:
+
+`cd provision`
+`vagrant up`
+
+AIDA framework will start in few minutes. Then, send your data to the framework using the following command (you need to have netcat installed):
+
+`nc localhost 4164 < path_to_file_with_your_data`
+
+If you do not have your own data, we recommend trying AIDA framework out with our [dataset](http://dx.doi.org/10.17632/p6tym3fghz.1). Download and unzip the main file in the datase (dataset.idea.zip) and use it in the command above.
 
 ## How to reference
 
