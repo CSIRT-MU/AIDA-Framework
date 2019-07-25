@@ -11,7 +11,7 @@
   file:
     path: /var/aida/rules/
     state: directory
-    mode: 0666
+    mode: 0755
   when: stat_dir.stat.exists == False
 
 - name: Check if database exists
