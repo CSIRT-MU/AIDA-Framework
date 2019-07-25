@@ -16,3 +16,4 @@
     - name: aida-input
     - name: sanitization
     - name: aggregation
+    - name: database
