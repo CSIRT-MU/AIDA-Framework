@@ -4,28 +4,28 @@
 
 - name: Check if directory exists
   stat:
-    path: /var/iabu/rules/
+    path: /var/aida/rules/
   register: stat_dir
 
 - name: Create directory
   file:
-    path: /var/iabu/rules/
+    path: /var/aida/rules/
     state: directory
     mode: 0666
   when: stat_dir.stat.exists == False
 
 - name: Check if database exists
   stat:
-    path: /var/iabu/rules/rule.db
+    path: /var/aida/rules/rule.db
   register: stat_result
 
 - name: Create empty datbase
-  command: sqlite3 /var/iabu/rules/rule.db 'CREATE TABLE rule (id INTEGER PRIMARY KEY, inserted DATETIME DEFAULT CURRENT_TIMESTAMP, rule TEXT NOT NULL, support INTEGER, number_of_sequences INTEGER, confidence REAL, active INTEGER DEFAULT 0, comment TEXT, database TEXT, algorithm TEXT )'
+  command: sqlite3 /var/aida/rules/rule.db 'CREATE TABLE rule (id INTEGER PRIMARY KEY, inserted DATETIME DEFAULT CURRENT_TIMESTAMP, rule TEXT NOT NULL, support INTEGER, number_of_sequences INTEGER, confidence REAL, active INTEGER DEFAULT 0, comment TEXT, database TEXT, algorithm TEXT )'
   when: stat_result.stat.exists == False
   become: yes
 
 - name: Set permissions
   file:
-    path: /var/iabu/rules/rule.db
+    path: /var/aida/rules/rule.db
     mode: 0666
 
