@@ -1,2 +1,4 @@
 ---
-# defaults file for database
+
+database_dir: /var/aida/rules/
+database_path: /var/aida/rules/rule.db
