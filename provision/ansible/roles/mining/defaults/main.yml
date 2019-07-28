@@ -1,0 +1,5 @@
+---
+
+mining_user: mining
+mining_dir: /opt/mining
+mining_repository_location: "{{ services_dir }}/mining"

@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
   config.vm.network :private_network, type: "dhcp"
   config.vm.network :forwarded_port, guest: 4164, host: 4164
 
-  # Some version of vagrant do not install pip while using Ansible provisioning
+  # Sometimes Vagrant does not install pip while using Ansible provisioning
   config.vm.provision :shell,
     inline: "apt-get update && apt-get -y install python-pip"
 

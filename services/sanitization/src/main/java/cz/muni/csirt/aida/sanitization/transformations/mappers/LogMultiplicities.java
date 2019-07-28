@@ -1,12 +1,13 @@
 package cz.muni.csirt.aida.sanitization.transformations.mappers;
 
-import cz.muni.csirt.aida.sanitization.idea.Idea;
-import cz.muni.csirt.aida.sanitization.idea.Source;
-import cz.muni.csirt.aida.sanitization.idea.Target;
 
 import org.apache.kafka.streams.kstream.ValueMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import cz.muni.csirt.aida.idea.Idea;
+import cz.muni.csirt.aida.idea.Source;
+import cz.muni.csirt.aida.idea.Target;
 
 public class LogMultiplicities implements ValueMapper<Idea, Idea> {
 

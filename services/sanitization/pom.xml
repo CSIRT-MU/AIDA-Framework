@@ -11,6 +11,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>cz.muni.csirt.aida</groupId>
+            <artifactId>commons-idea</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
         <!--Default logging configuration-->
         <dependency>
             <groupId>org.slf4j</groupId>

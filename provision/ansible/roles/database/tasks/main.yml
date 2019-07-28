@@ -6,7 +6,7 @@
   file:
     path: "{{ database_dir }}"
     state: directory
-    mode: 0755
+    mode: 0777
     recurse: yes
 
 - name: Check if database exists

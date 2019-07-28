@@ -2,8 +2,9 @@ package cz.muni.csirt.aida.sanitization;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import cz.muni.csirt.aida.sanitization.idea.Idea;
-import cz.muni.csirt.aida.sanitization.idea.serialization.kafka.IdeaSerde;
+
+import cz.muni.csirt.aida.idea.Idea;
+import cz.muni.csirt.aida.idea.kafka.IdeaSerde;
 import cz.muni.csirt.aida.sanitization.transformations.mappers.GetFieldsOfInterest;
 import cz.muni.csirt.aida.sanitization.transformations.mappers.RemoveCategory;
 import cz.muni.csirt.aida.sanitization.transformations.mappers.RemoveNodesWithoutName;

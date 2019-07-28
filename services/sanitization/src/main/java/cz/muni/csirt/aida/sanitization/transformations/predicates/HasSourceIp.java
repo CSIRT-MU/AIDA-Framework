@@ -1,8 +1,9 @@
 package cz.muni.csirt.aida.sanitization.transformations.predicates;
 
-import cz.muni.csirt.aida.sanitization.idea.Idea;
 
 import org.apache.kafka.streams.kstream.Predicate;
+
+import cz.muni.csirt.aida.idea.Idea;
 
 public class HasSourceIp implements Predicate<Object, Idea> {
 

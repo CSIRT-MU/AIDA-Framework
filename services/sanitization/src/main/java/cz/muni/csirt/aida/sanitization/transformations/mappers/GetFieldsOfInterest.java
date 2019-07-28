@@ -1,7 +1,8 @@
 package cz.muni.csirt.aida.sanitization.transformations.mappers;
 
-import cz.muni.csirt.aida.sanitization.idea.Idea;
 import org.apache.kafka.streams.kstream.ValueMapper;
+
+import cz.muni.csirt.aida.idea.Idea;
 
 public class GetFieldsOfInterest implements ValueMapper<Idea, Idea> {
 

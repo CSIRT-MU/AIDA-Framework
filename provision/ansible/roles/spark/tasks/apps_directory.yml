@@ -7,8 +7,8 @@
     group: "{{ spark_user }}"
     owner: "{{ spark_user }}"
 
-- name: Copy commons into {{ spark_modules_dir }} directory
-  command: "cp -r {{ commons_dir }} {{ spark_modules_dir }}"
+- name: Copy python commons into {{ spark_modules_dir }} directory
+  command: "cp -r {{ commons_python }} {{ spark_modules_dir }}"
   args:
     creates: "{{ spark_modules_dir }}"
 

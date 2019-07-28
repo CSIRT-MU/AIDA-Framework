@@ -1,0 +1,7 @@
+---
+
+- name: Install Java commons into local repository
+  command: mvn clean install
+  args:
+    chdir: "{{ item }}"
+  loop: "{{ commons_java }}"

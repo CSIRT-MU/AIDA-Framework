@@ -1,0 +1,6 @@
+---
+
+dependencies:
+  - role: commons
+  - role: kafka
+  - role: database

@@ -1,0 +1,39 @@
+---
+
+- name: Create {{ mining_user }} user
+  user:
+    name: "{{ mining_user }}"
+    shell: "/usr/sbin/nologin"
+    create_home: no
+    system: yes
+    state: present
+
+- name: Check for folder {{ mining_dir }}
+  stat:
+    path: "{{ mining_dir }}"
+  changed_when: false
+  register: install_dir
+- when: not install_dir.stat.exists
+  block:
+    - name: Package jar
+      command: mvn clean package
+      args:
+        chdir: "{{ mining_repository_location }}"
+    - name: Creates {{ mining_dir }} directory
+      file:
+        path: "{{ mining_dir }}"
+        state: directory
+    - name: Copy jar into {{ mining_dir }}
+      copy:
+        src: "{{ item }}"
+        dest: "{{ mining_dir }}/mining.jar"
+        mode: '0644'
+        remote_src: yes
+      with_fileglob:
+        - "{{ mining_repository_location }}/target/*jar-with-dependencies.jar"
+    - name: Set {{ mining_user }} as owner of {{ mining_dir }}
+      file: 
+        dest: "{{ mining_dir }}"
+        owner: "{{ mining_user }}"
+        group: "{{ mining_user }}"
+        recurse: yes

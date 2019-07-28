@@ -1,11 +1,12 @@
 package cz.muni.csirt.aida.sanitization.transformations.mappers;
 
-import cz.muni.csirt.aida.sanitization.idea.Idea;
-import cz.muni.csirt.aida.sanitization.idea.Node;
 import org.apache.kafka.streams.kstream.ValueMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import cz.muni.csirt.aida.idea.Idea;
+import cz.muni.csirt.aida.idea.Node;
 
 public class RemoveNodesWithoutName implements ValueMapper<Idea, Idea> {
 

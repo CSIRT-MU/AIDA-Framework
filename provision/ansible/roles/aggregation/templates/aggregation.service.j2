@@ -1,13 +1,13 @@
 [Unit]
 Description=AIDA Spark Streaming application - Aggregation
 Requires=kafka-topic@input.service kafka-topic@aggregated.service
-After=kafka-topic@input.service kafka-topic@aggregated.service
+After=kafka-topic@sanitized.service kafka-topic@aggregated.service
 
 [Service]
 Type=simple
 User={{ spark_user }}
 Group={{ spark_user }}
-ExecStart=/bin/bash {{ spark_run_app_script }} {{ aggregation_install_dir }}/spark_app.py --input input --output aggregated --zookeeper-in localhost:2181 --kafka-brokers-out localhost:9092
+ExecStart=/bin/bash {{ spark_run_app_script }} {{ aggregation_install_dir }}/spark_app.py --input sanitized --output aggregated --zookeeper-in localhost:2181 --kafka-brokers-out localhost:9092
 Restart=on-failure
 SuccessExitStatus=143
 

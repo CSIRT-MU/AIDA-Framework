@@ -1,0 +1,6 @@
+---
+
+commons_python: "{{ commons_dir }}/commons-python"
+commons_java:
+  - "{{ commons_dir }}/commons-idea"
+  - "{{ commons_dir }}/commons-mining"

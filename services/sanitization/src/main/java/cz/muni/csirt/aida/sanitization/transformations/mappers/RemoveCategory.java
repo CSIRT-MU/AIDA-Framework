@@ -1,10 +1,11 @@
 package cz.muni.csirt.aida.sanitization.transformations.mappers;
 
-import cz.muni.csirt.aida.sanitization.idea.Idea;
 import org.apache.kafka.streams.kstream.ValueMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import cz.muni.csirt.aida.idea.Idea;
 
 public class RemoveCategory implements ValueMapper<Idea, Idea> {
 
