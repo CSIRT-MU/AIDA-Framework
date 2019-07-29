@@ -8,7 +8,7 @@ AIDA is an analytical framework for processing intrusion detection alerts with a
 
 ## Framework features
 
-TODO
+![Schema of the AIDA Framework](/aida_schema.png "Schema of the AIDA Framework")
 
 ## Use-cases
 
