@@ -2,11 +2,11 @@
 
 A framework for the Analysis of Intrusion Detection Alerts.
 
-## About AIDA Framework
+## About the AIDA Framework
 
 AIDA is an analytical framework for processing intrusion detection alerts with a focus on alert correlation and predictive analytics. The framework contains components that filter, aggregate, and correlate the alerts, and predict future security events using the predictive rules distilled from historical records. The components are based on stream processing and use selected features of data mining (namely sequential rule mining) and complex event processing. The framework was designed to be deployed as an analytical component of an alert processing platform. Alternatively, it can be deployed locally for experimentations over datasets.
 
-## Framework Features
+## Framework features
 
 TODO
 
@@ -28,19 +28,36 @@ AIDA framework will start in few minutes. Then, send your data to the framework 
 
 If you do not have your own data, we recommend trying AIDA framework out with our [dataset](http://dx.doi.org/10.17632/p6tym3fghz.1). Download and unzip the main file in the datase (dataset.idea.zip) and use it in the command above.
 
+TODO run data mining
+
+TODO update rules
+
+TODO check outputs
+
 ## How to reference
 
-### Bibtex
-
-TODO
+Please, cite the design paper [AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts](http://dx.doi.org/10.1145/3339252.3340513).
 
 ### Plain text
 
-TODO
+Martin Husák and Jaroslav Kašpar. “AIDA Framework: Real-Time Correlation and Prediction of
+Intrusion Detection Alerts”. In: *Proceedings of the 14th International Conference on Availability, Reliability
+and Security*. 2019.
+
+### BibTex
+
+    @inproceedings{AIDAFramework,
+      author = {Martin Hus\'{a}k and Jaroslav Ka\v{s}par},
+      title = {{AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts}},
+      booktitle = {Proceedings of the 14th International Conference on Availability, Reliability and Security},
+      year = {2019}
+    }
 
 ### Related publications
 
-[AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts]()
+If you are interested in our work, you might be interested in our papers related to the topic:
+
+[Survey of Attack Projection, Prediction, and Forecasting in Cyber Security](http://dx.doi.org/10.1109/COMST.2018.2871866)
 
 [Towards Predicting Cyber Attacks Using Information Exchange and Data Mining](http://dx.doi.org/10.1109/IWCMC.2018.8450512)
 
@@ -51,6 +68,8 @@ TODO
 [A Graph-based Representation of Relations in Network Security Alert Sharing Platforms](http://dx.doi.org/10.23919/INM.2017.7987399)
 
 ## Acknowledgement
+
+AIDA Framework integrates [SPMF library](http://www.philippe-fournier-viger.com/spmf/) distributed under GPL v3 license.
 
 The development of the framework and related research were supported by the Security Research Programme of the Czech Republic 2015 - 2020 (BV III / 1 VS) granted by the Ministry of the Interior of the Czech Republic under No. VI20162019029 The Sharing and analysis of security events in the Czech Republic.
 
