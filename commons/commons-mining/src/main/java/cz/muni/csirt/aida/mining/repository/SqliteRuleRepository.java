@@ -10,11 +10,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cz.muni.csirt.aida.mining.model.KeyType;
 import cz.muni.csirt.aida.mining.model.Rule;
 import cz.muni.csirt.aida.mining.model.Rules;
 
 public class SqliteRuleRepository implements RuleRepository {
+
+    private static final Logger logger = LoggerFactory.getLogger(SqliteRuleRepository.class);
 
     private static final int QUERY_TIMEOUT = 20;
 
@@ -52,6 +57,8 @@ public class SqliteRuleRepository implements RuleRepository {
         final String sql = "INSERT INTO rule (rule, support, number_of_sequences, confidence, database, algorithm) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
+        logger.info("Going to save {} rules into database '{}'", rules.size(), sqliteUrl);
+
         try (Connection connection = DriverManager.getConnection(sqliteUrl)) {
 
             for (Rule rule : rules) {
@@ -64,12 +71,15 @@ public class SqliteRuleRepository implements RuleRepository {
                     statement.setString(5, keyType.toString());
                     statement.setString(6, algorithm);
                     statement.executeUpdate();
+                    logger.debug("Rule has been successfully saved into database '{}'", Rules.toSpmf(rule));
                 }
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        logger.info("All rules has been successfully saved into database");
 
     }
 }

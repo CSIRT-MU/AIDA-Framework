@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
@@ -18,6 +21,8 @@ import cz.muni.csirt.aida.mining.spmf.IdeaSequenceDatabase;
 import cz.muni.csirt.aida.mining.spmf.SequenceDatabases;
 
 public class Mining {
+
+	private static final Logger logger = LoggerFactory.getLogger(Mining.class);
 
 	@Parameter(names = {"--kafka-brokers"}, description = "List of Kafka bootstrap servers separated by comma")
 	private String kafkaBrokers = "127.0.0.1:9092";
@@ -34,6 +39,14 @@ public class Mining {
 			description = "SQLite URL from which will be rules fetched (example 'jdbc:sqlite:/var/aida/rules/rule.db')",
 			required = true)
 	private String sqliteUrl;
+
+	@Parameter(names = {"--min-conf"},
+			description = "Minimal confidence for mining algorithms")
+	private double minConf = 0.5;
+
+	@Parameter(names = {"--top-k"},
+			description = "The K parameter of the top-k algorithms.")
+	private int k  = 10;
 
 	@Parameter(names = {"-h", "--help"}, help = true)
 	private boolean help;
@@ -56,7 +69,6 @@ public class Mining {
 	}
 
 	public void run() {
-		// TODO: add info logs
 
 		// Create sequential database
 
@@ -65,9 +77,14 @@ public class Mining {
 
 		// Run algorithm
 
+		logger.info("Running TopSeqRules algorithm");
+
 		AlgoTopSeqRules algo = new AlgoTopSeqRules();
 		RedBlackTree<ca.pfv.spmf.algorithms.sequential_rules.topseqrules_and_tns.Rule> spmfRules =
-				algo.runAlgorithm(10, sequenceDb.getDatabase(), 0.5);
+				algo.runAlgorithm(k, sequenceDb.getDatabase(), minConf);
+
+		logger.info("TopSeqRules algorithm discovered {} rules", spmfRules.size());
+
 
 		// Save results into db
 

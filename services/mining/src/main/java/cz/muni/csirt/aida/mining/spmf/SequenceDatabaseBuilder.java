@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ca.pfv.spmf.input.sequence_database_array_integers.Sequence;
 import ca.pfv.spmf.input.sequence_database_array_integers.SequenceDatabase;
 import cz.muni.csirt.aida.idea.Idea;
@@ -12,6 +15,8 @@ import cz.muni.csirt.aida.mining.model.Item;
 import cz.muni.csirt.aida.mining.model.KeyType;
 
 class SequenceDatabaseBuilder implements IdeaDatabaseBuilder<IdeaSequenceDatabase> {
+
+	private static final Logger logger = LoggerFactory.getLogger(SequenceDatabaseBuilder.class);
 
 	private Map<Object, Sequence> sequences = new HashMap<>();
 	private KeyType keyType;
@@ -30,6 +35,8 @@ class SequenceDatabaseBuilder implements IdeaDatabaseBuilder<IdeaSequenceDatabas
 
 	@Override
 	public IdeaSequenceDatabase build() {
+		logger.info("Building sequence database with KeyType {} and {} sequences and {} of unique items",
+				keyType, sequences.size(), itemMapping.size());
 		SequenceDatabase database = new SequenceDatabase();
 		sequences.values().forEach(database::addSequence);
 

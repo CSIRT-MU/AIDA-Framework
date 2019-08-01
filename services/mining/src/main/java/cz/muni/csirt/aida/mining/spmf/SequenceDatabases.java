@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cz.muni.csirt.aida.idea.Idea;
+import cz.muni.csirt.aida.idea.aida.AidaUtils;
 import cz.muni.csirt.aida.mining.kafka.ConsumeAllRebalanceListener;
 import cz.muni.csirt.aida.mining.model.KeyType;
 
@@ -40,12 +41,17 @@ public class SequenceDatabases {
 		while (!consumeAllRebalanceListener.isAllRead()) {
 			ConsumerRecords<String, Idea> records = consumer.poll(Duration.ofMillis(100));
 			for (ConsumerRecord<String, Idea> record : records) {
+
 				try {
-					// TODO filter duplicates and so on
-					databaseBuilder.addEvent(record.value());
+					Idea idea = record.value();
+					if (AidaUtils.isDuplicate(idea) || AidaUtils.isContinuing(idea)) {
+						continue;
+					}
+					databaseBuilder.addEvent(idea);
 				} catch (Exception e) {
 					logger.error("Event cannot be added into database", e);
 				}
+
 			}
 		}
 

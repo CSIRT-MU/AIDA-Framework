@@ -9,6 +9,7 @@ import cz.muni.csirt.aida.sanitization.transformations.mappers.GetFieldsOfIntere
 import cz.muni.csirt.aida.sanitization.transformations.mappers.RemoveCategory;
 import cz.muni.csirt.aida.sanitization.transformations.mappers.RemoveNodesWithoutName;
 import cz.muni.csirt.aida.sanitization.transformations.mappers.RemoveWardenFilerNodes;
+import cz.muni.csirt.aida.sanitization.transformations.predicates.HasTargetIp;
 import cz.muni.csirt.aida.sanitization.transformations.predicates.HasTargetPort;
 import cz.muni.csirt.aida.sanitization.transformations.predicates.HasCategoryWithPrefix;
 import cz.muni.csirt.aida.sanitization.transformations.predicates.HasSourceIp;
@@ -77,8 +78,9 @@ public class Sanitization {
                 .filterNot(new HasCategoryWithPrefix("Vulnerable"))
                 .filterNot(new HasCategoryWithPrefix("Abusive.Sexual"))
 
-                // Drop alerts without Source IP or Target Port
+                // Drop alerts without Source IP or Target IP or Target Port
                 .filter(new HasSourceIp())
+                .filter(new HasTargetIp())
                 .filter(new HasTargetPort())
 
                 // Remove unwanted Nodes
