@@ -1,0 +1,15 @@
+[Unit]
+Description=Detects rules in a stream of alerts from kafka topic. Send predicted and observed rules into another kafka topics.
+Requires=kafka-topic@aggregated.service kafka-topic@predictions.service kafka-topic@observations.service
+After=kafka-topic@aggregated.service kafka-topic@predictions.service kafka-topic@observations.service
+
+[Service]
+Type=simple
+User={{ matching_user }}
+Group={{ matching_user }}
+ExecStart=/usr/bin/env java -jar {{ matching_dir }}/matching.jar --kafka-brokers localhost:9092 --kafka-input-topic aggregated --kafka-predictions-topic predictions --kafka-observations-topic observations --sqlite-url jdbc:sqlite:{{ database_path }}
+Restart=on-failure
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

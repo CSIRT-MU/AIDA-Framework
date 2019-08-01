@@ -1,0 +1,47 @@
+---
+
+- name: Create {{ matching_user }} user
+  user:
+    name: "{{ matching_user }}"
+    shell: "/usr/sbin/nologin"
+    create_home: no
+    system: yes
+    state: present
+
+- name: Check for folder {{ matching_dir }}
+  stat:
+    path: "{{ matching_dir }}"
+  changed_when: false
+  register: install_dir
+- when: not install_dir.stat.exists
+  block:
+    - name: Package jar
+      command: mvn clean package
+      args:
+        chdir: "{{ matching_repository_location }}"
+    - name: Creates {{ matching_dir }} directory
+      file:
+        path: "{{ matching_dir }}"
+        state: directory
+    - name: Copy jar into {{ matching_dir }}
+      copy:
+        src: "{{ item }}"
+        dest: "{{ matching_dir }}/matching.jar"
+        mode: '0644'
+        remote_src: yes
+      with_fileglob:
+        - "{{ matching_repository_location }}/target/*jar-with-dependencies.jar"
+    - name: Set {{ matching_user }} as owner of {{ matching_dir }}
+      file: 
+        dest: "{{ matching_dir }}"
+        owner: "{{ matching_user }}"
+        group: "{{ matching_user }}"
+        recurse: yes
+
+- name: Create systemd unit file for Matching
+  template:
+    src: matching.service.j2
+    dest: /etc/systemd/system/matching.service
+    mode: 0644
+    owner: root
+    group: root
