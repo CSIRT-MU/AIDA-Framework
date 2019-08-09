@@ -1,18 +1,6 @@
 package cz.muni.csirt.aida.sanitization;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-
-import cz.muni.csirt.aida.idea.Idea;
-import cz.muni.csirt.aida.idea.kafka.IdeaSerde;
-import cz.muni.csirt.aida.sanitization.transformations.mappers.GetFieldsOfInterest;
-import cz.muni.csirt.aida.sanitization.transformations.mappers.RemoveCategory;
-import cz.muni.csirt.aida.sanitization.transformations.mappers.RemoveNodesWithoutName;
-import cz.muni.csirt.aida.sanitization.transformations.mappers.RemoveWardenFilerNodes;
-import cz.muni.csirt.aida.sanitization.transformations.predicates.HasTargetIp;
-import cz.muni.csirt.aida.sanitization.transformations.predicates.HasTargetPort;
-import cz.muni.csirt.aida.sanitization.transformations.predicates.HasCategoryWithPrefix;
-import cz.muni.csirt.aida.sanitization.transformations.predicates.HasSourceIp;
+import java.util.Properties;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
@@ -23,7 +11,20 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Properties;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+
+import cz.muni.csirt.aida.idea.Idea;
+import cz.muni.csirt.aida.idea.kafka.IdeaSerde;
+import cz.muni.csirt.aida.sanitization.transformations.mappers.GetFieldsOfInterest;
+import cz.muni.csirt.aida.sanitization.transformations.mappers.MeasuringMapper;
+import cz.muni.csirt.aida.sanitization.transformations.mappers.RemoveCategory;
+import cz.muni.csirt.aida.sanitization.transformations.mappers.RemoveNodesWithoutName;
+import cz.muni.csirt.aida.sanitization.transformations.mappers.RemoveWardenFilerNodes;
+import cz.muni.csirt.aida.sanitization.transformations.predicates.HasCategoryWithPrefix;
+import cz.muni.csirt.aida.sanitization.transformations.predicates.HasSourceIp;
+import cz.muni.csirt.aida.sanitization.transformations.predicates.HasTargetIp;
+import cz.muni.csirt.aida.sanitization.transformations.predicates.HasTargetPort;
 
 public class Sanitization {
 
@@ -71,6 +72,8 @@ public class Sanitization {
 
         KStream<String, Idea> inputStream = builder.stream(kafkaInputTopic);
         inputStream
+                .mapValues(new MeasuringMapper("Incoming events count"))
+
                 // Drop nulls
                 .filter((key, value) -> value != null)
 
@@ -92,6 +95,8 @@ public class Sanitization {
 
                 // Output just wanted fields
                 .mapValues(new GetFieldsOfInterest())
+
+                .mapValues(new MeasuringMapper("Outgoing events count"))
                 .to(kafkaOutputTopic);
 
         Topology topology = builder.build();
