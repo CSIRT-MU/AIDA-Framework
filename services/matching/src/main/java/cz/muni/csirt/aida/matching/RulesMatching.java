@@ -1,5 +1,15 @@
 package cz.muni.csirt.aida.matching;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
+
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.espertech.esper.common.client.EPCompiled;
@@ -18,21 +28,11 @@ import com.espertech.esperio.kafka.EsperIOKafkaInputSubscriberByTopicList;
 
 import cz.muni.csirt.aida.idea.Idea;
 import cz.muni.csirt.aida.idea.kafka.IdeaDeserializer;
+import cz.muni.csirt.aida.matching.esper.listeners.RuleListener;
 import cz.muni.csirt.aida.matching.esper.soda.IdeaWindows;
 import cz.muni.csirt.aida.matching.esper.soda.RuleStatements;
-import cz.muni.csirt.aida.matching.esper.listeners.RuleListener;
 import cz.muni.csirt.aida.mining.model.Rule;
 import cz.muni.csirt.aida.mining.repository.SqliteRuleRepository;
-
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
-import java.util.stream.Collectors;
 
 public class RulesMatching {
 

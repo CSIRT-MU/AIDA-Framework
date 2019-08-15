@@ -11,6 +11,7 @@ import cz.muni.csirt.aida.idea.Source;
 import cz.muni.csirt.aida.idea.Target;
 import cz.muni.csirt.aida.idea.kafka.IdeaSerializer;
 import cz.muni.csirt.aida.matching.esper.soda.annotations.StatementType;
+import cz.muni.csirt.aida.matching.jmx.Metrics;
 import cz.muni.csirt.aida.mining.model.Item;
 import cz.muni.csirt.aida.mining.model.Rule;
 import cz.muni.csirt.aida.mining.model.Rules;
@@ -25,13 +26,15 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import static java.util.Collections.singletonList;
 
 
 public class RuleListener implements UpdateListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(RuleListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(RuleListener.class);
+    private static final Metrics metrics = Metrics.getInstance();
 
     private final Producer<Long, Idea> kafkaProducer;
     private final String outputKafkaTopic;
@@ -79,6 +82,8 @@ public class RuleListener implements UpdateListener {
             switch (statementType) {
                 case PREDICTION:
                     for (Item event : rule.getConsequent()) {
+                        metrics.getMeasures().computeIfAbsent("predictions", x -> new AtomicInteger()).incrementAndGet();
+
                         Idea predicted = ideaBase(basedOn);
                         predicted.setDescription(
                                 "This event did not happen yet. It is just predicted.");
@@ -98,6 +103,8 @@ public class RuleListener implements UpdateListener {
                     break;
 
                 case OBSERVATION:
+                    metrics.getMeasures().computeIfAbsent("observations", x -> new AtomicInteger()).incrementAndGet();
+
                     Idea observation = ideaBase(basedOn);
                     observation.setDescription(
                             "This event represents a full Rule match, which means that all events in the Rule was " +

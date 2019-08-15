@@ -1,4 +1,4 @@
-package cz.muni.csirt.aida.sanitization.jmx;
+package cz.muni.csirt.aida.matching.jmx;
 
 import java.lang.management.ManagementFactory;
 import java.util.Map;
@@ -17,7 +17,6 @@ import javax.management.ObjectName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class Metrics implements MetricsMBean {
 
 	private static final int LOGGING_INTERVAL_SEC = 60;
@@ -27,7 +26,7 @@ public class Metrics implements MetricsMBean {
 
 	static {
 		try {
-			ObjectName objectName = new ObjectName("cz.muni.csirt.aida:type=basic,name=sanitization");
+			ObjectName objectName = new ObjectName("cz.muni.csirt.aida:type=basic,name=matching");
 			MBeanServer server = ManagementFactory.getPlatformMBeanServer();
 			server.registerMBean(Metrics.getInstance(), objectName);
 		} catch (MalformedObjectNameException | InstanceAlreadyExistsException | MBeanRegistrationException
