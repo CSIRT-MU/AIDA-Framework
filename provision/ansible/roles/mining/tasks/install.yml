@@ -37,3 +37,19 @@
         owner: "{{ mining_user }}"
         group: "{{ mining_user }}"
         recurse: yes
+
+- name: Create systemd unit file for Mining
+  template:
+    src: mining.service.j2
+    dest: /etc/systemd/system/mining.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Create systemd unit file for Mining timer
+  template:
+    src: mining.timer.j2
+    dest: /etc/systemd/system/mining.timer
+    mode: 0644
+    owner: root
+    group: root
