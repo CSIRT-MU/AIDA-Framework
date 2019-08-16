@@ -21,6 +21,7 @@ class SequenceDatabaseBuilder implements IdeaDatabaseBuilder<IdeaSequenceDatabas
 	private Map<Object, Sequence> sequences = new HashMap<>();
 	private KeyType keyType;
 	private Map<Item, Integer> itemMapping = new HashMap<>();
+	private int eventsSum = 0;
 
 	SequenceDatabaseBuilder(KeyType keyType) {
 		this.keyType = keyType;
@@ -31,12 +32,13 @@ class SequenceDatabaseBuilder implements IdeaDatabaseBuilder<IdeaSequenceDatabas
 		Integer item = itemMapping.computeIfAbsent(new Item(idea), k -> itemMapping.size());
 		Sequence sequence = sequences.computeIfAbsent(keyType.getKey(idea), k -> new Sequence());
 		sequence.addItemset(new Integer[] { item });
+		eventsSum++;
 	}
 
 	@Override
 	public IdeaSequenceDatabase build() {
-		logger.info("Building sequence database with KeyType {} and {} sequences and {} of unique items",
-				keyType, sequences.size(), itemMapping.size());
+		logger.info("Building sequence database with KeyType {}, {} sequences, {} items total and {} of unique items",
+				keyType, sequences.size(), eventsSum, itemMapping.size());
 		SequenceDatabase database = new SequenceDatabase();
 		sequences.values().forEach(database::addSequence);
 

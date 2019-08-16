@@ -26,6 +26,8 @@ public class SequenceDatabases {
 	public static IdeaSequenceDatabase fromKafka(String topic, String bootstrapServers, String consumerGroup,
 			KeyType keyType) {
 
+		long timeStart = System.currentTimeMillis();
+
 		Properties props = new Properties();
 		props.setProperty("bootstrap.servers", bootstrapServers);
 		props.setProperty("group.id", consumerGroup);
@@ -55,6 +57,8 @@ public class SequenceDatabases {
 			}
 		}
 
-		return databaseBuilder.build();
+		IdeaSequenceDatabase db = databaseBuilder.build();
+		logger.info("Metrics: total time building db from kafka {} s", (System.currentTimeMillis()-timeStart)/1000d);
+		return db;
 	}
 }

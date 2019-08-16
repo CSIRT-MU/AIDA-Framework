@@ -13,6 +13,7 @@ import com.beust.jcommander.Parameter;
 
 import ca.pfv.spmf.algorithms.sequential_rules.topseqrules_and_tns.AlgoTopSeqRules;
 import ca.pfv.spmf.datastructures.redblacktree.RedBlackTree;
+import ca.pfv.spmf.tools.MemoryLogger;
 import cz.muni.csirt.aida.mining.model.KeyType;
 import cz.muni.csirt.aida.mining.model.Rule;
 import cz.muni.csirt.aida.mining.repository.RuleRepository;
@@ -84,7 +85,8 @@ public class Mining {
 				algo.runAlgorithm(k, sequenceDb.getDatabase(), minConf);
 
 		logger.info("TopSeqRules algorithm discovered {} rules", spmfRules.size());
-
+		logger.info("Metrics: max memory usage {} MB", MemoryLogger.getInstance().getMaxMemory());
+		logger.info("Metrics: total time running alg {} s", algo.getTotalTime()/1000d);
 
 		// Save results into db
 

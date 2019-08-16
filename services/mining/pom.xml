@@ -53,6 +53,12 @@
             <version>3.25.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>ca.pfv</groupId>
+            <artifactId>spmf</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -66,6 +72,51 @@
                     <source>8</source>
                     <target>8</target>
                 </configuration>
+            </plugin>
+
+<!--            Download and install SPMF library-->
+
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.4.2</version>
+                <executions>
+                    <execution>
+                        <id>download-spmf-jar</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>http://www.philippe-fournier-viger.com/spmf/spmf.jar</url>
+                            <outputDirectory>${project.basedir}/libs/</outputDirectory>
+                            <outputFileName>spmf.jar</outputFileName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <executions>
+                    <execution>
+                        <id>install-spmf-jar</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <repositoryLayout>default</repositoryLayout>
+                            <groupId>ca.pfv</groupId>
+                            <artifactId>spmf</artifactId>
+                            <version>1.0.0</version>
+                            <file>${project.basedir}/libs/spmf.jar</file>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
