@@ -34,23 +34,29 @@ TODO update rules
 
 TODO check outputs
 
-## How to reference
+## How to cite
 
-Please, cite the design paper [AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts](http://dx.doi.org/10.1145/3339252.3340513).
+There is a design paper on the AIDA framework: [AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts](http://dx.doi.org/10.1145/3339252.3340513). We recommend citing the paper, bibliography entries are provided as follows.
 
 ### Plain text
 
-Martin Husák and Jaroslav Kašpar. “AIDA Framework: Real-Time Correlation and Prediction of
-Intrusion Detection Alerts”. In: *Proceedings of the 14th International Conference on Availability, Reliability
-and Security*. 2019.
+Martin Husák and Jaroslav Kašpar. 2019. "AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts". In *Proceedings of the 14th International Conference on Availability, Reliability and Security (ARES '19)*. ACM, New York, NY, USA, Article 81, 8 pages. DOI: https://doi.org/10.1145/3339252.3340513
 
 ### BibTex
 
-    @inproceedings{AIDAFramework,
-      author = {Martin Hus\'{a}k and Jaroslav Ka\v{s}par},
-      title = {{AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts}},
+    @inproceedings{AIDAframework,
+      author = {Hus\'{a}k, Martin and Ka\v{s}par, Jaroslav},
+      title = {AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts},
       booktitle = {Proceedings of the 14th International Conference on Availability, Reliability and Security},
-      year = {2019}
+      series = {ARES '19},
+      year = {2019},
+      isbn = {978-1-4503-7164-3},
+      location = {Canterbury, CA, United Kingdom},
+      pages = {81:1--81:8},
+      doi = {10.1145/3339252.3340513},
+      publisher = {ACM},
+      address = {New York, NY, USA},
+      keywords = {alert correlation, data mining, information sharing, intrusion detection, prediction}
     }
 
 ### Related publications
