@@ -15,8 +15,12 @@
   register: install_dir
 - when: not install_dir.stat.exists
   block:
+    - name: Install spmf
+      command: mvn clean
+      args:
+        chdir: "{{ mining_repository_location }}"
     - name: Package jar
-      command: mvn clean package
+      command: mvn package
       args:
         chdir: "{{ mining_repository_location }}"
     - name: Creates {{ mining_dir }} directory
