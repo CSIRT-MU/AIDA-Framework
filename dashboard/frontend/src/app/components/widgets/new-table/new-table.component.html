@@ -1,0 +1,50 @@
+<div *ngIf="!trim; else withTrim" class="widget-wrapper">
+  {{ title }}
+  <table class="table table-bordered">
+    <tr>
+      <th *ngFor="let h of header; let i = index">
+        {{ h.label }}
+        <app-column-sort (sortedAsc)="sortAsc($event)" (sortedDesc)="sortDesc($event)" [property]="i"></app-column-sort>
+      </th>
+    </tr>
+    <tr *ngFor="let row of filteredData">
+      <td *ngFor="let col of row; let i = index">
+        <span *ngIf="i < row.length - 2" [innerHTML]="col | sanitizeHtml"></span>
+        <button  mat-button *ngIf="i === row.length - 1" (click)="functionRule(row, col)">{{col}}</button>
+        <mat-icon *ngIf="i === row.length - 2 && col === 1" [ngStyle]="{'color': 'green'}">lens</mat-icon>
+        <mat-icon *ngIf="i === row.length - 2 && col === 0" [ngStyle]="{'color': 'red'}">lens</mat-icon>
+      </td>
+    </tr>
+  </table>
+  <ngb-pagination *ngIf="showPageFooter" class="d-flex justify-content-center" [(page)]="currentPage" [collectionSize]="itemsCount"
+    [maxSize]="maxPages" [boundaryLinks]="true" (pageChange)="setPage($event)"></ngb-pagination>
+</div>
+
+<!-- Kinda nasty - redo this! -->
+<ng-template #withTrim>
+  <div class="widget-wrapper">
+    <div class="card">
+      <div class="card-header">
+        {{ title }}
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <tr>
+            <th *ngFor="let h of header; let i = index">
+              {{ h.label }}
+              <app-column-sort (sortedAsc)="sortAsc($event)" (sortedDesc)="sortDesc($event)" [property]="name"></app-column-sort>
+            </th>
+          </tr>
+          <tr *ngFor="let row of filteredData">
+            <td *ngFor="let col of row">
+              <span [innerHTML]="col">
+              </span>
+            </td>
+          </tr>
+        </table>
+        <ngb-pagination *ngIf="showPageFooter" class="d-flex justify-content-center" [(page)]="currentPage"
+          [collectionSize]="itemsCount" [maxSize]="maxPages" [boundaryLinks]="true" (pageChange)="setPage($event)"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</ng-template>

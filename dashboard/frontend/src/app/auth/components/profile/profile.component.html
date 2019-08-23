@@ -1,0 +1,26 @@
+<div class="container-fluid">
+  <div class="row mt-3">
+      <div class="col"><h1>{{ userProfile['name'] }}</h1>
+          <span *ngIf='userProfile["local"]'>Local User</span>
+          <span *ngIf='!userProfile["local"]'>OIDC User</span></div>
+  </div>
+  <hr>
+  <!-- <div class="row">
+      <div class="col-sm"><strong>UČO:</strong> {{ userProfile['sub'] || "not available" }}</div>
+  </div> -->
+  <div class="row">
+      <div class="col-sm"><strong>Email:</strong> {{ userProfile['email'] || "not available"  }}</div>
+  </div>
+  <!-- <div class="row">
+      <div class="col-sm"><strong>Group names: </strong><span *ngIf="userProfile['groupNames'] === undefined">not available</span></div>
+  </div> -->
+  <div class="row">
+      <div class="col-sm">
+          <ul>
+              <li *ngFor="let group of userProfile['groupNames']">
+                  <span [ngClass]="group === 'csirt-mu' ? 'bg-csirt text-white' : ''">{{ group }}</span>
+              </li>
+          </ul>
+      </div>
+  </div>
+</div>

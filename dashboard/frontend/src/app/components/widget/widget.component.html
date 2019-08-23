@@ -1,0 +1,28 @@
+<!-- add -->
+
+<div [ngSwitch]="type">
+  <div *ngSwitchCase="'RULES'">
+    <widget-display-rules></widget-display-rules>
+  </div>
+  <div *ngSwitchCase="'OVERVIEW'">
+    <widget-overview [title]="title"></widget-overview>
+  </div>
+  <div *ngSwitchCase="'SPARK_LOG'">
+    <widget-spark-log [title]="title"></widget-spark-log>
+  </div>
+
+  <div *ngSwitchDefault>
+    <div class="widget-wrapper">
+      <div class="card">
+        <div class="card-header">
+          {{ title }} ({{ type }})
+        </div>
+
+        <div class="card-block">
+          data:
+          <pre>{{ data }}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

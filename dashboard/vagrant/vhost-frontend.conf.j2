@@ -1,0 +1,20 @@
+<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot {{ frontend_root }}/dist/
+
+  <Directory {{ frontend_root }}/dist/ >
+    AllowOverride None
+    Require all granted
+
+    # fix bug with 404 on route refresh
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+
+    RewriteRule ^ index.html [L]
+  </Directory>
+
+  ErrorLog ${APACHE_LOG_DIR}/frontend-error.log
+  CustomLog ${APACHE_LOG_DIR}/frontend-access.log combined
+
+</VirtualHost>

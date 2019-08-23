@@ -1,0 +1,68 @@
+/*
+ * Content
+ */
+
+[role="main"] {
+  padding-top: 48px; /* Space for fixed navbar */
+  /*TEMP FOR DEV */
+  margin-left: 0 !important;
+  top: 20px;
+}
+
+.hamburger {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    width: 48px;
+    height: 48px;
+    font-size: 0;
+    text-indent: -9999px;
+    cursor: pointer;
+    outline: none;
+    background: none;
+    border: 0;
+  }
+
+
+  .hamburger span {
+    display: block;
+    position: absolute;
+    top: 22px;
+    left: 9px;
+    right: 9px;
+    height: 4px;
+    background: #fff;
+  }
+
+  .hamburger span::before,
+  .hamburger span::after {
+    display: block;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: #fff;
+    content: "";
+  }
+
+  .hamburger span::before {
+    top: -10px;
+  }
+
+  .hamburger span::after {
+    bottom: -10px;
+  }
+
+  .pl-300px {
+    padding-left: 300px;
+  }
+
+  .pl-0 {
+    padding-left: 0;
+  }
+
+  .transition {
+    transition: all 0.2s ease-out;
+  }

@@ -1,0 +1,30 @@
+<nav>
+    <div *ngFor="let panelGroup of panelGroups">
+      <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        <span>{{ panelGroup.name }}</span>
+        <a class="d-flex align-items-center text-muted" href="#">
+          <span data-feather="plus-circle"></span>
+        </a>
+      </h6>
+      <ul class="nav flex-column mb-2">
+        <li class="nav-item" *ngFor="let panel of panels">
+          <ng-template [ngIf]="panel.panel_group === panelGroup.id">
+          <a *ngIf="panel.external_link === false" class="nav-link" [routerLink]="[ 'panel', panel.alias ]">
+            {{ panel.menu_name }}
+          </a>
+          <a *ngIf="panel.external_link === true" class="nav-link" href="{{panel.external_link_url}}">
+              {{ panel.menu_name }}
+            </a>
+        </ng-template>
+        </li>
+      </ul>
+    </div>
+    <hr>
+    <ul class="nav flex-column mb-2">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="[ 'profile' ]">
+          User profile
+        </a>
+      </li>
+    </ul>
+</nav>

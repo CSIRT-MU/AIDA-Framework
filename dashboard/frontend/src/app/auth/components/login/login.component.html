@@ -1,0 +1,15 @@
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-md-7 login-background d-md-block d-sm-none d-none">
+            <img src="../../../assets/images/sabu-logo.png" alt="CSIRT-MU" class="sabu-logo">
+        </div>
+        <div class="col-md-5 align-self-center pl-5 pr-5">
+            <h1 class="text-center">Dashboard</h1>
+            <hr>
+            <app-simple-login></app-simple-login>
+            <div class="col-md-4 offset-4 text-center mt-5">
+                <button (click)="oidcLogin()" class="btn btn-lg btn-primary btn-block" style="background-color: #0d3982;">MU Login</button>
+            </div>
+        </div>
+    </div>
+</div>

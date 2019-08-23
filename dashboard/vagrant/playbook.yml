@@ -1,0 +1,261 @@
+---
+- hosts: all
+  sudo: true
+  vars:
+    frontend_root: /srv/frontend
+    backend_root: /srv/backend
+    backend_app: /srv/backend/dashboard
+    virtualenv_path: /home/vagrant/django-venv
+  # roles:
+  #   - geerlingguy.repo-epel
+  #   - geerlingguy.nodejs
+  tasks:    
+    - name: Update apt cache
+      apt: update_cache=yes
+
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: Set DJANGO_DEBUG=true in Apache2 env variables
+      lineinfile:
+        dest: /etc/apache2/envvars
+        line: export DJANGO_DEBUG=true   
+
+    # - name: Install apt tools
+    #   apt:
+    #     name: apt-transport-https
+    #     state: present
+    #
+    # - name: Install Node
+    #   apt:
+    #     name: nodejs
+    #     state: present
+    #
+    # - name: Install NPM
+    #   apt:
+    #     name: npm=5.8.0
+    #     state: present
+
+    # - name: Add Nodesource Keys
+    #   become: yes
+    #   apt_key:
+    #     url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    #     state: present
+    #
+    # - name: Add Nodesource Keys
+    #   apt_key:
+    #     url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    #     state: present
+    #     validate_certs: no
+    #
+    # # Note: "xenial" is ubuntu-speak for 16.04
+    # - name: Add Nodesource Apt Sources
+    #   apt_repository:
+    #     repo: '{{ item }}'
+    #     state: present
+    #   with_items:
+    #     - 'deb https://deb.nodesource.com/node_6.x xenial main'
+    #     - 'deb-src https://deb.nodesource.com/node_6.x xenial main'
+    #
+    # - name: Install NodeJS and NPM
+    #   apt:
+    #     name: '{{ item }}'
+    #     state: latest
+    #     update_cache: yes
+    #   with_items:
+    #     - nodejs
+    #     - nodejs-legacy
+    #     - npm
+
+    # - name: Install Apache WSGI module
+    #   apt:
+    #     name: libapache2-mod-wsgi-py3
+    #     state: present
+
+    - name: Install Apache WSGI module
+      apt:
+        name: libapache2-mod-wsgi
+        state: present
+
+    - name: Install pip
+      apt:
+        name: python-pip
+        state: present
+    #
+    # - name: Install pip
+    #   apt:
+    #     name: python-pip
+    #     state: present
+
+    # - name: Add repository with Python 3.6
+    #   apt_repository:
+    #     repo: ppa:jonathonf/python-3.6
+    #     state: present
+    #
+    # - name: Install Python 3.6
+    #   apt:
+    #     name: python3.6
+    #     state: present
+
+    - name: Install virtualenv
+      pip:
+        name: virtualenv
+        version: 15.1.0
+
+    - name: Manually create the initial virtualenv
+      command: virtualenv "{{ virtualenv_path }}"
+      args:
+        creates: "{{ virtualenv_path }}"
+
+    - name: Check that the requirements.txt file exists
+      stat:
+        path: "{{ backend_root }}/requirements.txt"
+      register: requirements_exist
+
+    - name: Install dependencies
+      pip:
+        virtualenv: "{{ virtualenv_path }}"
+        requirements: "{{ backend_root }}/requirements.txt"
+      when: requirements_exist.stat.exists == True
+
+    - name: Copy .bash_rc which switches to django virtualenv by default
+      template:
+        src: ./bashrc.j2
+        dest: /home/vagrant/.bashrc
+
+    - name: Open ports 8000 and 80 on Apache
+      template:
+        src: ./apache-ports.conf.j2
+        dest: /etc/apache2/ports.conf
+
+    - name: Enable Apache WSGI module
+      apache2_module:
+        state: present
+        name: wsgi
+
+    - name: Enable Apache rewrite module
+      apache2_module:
+        state: present
+        name: rewrite
+
+    - name: Create Apache virtual host for front-end
+      template:
+        src: ./vhost-frontend.conf.j2
+        dest: /etc/apache2/sites-available/frontend.conf
+
+    - name: Create Apache virtual host for back-end
+      template:
+        src: ./vhost-frontend.conf.j2
+        dest: /etc/apache2/sites-available/frontend.conf
+
+    - name: Create Apache virtual host for back-end
+      template:
+        src: vhost-backend.conf.j2
+        dest: /etc/apache2/sites-available/backend.conf
+
+    - name: Delete default virtualhost file
+      file:
+        path: /etc/apache2/sites-enabled/000-default.conf
+        state: absent
+
+    - name: Enable front-end virtual host
+      file:
+        src: /etc/apache2/sites-available/frontend.conf
+        dest: /etc/apache2/sites-enabled/frontend.conf
+        state: link
+
+    - name: Enable back-end virtual host
+      file:
+        src: /etc/apache2/sites-available/backend.conf
+        dest: /etc/apache2/sites-enabled/backend.conf
+        state: link
+
+    - name: Download mod_auth_openidc module for Apache2
+      get_url:
+        url: https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.9/libapache2-mod-auth-openidc_2.3.9-1.stretch+1_amd64.deb
+        dest: /tmp/libapache2-mod-auth-openidc_2.3.7-1.stretch.1_amd64.deb
+
+    - name: Download libcjose package
+      get_url:
+        url: https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.0/libcjose0_0.5.1-1.stretch.1_amd64.deb
+        dest: /tmp/libcjose0_0.5.1-1.stretch.1_amd64.deb
+
+    - name: Install libcjose
+      apt:
+        deb: /tmp/libcjose0_0.5.1-1.stretch.1_amd64.deb
+
+    - name: Install mod_auth_openidc
+      apt:
+        deb: /tmp/libapache2-mod-auth-openidc_2.3.7-1.stretch.1_amd64.deb
+
+    - name: Install previously missed dependencies
+      command: apt-get install -f
+
+    - name: Enable Apache auth_openidc module
+      apache2_module:
+        state: present
+        name: auth_openidc
+
+    - name: Configure OpenIDC protected routes
+      template:
+        src: ./openid.conf
+        dest: /etc/apache2/conf-available/openid.conf
+
+    - name: Enable OpenIDC protected routes configuration
+      command: a2enconf openid.conf
+
+    # - name: Install frontend node dependencies
+    #   npm:
+    #     path: "{{ frontend_root }}"
+    #
+    # - name: Build angular
+    #   command: npm run build
+
+    # - name: Watch backend directory and reload Apache on change
+    #   command: iwatch -r -c "service apache2 reload" /srv/backend/ > /dev/null 2>&1 &
+    #   async: 1
+    #   poll: 0
+
+    # - name: Change backend folder permissions
+    #   file:
+    #     path: /srv/backend
+    #     group: www-data
+    #     recurse: true
+    #     state: directory
+    
+    - name: Install Curl
+      apt:
+        name: curl
+        state: present
+
+    - name: Preinstall Node.js
+      shell: curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+
+    - name: Install Node.js
+      apt:
+        name: nodejs
+        state: present
+
+    - name: Install Angular CLI
+      command: "npm install -g --unsafe-perm @angular/cli@latest"
+
+    - name: Install dashboard modules
+      command: npm install --no-bin-links
+      sudo: false
+      args:
+        chdir: "{{ frontend_root }}"
+        creates: "{{ frontend_root }}/node-modules/"
+
+    - name: Build angular application via Angular CLI
+      command: ng build
+      sudo: false
+      args:
+        chdir: "{{ frontend_root }}"
+        creates: "{{ frontend_root }}/dist/"
+
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted

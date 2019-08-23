@@ -1,0 +1,212 @@
+# Deployment file
+# - is located on a production server (147.251.21.80)
+# - can be found in the /dashboard/auto_deploy/ folder
+# - its purpose is to update the application based on an actual master branch in the project's repository
+
+---
+- name: Pull master branch from git repo and move it to proper folders
+  hosts: 127.0.0.1
+  connection: local
+  vars:
+    frontend_root: /var/www/html
+    backend_root: /srv/backend
+    backend_app: /srv/backend/dashboard
+    virtualenv_path: /home/debian/django-venv
+
+  tasks:
+  - name: Update apt cache
+    apt: update_cache=yes
+
+  - name: Install Apache
+    apt:
+      name: apache2
+      state: present
+
+  - name: Set DJANGO_DEBUG=false in Apache2 env variables
+    lineinfile:
+      dest: /etc/apache2/envvars
+      line: export DJANGO_DEBUG=false
+
+  - name: Install Apache WSGI module
+    apt:
+      name: libapache2-mod-wsgi
+      state: present
+
+  - name: Install pip
+    apt:
+      name: python-pip
+      state: present
+
+  - name: Install virtualenv
+    pip:
+      name: virtualenv
+      version: 16.4.0
+
+  - name: Manually create the initial virtualenv
+    command: virtualenv "{{ virtualenv_path }}"
+    args:
+      creates: "{{ virtualenv_path }}"
+
+  # - name: Open ports 8000 and 80 on Apache
+  #   template:
+  #     src: ./apache-ports.conf.j2
+  #     dest: /etc/apache2/ports.conf
+
+  - name: Enable Apache WSGI module
+    apache2_module:
+      state: present
+      name: wsgi
+
+  - name: Enable Apache rewrite module
+    apache2_module:
+      state: present
+      name: rewrite
+
+  # - name: Create Apache virtual host for front-end
+  #   template:
+  #     src: ./vhost-frontend.conf.j2
+  #     dest: /etc/apache2/sites-available/frontend.conf
+
+  # - name: Create Apache virtual host for back-end
+  #   template:
+  #     src: vhost-backend.conf.j2
+  #     dest: /etc/apache2/sites-available/backend.conf
+
+  # - name: Delete default virtualhost file
+  #   file:
+  #     path: /etc/apache2/sites-enabled/000-default.conf
+  #     state: absent
+
+  # - name: Enable front-end virtual host
+  #   file:
+  #     src: /etc/apache2/sites-available/frontend.conf
+  #     dest: /etc/apache2/sites-enabled/frontend.conf
+  #     state: link
+
+  # - name: Enable back-end virtual host
+  #   file:
+  #     src: /etc/apache2/sites-available/backend.conf
+  #     dest: /etc/apache2/sites-enabled/backend.conf
+  #     state: link
+
+  - name: Download mod_auth_openidc module for Apache2
+    get_url:
+      url: https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.9/libapache2-mod-auth-openidc_2.3.9-1.stretch+1_amd64.deb
+      dest: /tmp/libapache2-mod-auth-openidc_2.3.7-1.stretch.1_amd64.deb
+
+  - name: Download libcjose package
+    get_url:
+      url: https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.0/libcjose0_0.5.1-1.stretch.1_amd64.deb
+      dest: /tmp/libcjose0_0.5.1-1.stretch.1_amd64.deb
+
+  - name: Install libcjose
+    apt:
+      deb: /tmp/libcjose0_0.5.1-1.stretch.1_amd64.deb
+
+  - name: Install mod_auth_openidc
+    apt:
+      deb: /tmp/libapache2-mod-auth-openidc_2.3.7-1.stretch.1_amd64.deb
+
+  - name: Install previously missed dependencies
+    command: apt-get install -f
+
+  - name: Enable Apache auth_openidc module
+    apache2_module:
+      state: present
+      name: auth_openidc
+
+  - name: Install Curl
+    apt:
+      name: curl
+      state: present
+
+  - name: Preinstall Node.js
+    shell: curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+
+  - name: Install Node.js
+    apt:
+      name: nodejs
+      state: present
+
+  - name: Install Angular CLI
+    command: "npm install -g --unsafe-perm @angular/cli@latest"
+
+# Deployment.yml
+  - name: Clean project's folder
+    file:
+      state: absent
+      path: "/home/dashboard/auto_deploy/project"
+
+  - name: Clone project's repository
+    git:
+      repo: 'https://gitlab.ics.muni.cz/CSIRT-MU/dashboard.git'
+      dest: /home/dashboard/auto_deploy/project
+
+  - name: Configure OpenIDC protected routes
+    template:
+      src: /home/dashboard/auto_deploy/project/vagrant/openid.conf
+      dest: /etc/apache2/conf-available/openid.conf
+
+  - name: Enable OpenIDC protected routes configuration
+    command: a2enconf openid.conf
+
+  - name: Clean /var/www/html/ folder
+    file:
+      state: absent
+      path: "/var/www/html/"
+    become: yes
+
+  - name: Install dashboard modules
+    command: npm install --no-bin-links
+    args:
+      chdir: "/home/dashboard/auto_deploy/project/frontend"
+      creates: "/home/dashboard/auto_deploy/project/frontend/node-modules/"
+
+  - name: Install node-sass
+    command: npm install node-sass --unsafe-perm
+    args:
+      chdir: "/home/dashboard/auto_deploy/project/frontend"
+    become: true
+
+  - name: Build frontend with Angular CLI
+    command: ng build --prod
+    args:
+      chdir: "/home/dashboard/auto_deploy/project/frontend"
+      creates: "/home/dashboard/auto_deploy/project/frontend/dist/"
+
+  - name: Copy frontend from repo to /var/www/html
+    copy:
+      src: /home/dashboard/auto_deploy/project/frontend/dist/
+      dest: /var/www/html/
+      owner: www-data
+    become: true
+
+  - name: Clean /srv/backend/ folder
+    file:
+      state: absent
+      path: "/srv/backend/"
+    become: true
+
+  - name: Copy backend from repo to /srv/backend/
+    copy:
+      src: /home/dashboard/auto_deploy/project/backend/
+      dest: /srv/backend/
+      owner: www-data
+    become: true
+
+  - name: Check that the requirements.txt file exists
+    stat:
+      path: "{{ backend_root }}/requirements.txt"
+    register: requirements_exist
+
+  - name: Install dependencies
+    pip:
+      virtualenv: "{{ virtualenv_path }}"
+      requirements: "{{ backend_root }}/requirements.txt"
+    when: requirements_exist.stat.exists == True
+
+  - name: Restart Apache
+    service:
+      name: apache2
+      state: restarted
+  become: true

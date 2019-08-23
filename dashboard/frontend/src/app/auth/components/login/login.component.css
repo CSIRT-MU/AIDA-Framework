@@ -1,0 +1,28 @@
+.login-background {
+    position: relative;
+    background-image:url(/assets/images/home_background.jpeg);
+    background-position: top center;
+    background-size: cover;
+}
+
+.sabu-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -95px;
+    margin-lefT: -95px;
+}
+
+h1 {
+    color: #243370;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+form p.heading {
+    font-size: 24px;
+}
+
+form {
+    margin-top: 60px;
+}

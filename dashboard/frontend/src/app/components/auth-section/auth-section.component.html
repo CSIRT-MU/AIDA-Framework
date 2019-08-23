@@ -1,0 +1,13 @@
+<app-navbar>
+  <button (click)="toggleSidebar()" class="hamburger">
+    <span>toggle menu</span>
+  </button>
+</app-navbar>
+<div class="container-fluid">
+  <div class="row pl-300px transition" #mainWrapper>
+      <app-sidebar class="bg-light" [@slideInOut]="sidebarState"></app-sidebar>
+      <main role="main" class="col-lg-12">
+        <router-outlet></router-outlet>
+      </main>
+  </div>
+</div>

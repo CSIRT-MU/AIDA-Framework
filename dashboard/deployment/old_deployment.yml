@@ -1,0 +1,59 @@
+---
+
+- name: Pull master branch from git repo and move it to proper folders
+  hosts: 127.0.0.1
+  connection: local
+  #become: true
+  tasks:
+  - name: Clean project's folder
+    file:
+      state: absent
+      path: "/home/dashboard/auto_deploy/project"
+
+  - name: Clone project's repository
+    git:
+      repo: 'https://gitlab.ics.muni.cz/CSIRT-MU/dashboard.git'
+      dest: /home/dashboard/auto_deploy/project
+
+  - name: Clean /var/www/html/ folder
+    file:
+      state: absent
+      path: "/var/www/html/"
+    become: yes
+
+  - name: Install dashboard modules
+    command: npm install --no-bin-links
+    args:
+      chdir: "/home/dashboard/auto_deploy/project/frontend"
+      creates: "/home/dashboard/auto_deploy/project/frontend/node-modules/"
+
+  - name: Build frontend with Angular CLI
+    command: ng build --prod
+    args:
+      chdir: "/home/dashboard/auto_deploy/project/frontend"
+      creates: "/home/dashboard/auto_deploy/project/frontend/dist/"
+
+  - name: Copy frontend from repo to /var/www/html
+    copy:
+      src: /home/dashboard/auto_deploy/project/frontend/dist/
+      dest: /var/www/html/
+      owner: www-data
+    become: true
+
+  - name: Clean /srv/backend/ folder
+    file:
+      state: absent
+      path: "/srv/backend/"
+    become: true
+
+  - name: Copy backend from repo to /srv/backend/
+    copy:
+      src: /home/dashboard/auto_deploy/project/backend/
+      dest: /srv/backend/
+      owner: www-data
+    become: true
+
+#  - name: Restart Apache
+#    service:
+#        name: apache2
+#        state: restarted

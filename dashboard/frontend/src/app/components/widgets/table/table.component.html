@@ -1,0 +1,68 @@
+<div class="widget-wrapper">
+  <div class="card">
+      <div class="card-header">
+          {{ title }}
+      </div>
+
+      <div class="card-body">
+          <table class="table table-bordered">
+            <tr>
+              <th>
+                Timestamp
+                <app-column-sort
+                  (sortedAsc)="sortAsc($event)"
+                  (sortedDesc)="sortDesc($event)"
+                  [property]="'timestamp'"
+                ></app-column-sort>
+              </th>
+              <th>
+                Source
+                <app-column-sort
+                  (sortedAsc)="sortAsc($event)"
+                  (sortedDesc)="sortDesc($event)"
+                  [property]="'source'"
+                ></app-column-sort>
+              </th>
+              <th>Destination
+                  <app-column-sort
+                    (sortedAsc)="sortAsc($event)"
+                    (sortedDesc)="sortDesc($event)"
+                    [property]="'source'"
+                  ></app-column-sort>
+              </th>
+              <th>Flows
+                  <app-column-sort
+                    (sortedAsc)="sortAsc($event)"
+                    (sortedDesc)="sortDesc($event)"
+                    [property]="'flows'"
+                  ></app-column-sort>
+              </th>
+              <th>Duration
+                  <app-column-sort
+                    (sortedAsc)="sortAsc($event)"
+                    (sortedDesc)="sortDesc($event)"
+                    [property]="'duration'"
+                  ></app-column-sort>
+              </th>
+            </tr>
+
+            <tr *ngFor="let row of filteredData">
+              <td [innerText]="row.timestamp"></td>
+              <td [innerText]="row.source"></td>
+              <td [innerText]="row.destination"></td>
+              <td [innerText]="row.flows"></td>
+              <td [innerText]="row.duration"></td>
+            </tr>
+          </table>
+
+          <ngb-pagination
+            class="d-flex justify-content-center"
+            [page]="currentPage"
+            [collectionSize]="itemsCount"
+            [maxSize]="10"
+            [boundaryLinks]="true"
+            (pageChange)="setPage($event)"
+            ></ngb-pagination>
+      </div>
+  </div>
+</div>

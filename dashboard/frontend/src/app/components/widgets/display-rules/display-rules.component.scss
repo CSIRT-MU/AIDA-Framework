@@ -1,0 +1,44 @@
+.card-header {
+  align-items: center;
+}
+
+.card-header-dd {
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.table-name {
+  text-align: left;
+}
+
+.date-picker {
+  position: absolute;
+  right: 20px;
+}
+
+::ng-deep .mat-tooltip {
+  font-size: 12px!important;
+  white-space: pre-line;
+}
+
+mat-form-field {
+  width: 15%;
+  display: inline-flex;
+}
+
+#arrow {
+  padding-left: 1%;
+  padding-right: 3%;
+  vertical-align: middle;
+  font-size: 2.25em;
+}
+
+#addRuleCheckbox {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+#DDtable, #ARtable {
+  padding-top: 50px;
+}

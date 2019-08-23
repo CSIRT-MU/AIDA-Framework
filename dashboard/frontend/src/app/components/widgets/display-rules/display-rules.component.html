@@ -1,0 +1,98 @@
+<!-- Create new rule -->
+<div class="new-rule-wrapper">
+  <mat-card class="card">
+    <mat-card-header class="card-header">
+      <mat-card-title>
+        Add new rule
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="card-body">
+      <form [formGroup]="rulesForm" (submit)="onFormSubmit(comment, active)">
+        <div formArrayName="rules">
+          <div *ngFor="let rule of rules; let i = index;" [formGroupName]="i">
+
+            <mat-form-field>
+                <input matInput type="text"
+                       placeholder="Rule address {{ i + 1 }}"
+                       value="" formControlName="l_rule_address" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="text"
+                       placeholder="Rule action {{ i + 1 }}"
+                       value="" formControlName="l_rule_action" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="number" min="0" max="65535"
+                       placeholder="Rule port {{ i + 1 }}"
+                       value="" formControlName="l_rule_port"
+                       matTooltip="Value must be in range 0-65535" [matTooltipShowDelay]="showDelay.value" required>
+            </mat-form-field>
+            <mat-icon id="arrow">arrow_forward</mat-icon>
+            <mat-form-field>
+                <input matInput type="text"
+                       placeholder="Rule address {{ i + 1 }}"
+                       value="" formControlName="r_rule_address" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="text"
+                       placeholder="Rule action {{ i + 1 }}"
+                       value="" formControlName="r_rule_action" required>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="number" min="0" max="65535"
+                       placeholder="Rule port {{ i + 1 }}"
+                       value="" formControlName="r_rule_port"
+                       matTooltip="Value must be in range 0-65535" [matTooltipShowDelay]="showDelay.value" required>
+            </mat-form-field>
+
+            <button type="button" mat-icon-button class="buttonClass" (click)="removeRuleRow(i)">
+              <mat-icon>remove</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <button mat-icon-button type="button" class="buttonClass" (click)="addRuleRow()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <hr>
+
+        <mat-form-field class="example-full-width">
+          <input matInput type="text" class="input-field" placeholder="Comment" value="" #comment name="comment">
+        </mat-form-field>
+
+        <mat-checkbox id="addRuleCheckbox" class="activate-checkbox" #active>Activate this rule?</mat-checkbox>
+        <button id="addRuleSubmitBtn" class="btn btn-primary" mat-raised-button>Submit</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Default day table -->
+
+<mat-form-field class="date-picker">
+    <input matInput [matDatepicker]="picker"
+           placeholder="DD/MM/YYYY"
+           (dateChange)="addEvent('change', $event)"
+           [formControl]="serializedDate"
+           [matDatepickerFilter]="myFilter">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker startView="month" [startAt]="startDate"></mat-datepicker>
+</mat-form-field>
+
+<div *ngIf="dataLoadedDD" id="DDtable">
+    <widget-new-table [trim]="false"
+                      [header]="displayedColumns"
+                      [data]="tableDataDD"
+                      [title]="tableNameDD"
+                      [maxPages]="maxTablePages"></widget-new-table>
+</div>
+
+<!-- All active rules table -->
+
+<div *ngIf="dataLoadedAR" id="tableAr">
+    <widget-new-table [trim]="false"
+                      [header]="displayedColumns"
+                      [data]="tableDataAR"
+                      [title]="tableNameAR"
+                      [maxPages]="maxTablePages"></widget-new-table>
+</div>

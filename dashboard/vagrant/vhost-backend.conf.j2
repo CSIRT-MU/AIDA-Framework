@@ -1,0 +1,23 @@
+<VirtualHost *:8000>
+    Alias /static {{ backend_root }}/static
+
+    <Directory {{ backend_app }}>
+        <Files wsgi.py>
+            Require all granted
+        </Files>
+    </Directory>
+
+    <Directory {{ backend_root }}/static>
+      Require all granted
+    </Directory>
+
+    WSGIDaemonProcess backend python-path={{ backend_root }} python-home={{ virtualenv_path }}
+    WSGIProcessGroup backend
+    WSGIScriptAlias / {{ backend_app }}/wsgi.py
+    WSGIApplicationGroup %{GLOBAL}
+    WSGIPassAuthorization On
+
+    ErrorLog ${APACHE_LOG_DIR}/backend-error.log
+    CustomLog ${APACHE_LOG_DIR}/backend-access.log combined
+
+</VirtualHost>

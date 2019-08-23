@@ -1,0 +1,41 @@
+/*
+ * Sidebar
+ */
+
+:host {
+  border-right: 1px solid rgba(0,0,0,.1);
+}
+
+:host {
+  padding-top: 64px;
+  height: 100%;
+  width: 300px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 4;
+}
+
+:host .nav-link {
+    font-weight: 500;
+    color: #333;
+}
+
+:host .nav-link .feather {
+    margin-right: 4px;
+    color: #999;
+}
+
+:host .nav-link.active {
+    color: #007bff;
+}
+
+:host .nav-link:hover .feather,
+:host .nav-link.active .feather {
+    color: inherit;
+}
+
+.sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+}

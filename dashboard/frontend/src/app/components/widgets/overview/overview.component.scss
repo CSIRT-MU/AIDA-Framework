@@ -1,0 +1,27 @@
+#schema {
+  height: 400px;
+  width: 100%;
+}
+
+.description-card {
+  width:55.00%;
+
+  float: left;
+}
+
+.last-logs-card {
+  float: left;
+  width: 45.0%;
+}
+.img-overlay-wrap {
+    position: relative;
+ }
+ 
+ .img-overlay-wrap object {
+    display: block;
+ }
+ 
+ .line-breaker {
+   white-space: pre-wrap;
+ }
+

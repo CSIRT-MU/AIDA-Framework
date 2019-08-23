@@ -1,0 +1,37 @@
+
+export const refreshTimer = 15000;
+export const components = [{name: 'kafka',
+                            link: 'https://google.com/',
+                            infoPath: 'kafka',
+                            svgId: 'kafkaIcon'},
+                           {name: 'esper',
+                            link: 'https://google.com/',
+                            infoPath: 'esper',
+                            svgId: 'esperSRMcog'},
+                           {name: 'sparkAggregation',
+                            link: 'https://google.com/',
+                            infoPath: 'spark.aggregation',
+                            svgId: 'sparkAAcog'},
+                           {name: 'sparkMining',
+                            link: 'https://google.com/',
+                            infoPath: 'spark.data_mining',
+                            svgId: 'sparkRDcog'},
+                           {name: 'sparkRelationshipDiscovery',
+                            link: 'https://google.com/',
+                            infoPath: 'spark.relationship_discovery',
+                            svgId: 'sparkSRMcog'},
+                           {name: 'wardenSender',
+                            link: 'https://google.com/',
+                            infoPath: 'warden.sender',
+                            svgId: 'wardenSenderIcon'},
+                           {name: 'wardenReceiver',
+                            link: 'https://google.com/',
+                            infoPath: 'warden.receiver',
+                            svgId: 'wardenReceiverIcon'},
+                           {name: 'feedback',
+                            link: 'https://google.com/',
+                            infoPath: 'feedback',
+                            svgId: 'feedback'}
+                          ];
+export const additionalSVGIds = ['sparkIcon'];
+export const SVG_path = 'assets/images/iabu.svg';

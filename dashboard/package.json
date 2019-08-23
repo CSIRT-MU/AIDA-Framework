@@ -1,0 +1,15 @@
+{
+  "name": "security-dashboard",
+  "version": "1.0.0",
+  "description": "Dashboard aims to be universal web application for data visualisation with user management and\r built-in system of [pages and widgets](https://gitlab.ics.muni.cz/CSIRT-MU/dashboard/wikis/home#panels-and-widgets).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.ics.muni.cz:CSIRT-MU/dashboard.git"
+  },
+  "author": "",
+  "license": "ISC"
+}

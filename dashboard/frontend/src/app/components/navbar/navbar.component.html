@@ -1,0 +1,27 @@
+<!--<nav class="navbar navbar-dark fixed-top bg-csirt p-0 shadow">-->
+  <!--<a class="navbar-brand" href="#">Dashboard</a>-->
+  <!--<div class="collapse navbar-collapse">-->
+  <!--<ul class="navbar-nav mr-auto">-->
+    <!--<li class="nav-item">-->
+      <!--<a class="nav-link" (click)="oauthService.logOut()" style="cursor: pointer">Log out</a>-->
+    <!--</li>-->
+  <!--</ul>-->
+  <!--<span class="navbar-text">-->
+     <!--Navbar text with an inline element-->
+  <!--</span>-->
+  <!--</div>-->
+<!--</nav>-->
+
+
+<nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-csirt">
+  <ng-content></ng-content>
+  <a class="navbar-brand" [routerLink]="['/auth/']">SABU Dashboard</a>
+    <span class="navbar-text">
+      (logged as <strong>{{ userName }}</strong>)
+    </span>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <app-logout></app-logout>
+      </li>
+    </ul>
+</nav>

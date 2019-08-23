@@ -1,0 +1,33 @@
+<div *ngIf="panel">
+  <h1>{{ panel.name }}</h1>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <app-default-filter *ngIf="panel.include_filter" #filterComponent (submitted)="handleSubmit($event)" [filter]="filter">
+        </app-default-filter>
+      </div>
+    </div>
+    <!-- </div> -->
+
+    <div *ngIf="loading" class="text-center">
+      <br><br>
+      <img src="/assets/loading.gif" alt="loading..." style="margin: 0 auto">
+    </div>
+
+    <div *ngIf="!loading">
+      <!-- <div class="container-fluid"> -->
+      <div class="row">
+        <ng-container #componentElement *ngFor="let widgetGroup of widgetGroups">
+          <widget-group [ngClass]="'col-lg-' + widgetGroup.cols"
+          [title]="widgetGroup.title" [name]="widgetGroup.name" [config_json]="widgetGroup.customConfig"></widget-group>
+        </ng-container>
+        <ng-container #widgetElement *ngFor="let widget of widgets">
+          <widget [ngClass]="'col-lg-' + widget.cols" [title]="widget.name" [type]="widget.type" [data]="widget.data"
+            [dataType]="widget.data_type" [filter]="filter" (filterChange)="filterChanged($event)">
+          </widget>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

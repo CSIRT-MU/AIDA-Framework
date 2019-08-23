@@ -1,0 +1,380 @@
+{
+  "componentsinfo": {
+    "kafka_filer": {
+      "status": 0,
+      "description": "* kafka_filer.service\n   Loaded: not-found (Reason: No such file or directory)\n   Active: inactive (dead)\n"
+    },
+    "esper": {
+      "status": 0,
+      "description": ""
+    },
+    "kafka": {
+      "status": 1,
+      "description": "* kafka.service - Apache Kafka broker used by iABU.\n   Loaded: loaded (/etc/systemd/system/kafka.service; disabled)\n   Active: active (running) since Tue 2019-02-19 19:12:50 UTC; 1 months 20 days ago\n Main PID: 23788 (java)\n   CGroup: /system.slice/kafka.service\n           `-23788 java -Xmx1G -Xms1G -server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -XX:+ExplicitGCInvokesConcurrent -Djava.awt.headless=true -Xloggc:/opt/kafka/bin/../logs/kafkaServer-gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100M -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dkafka.logs.dir=/opt/kafka/bin/../logs -Dlog4j.configuration=file:/opt/kafka/bin/../config/log4j.properties -cp :/opt/kafka/bin/../libs/aopalliance-repackaged-2.5.0-b32.jar:/opt/kafka/bin/../libs/argparse4j-0.7.0.jar:/opt/kafka/bin/../libs/commons-lang3-3.5.jar:/opt/kafka/bin/../libs/connect-api-1.0.0.jar:/opt/kafka/bin/../libs/connect-file-1.0.0.jar:/opt/kafka/bin/../libs/connect-json-1.0.0.jar:/opt/kafka/bin/../libs/connect-runtime-1.0.0.jar:/opt/kafka/bin/../libs/connect-transforms-1.0.0.jar:/opt/kafka/bin/../libs/guava-20.0.jar:/opt/kafka/bin/../libs/hk2-api-2.5.0-b32.jar:/opt/kafka/bin/../libs/hk2-locator-2.5.0-b32.jar:/opt/kafka/bin/../libs/hk2-utils-2.5.0-b32.jar:/opt/kafka/bin/../libs/jackson-annotations-2.9.1.jar:/opt/kafka/bin/../libs/jackson-core-2.9.1.jar:/opt/kafka/bin/../libs/jackson-databind-2.9.1.jar:/opt/kafka/bin/../libs/jackson-jaxrs-base-2.9.1.jar:/opt/kafka/bin/../libs/jackson-jaxrs-json-provider-2.9.1.jar:/opt/kafka/bin/../libs/jackson-module-jaxb-annotations-2.9.1.jar:/opt/kafka/bin/../libs/javassist-3.20.0-GA.jar:/opt/kafka/bin/../libs/javassist-3.21.0-GA.jar:/opt/kafka/bin/../libs/javax.annotation-api-1.2.jar:/opt/kafka/bin/../libs/javax.inject-1.jar:/opt/kafka/bin/../libs/javax.inject-2.5.0-b32.jar:/opt/kafka/bin/../libs/javax.servlet-api-3.1.0.jar:/opt/kafka/bin/../libs/javax.ws.rs-api-2.0.1.jar:/opt/kafka/bin/../libs/jersey-client-2.25.1.jar:/opt/kafka/bin/../libs/jersey-common-2.25.1.jar:/opt/kafka/bin/../libs/jersey-container-servlet-2.25.1.jar:/opt/kafka/bin/../libs/jersey-container-servlet-core-2.25.1.jar:/opt/kafka/bin/../libs/jersey-guava-2.25.1.jar:/opt/kafka/bin/../libs/jersey-media-jaxb-2.25.1.jar:/opt/kafka/bin/../libs/jersey-server-2.25.1.jar:/opt/kafka/bin/../libs/jetty-continuation-9.2.22.v20170606.jar:/opt/kafka/bin/../libs/jetty-http-9.2.22.v20170606.jar:/opt/kafka/bin/../libs/jetty-io-9.2.22.v20170606.jar:/opt/kafka/bin/../libs/jetty-security-9.2.22.v20170606.jar:/opt/kafka/bin/../libs/jetty-server-9.2.22.v20170606.jar:/opt/kafka/bin/../libs/jetty-servlet-9.2.22.v20170606.jar:/opt/kafka/bin/../libs/jetty-servlets-9.2.22.v20170606.jar:/opt/kafka/bin/../libs/jetty-util-9.2.22.v20170606.jar:/opt/kafka/bin/../libs/jopt-simple-5.0.4.jar:/opt/kafka/bin/../libs/kafka_2.11-1.0.0.jar:/opt/kafka/bin/../libs/kafka_2.11-1.0.0-sources.jar:/opt/kafka/bin/../libs/kafka_2.11-1.0.0-test-sources.jar:/opt/kafka/bin/../libs/kafka-clients-1.0.0.jar:/opt/kafka/bin/../libs/kafka-log4j-appender-1.0.0.jar:/opt/kafka/bin/../libs/kafka-streams-1.0.0.jar:/opt/kafka/bin/../libs/kafka-streams-examples-1.0.0.jar:/opt/kafka/bin/../libs/kafka-tools-1.0.0.jar:/opt/kafka/bin/../libs/log4j-1.2.17.jar:/opt/kafka/bin/../libs/lz4-java-1.4.jar:/opt/kafka/bin/../libs/maven-artifact-3.5.0.jar:/opt/kafka/bin/../libs/metrics-core-2.2.0.jar:/opt/kafka/bin/../libs/osgi-resource-locator-1.0.1.jar:/opt/kafka/bin/../libs/plexus-utils-3.0.24.jar:/opt/kafka/bin/../libs/reflections-0.9.11.jar:/opt/kafka/bin/../libs/rocksdbjni-5.7.3.jar:/opt/kafka/bin/../libs/scala-library-2.11.11.jar:/opt/kafka/bin/../libs/slf4j-api-1.7.25.jar:/opt/kafka/bin/../libs/slf4j-log4j12-1.7.25.jar:/opt/kafka/bin/../libs/snappy-java-1.1.4.jar:/opt/kafka/bin/../libs/validation-api-1.1.0.Final.jar:/opt/kafka/bin/../libs/zkclient-0.10.jar:/opt/kafka/bin/../libs/zookeeper-3.4.10.jar kafka.Kafka /opt/kafka/config/server.properties\n"
+    },
+    "warden": {
+      "sender": {
+        "status": 0,
+        "description": "* warden_filer_sender.service - LSB: Warden Filer - sender\n   Loaded: loaded (/etc/init.d/warden_filer_sender)\n   Active: inactive (dead)\n"
+      },
+      "receiver": {
+        "status": 0,
+        "description": "* warden_filer_receiver.service - LSB: Warden Filer - receiver\n   Loaded: loaded (/etc/init.d/warden_filer_receiver)\n   Active: inactive (dead) since Tue 2018-09-18 12:09:49 UTC; 6 months 22 days ago\n"
+      }
+    },
+    "neo4j": {
+      "status": 1,
+      "description": "* neo4j.service - Neo4j Graph Database\n   Loaded: loaded (/lib/systemd/system/neo4j.service; disabled)\n   Active: active (running) since Thu 2018-12-06 11:37:33 UTC; 4 months 4 days ago\n Main PID: 10708 (java)\n   CGroup: /system.slice/neo4j.service\n           `-10708 /usr/bin/java -cp /var/lib/neo4j/plugins:/etc/neo4j:/usr/share/neo4j/lib/*:/var/lib/neo4j/plugins/* -server -XX:+UseG1GC -XX:-OmitStackTraceInFastThrow -XX:+AlwaysPreTouch -XX:+UnlockExperimentalVMOptions -XX:+TrustFinalNonStaticFields -XX:+DisableExplicitGC -Djdk.tls.ephemeralDHKeySize=2048 -Dunsupported.dbms.udc.source=debian -Dfile.encoding=UTF-8 org.neo4j.server.CommunityEntryPoint --home-dir=/var/lib/neo4j --config-dir=/etc/neo4j\n"
+    },
+    "spark": {
+      "data_mining": {
+        "status": 0,
+        "description": "* sparkapp-mining.service - iABU Spark Streaming application - Mining\n   Loaded: loaded (/etc/systemd/system/sparkapp-mining.service; disabled)\n   Active: inactive (dead)\n"
+      },
+      "aggregation": {
+        "status": 0,
+        "description": "* sparkapp-aggregation.service - iABU Spark Streaming application - Aggregation\n   Loaded: loaded (/etc/systemd/system/sparkapp-aggregation.service; disabled)\n   Active: inactive (dead)\n"
+      },
+      "relationship_discovery": {
+        "status": 0,
+        "description": "* sparkapp-graphdb.service - iABU Spark Streaming application - GraphDB\n   Loaded: loaded (/etc/systemd/system/sparkapp-graphdb.service; disabled)\n   Active: inactive (dead)\n"
+      }
+    },
+    "inspector": {
+      "status": 0,
+      "description": "* mentat_inspector.service\n   Loaded: not-found (Reason: No such file or directory)\n   Active: inactive (dead)\n"
+    }
+  },
+  "activerules2": [
+    {
+      "comment": null,
+      "confidence": 0.9829059829059829,
+      "algorithm": "TopSeqRules 10 0.5",
+      "database": "/var/iabu/spmf_db/ports/2019-04-18--20-54-31.src-tar",
+      "support": 230,
+      "rule": "cz.cesnet.collector_nemea.filer_Malware_None ==> None_Malware_None",
+      "number_of_sequences": 688783,
+      "active": 1,
+      "inserted": "2019-04-18 18:54:49",
+      "id": 91
+    },
+    {
+      "comment": null,
+      "confidence": 0.9441930618401206,
+      "algorithm": "TopSeqRules 10 0.5",
+      "database": "/var/iabu/spmf_db/ports/2019-04-26--15-02-12.src-tar",
+      "support": 626,
+      "rule": "cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_5060,cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_46060 ==> cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_1025",
+      "number_of_sequences": 711228,
+      "active": 1,
+      "inserted": "2019-04-26 13:02:24",
+      "id": 182
+    },
+    {
+      "comment": null,
+      "confidence": 1,
+      "algorithm": "TopSeqRules 10 0.5",
+      "database": "/var/iabu/spmf_db/ports/2019-04-26--15-02-12.src-tar",
+      "support": 937,
+      "rule": "cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_53421 ==> cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_3232",
+      "number_of_sequences": 711228,
+      "active": 1,
+      "inserted": "2019-04-26 13:02:24",
+      "id": 185
+    }
+  ],
+  "activerules": [
+    {
+      "id": 270,
+      "comment": "a",
+      "confidence": 0,
+      "algorithm": "TopSeqRules 10 0.5",
+      "database": "/var/iabu/spmf_db/ports/2019-04-30--14-57-02.src-tar",
+      "support": 117,
+      "rule": "cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_1025 ==> cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_1024",
+      "number_of_sequences": 704174,
+      "active": "0",
+      "inserted": "2019-05-02 12:00:03"
+    },
+    {
+      "id": 296,
+      "comment": "a",
+      "confidence": 0,
+      "algorithm": "TopSeqRules 10 0.5",
+      "database": "/var/iabu/spmf_db/ports/2019-05-01--14-54-09.src-tar",
+      "support": 4,
+      "rule": "cz.cesnet.tarpit_Recon.Scanning_23,cz.cesnet.tarpit_Recon.Scanning_25 ==> cz.cesnet.tarpit_Recon.Scanning_88",
+      "number_of_sequences": 668950,
+      "active": "0",
+      "inserted": "2019-05-02 12:00:30"
+    }
+  ],
+  "activerules-01-04-2019": [
+    {
+      "comment": "essential rule (date)",
+      "confidence": 0.67,
+      "support_total": 9001,
+      "rule": "abc,def => ghi",
+      "active": 1,
+      "date": "20-03-2019",
+      "id": 1,
+      "support_hints": 42
+    },
+    {
+      "comment": "rule 1 (date)",
+      "confidence": 0.67,
+      "support_total": 9002,
+      "rule": "abc,def => ghi",
+      "active": 0,
+      "date": "20-03-2019",
+      "id": 2,
+      "support_hints": 76
+    },
+    {
+      "comment": "rule 2 (date)",
+      "confidence": 0.6,
+      "support_total": 9054,
+      "rule": "abc,def => ghg",
+      "active": 0,
+      "date": "20-03-2019",
+      "id": 4,
+      "support_hints": 53
+    }
+  ],
+  "activerules-03-04-2019": [
+    {
+      "comment": "essential rule (date 2)",
+      "confidence": 0.67,
+      "support_total": 9001,
+      "rule": "abc,def => ghi",
+      "active": 1,
+      "date": "21-03-2019",
+      "id": 1,
+      "support_hints": 42
+    },
+    {
+      "comment": "rule 1 (date 2)",
+      "confidence": 0.67,
+      "support_total": 9002,
+      "rule": "abc,def => ghi",
+      "active": 0,
+      "date": "21-03-2019",
+      "id": 2,
+      "support_hints": 76
+    },
+    {
+      "comment": "rule 2 (date 2)",
+      "confidence": 0.6,
+      "support_total": 9054,
+      "rule": "abc,def => ghg",
+      "active": 0,
+      "date": "21-03-2019",
+      "id": 4,
+      "support_hints": 53
+    }
+  ],
+  "activerules-02-04-2019": [
+    {
+      "comment": "essential rule (date 3)",
+      "confidence": 0.67,
+      "support_total": 9001,
+      "rule": "abc,def => ghi",
+      "active": 0,
+      "date": "22-03-2019",
+      "id": 1,
+      "support_hints": 42
+    },
+    {
+      "comment": "rule 1 (date 3)",
+      "confidence": 0.67,
+      "support_total": 9002,
+      "rule": "abc,def => ghi",
+      "active": 1,
+      "date": "22-03-2019",
+      "id": 2,
+      "support_hints": 76
+    },
+    {
+      "comment": "rule 2 (date 3)",
+      "confidence": 0.6,
+      "support_total": 9054,
+      "rule": "abc,def => ghg",
+      "active": 0,
+      "date": "22-03-2019",
+      "id": 4,
+      "support_hints": 53
+    }
+  ],
+  "addrules": [
+    {
+      "comment": "essential rule (add)",
+      "confidence": 0.67,
+      "support_total": 9001,
+      "rule": "abc,def => ghi",
+      "active": 1,
+      "date": "2018-01-01",
+      "id": 1,
+      "support_hints": 42
+    },
+    {
+      "comment": "rule 1 (add)",
+      "confidence": 0.67,
+      "support_total": 9002,
+      "rule": "abc,def => ghi",
+      "active": 1,
+      "date": "2018-01-01",
+      "id": 2,
+      "support_hints": 76
+    },
+    {
+      "comment": "",
+      "confidence": null,
+      "algorithm": null,
+      "database": null,
+      "support": null,
+      "rule": "s_s_11,s_s_11,s_s_11 ==> a_a_6,a_a_6,a_a_6",
+      "number_of_sequences": null,
+      "active": 0,
+      "inserted": "02/05/2019 20:05:40",
+      "id": 3
+    },
+    {
+      "comment": "sdasd",
+      "confidence": null,
+      "algorithm": null,
+      "database": null,
+      "support": null,
+      "rule": "aa_a,sa_s ==> a",
+      "number_of_sequences": null,
+      "active": "1",
+      "inserted": "14/05/2019 17:05:63",
+      "id": 4
+    }
+  ],
+  "rules-2019-05-13": [
+    {
+      "comment": null,
+      "confidence": 1,
+      "algorithm": "TopSeqRules 10 0.5",
+      "database": "/var/iabu/spmf_db/ports/2019-04-30--14-57-02.src-tar",
+      "support": 117,
+      "rule": "cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_1025 ==> cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_1024",
+      "number_of_sequences": 704174,
+      "active": 0,
+      "inserted": "2019-05-02 12:00:03",
+      "id": 270
+    },
+    {
+      "comment": null,
+      "confidence": 1,
+      "algorithm": "TopSeqRules 10 0.5",
+      "database": "/var/iabu/spmf_db/ports/2019-05-01--14-54-09.src-tar",
+      "support": 4,
+      "rule": "cz.cesnet.tarpit_Recon.Scanning_23,cz.cesnet.tarpit_Recon.Scanning_25 ==> cz.cesnet.tarpit_Recon.Scanning_88",
+      "number_of_sequences": 668950,
+      "active": 0,
+      "inserted": "2019-05-02 12:00:30",
+      "id": 296
+    },
+    {
+      "comment": "Rule used for checking health check of mining service.",
+      "confidence": 0,
+      "algorithm": null,
+      "database": null,
+      "support": null,
+      "rule": "healthcheck.premis_Test_None ==> healthcheck.conclusion_Test_None",
+      "number_of_sequences": null,
+      "active": 1,
+      "inserted": "2019-05-02 12:34:39",
+      "id": 304
+    }
+  ],
+  "rules-2019-05-15": [
+    {
+      "comment": "a",
+      "confidence": 0,
+      "algorithm": "TopSeqRules 10 0.5",
+      "database": "/var/iabu/spmf_db/ports/2019-04-30--14-57-02.src-tar",
+      "support": 117,
+      "rule": "cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_1025 ==> cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_1024",
+      "number_of_sequences": 704174,
+      "active": 0,
+      "inserted": "2019-05-02 12:00:03",
+      "id": 270
+    },
+    {
+      "comment": "a",
+      "confidence": 0,
+      "algorithm": "TopSeqRules 10 0.5",
+      "database": "/var/iabu/spmf_db/ports/2019-05-01--14-54-09.src-tar",
+      "support": 4,
+      "rule": "cz.cesnet.tarpit_Recon.Scanning_23,cz.cesnet.tarpit_Recon.Scanning_25 ==> cz.cesnet.tarpit_Recon.Scanning_88",
+      "number_of_sequences": 668950,
+      "active": 0,
+      "inserted": "2019-05-02 12:00:30",
+      "id": 296
+    },
+    {
+      "comment": "a",
+      "confidence": 0,
+      "algorithm": null,
+      "database": null,
+      "support": null,
+      "rule": "healthcheck.premis_Test_None ==> healthcheck.conclusion_Test_None",
+      "number_of_sequences": null,
+      "active": 1,
+      "inserted": "2019-05-02 12:34:39",
+      "id": 304
+    }
+  ],
+  "inactiverules": [
+    {
+      "id": 91,
+      "comment": null,
+      "confidence": 0.9829059829059829,
+      "algorithm": "TopSeqRules 10 0.5",
+      "database": "/var/iabu/spmf_db/ports/2019-04-18--20-54-31.src-tar",
+      "support": 230,
+      "rule": "cz.cesnet.collector_nemea.filer_Malware_None ==> None_Malware_None",
+      "number_of_sequences": 688783,
+      "active": "1",
+      "inserted": "2019-04-18 18:54:49"
+    },
+    {
+      "id": 304,
+      "comment": "a",
+      "confidence": 0,
+      "algorithm": null,
+      "database": null,
+      "support": null,
+      "rule": "healthcheck.premis_Test_None ==> healthcheck.conclusion_Test_None",
+      "number_of_sequences": null,
+      "active": "1",
+      "inserted": "2019-05-02 12:34:39"
+    },
+    {
+      "id": 182,
+      "comment": null,
+      "confidence": 0.9441930618401206,
+      "algorithm": "TopSeqRules 10 0.5",
+      "database": "/var/iabu/spmf_db/ports/2019-04-26--15-02-12.src-tar",
+      "support": 626,
+      "rule": "cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_5060,cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_46060 ==> cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_1025",
+      "number_of_sequences": 711228,
+      "active": "1",
+      "inserted": "2019-04-26 13:02:24"
+    },
+    {
+      "id": 185,
+      "comment": null,
+      "confidence": 1,
+      "algorithm": "TopSeqRules 10 0.5",
+      "database": "/var/iabu/spmf_db/ports/2019-04-26--15-02-12.src-tar",
+      "support": 937,
+      "rule": "cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_53421 ==> cz.cesnet.ids_collector.tippingpoint_Attempt.Exploit_3232",
+      "number_of_sequences": 711228,
+      "active": "1",
+      "inserted": "2019-04-26 13:02:24"
+    }
+  ]
+}

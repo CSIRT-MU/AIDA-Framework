@@ -1,0 +1,64 @@
+<object id="schema" type="image/svg+xml" [data]="SVG_path | safe"></object>
+
+<!-- Info card section -->
+<div fxLayout="row" class="info-cards" *ngIf="showInfo">
+  <!-- Descritpion card -->
+  <mat-card class="description-card">
+    <mat-card-header>
+      <mat-card-title>Description</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p *ngIf="componentName==='kafka'" class="line-breaker">
+          {{ this.componentInfo.kafka.description }}
+      </p>
+      <p *ngIf="componentName==='wardenSender'" class="line-breaker">
+          {{ this.componentInfo.warden.sender.description }}
+      </p>
+      <p *ngIf="componentName==='sparkAA'" class="line-breaker">
+          {{ this.componentInfo.spark.aggregation.description }}
+      </p>
+      <p *ngIf="componentName==='sparkSRM'" class="line-breaker">
+          {{ this.componentInfo.spark.data_mining.description }}
+      </p>
+      <p *ngIf="componentName==='sparkRD'" class="line-breaker">
+          {{ this.componentInfo.spark.relationship_discovery.description }}
+      </p>
+      <p *ngIf="componentName==='esperSRM'" class="line-breaker">
+          {{ this.componentInfo.esper.description }}
+      </p>
+      <p *ngIf="componentName==='wardenReceiver'" class="line-breaker">
+          {{ this.componentInfo.warden.receiver.description }}
+      </p>
+  </mat-card-content>
+  </mat-card>
+
+  <!-- Logs Card -->
+  <mat-card class="last-logs-card">
+    <mat-card-header>
+      <mat-card-title>Last logs</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <p *ngIf="componentName==='kafka'" class="line-breaker">
+            {{ this.componentInfo.kafka.log }}
+        </p>
+        <p *ngIf="componentName==='wardenSender'" class="line-breaker">
+            {{ this.componentInfo.warden.sender.log }}
+        </p>
+        <p *ngIf="componentName==='sparkAA'" class="line-breaker">
+            {{ this.componentInfo.spark.aggregation.log }}
+        </p>
+        <p *ngIf="componentName==='sparkSRM'" class="line-breaker">
+            {{ this.componentInfo.spark.data_mining.log }}
+        </p>
+        <p *ngIf="componentName==='sparkRD'" class="line-breaker">
+            {{ this.componentInfo.spark.relationship_discovery.log }}
+        </p>
+        <p *ngIf="componentName==='esperSRM'" class="line-breaker">
+            {{ this.componentInfo.esper.log }}
+        </p>
+        <p *ngIf="componentName==='wardenReceiver'" class="line-breaker">
+            {{ this.componentInfo.warden.receiver.log }}
+        </p>
+    </mat-card-content>
+  </mat-card>
+</div>

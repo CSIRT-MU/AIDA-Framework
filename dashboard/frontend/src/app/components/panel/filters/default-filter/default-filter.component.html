@@ -1,0 +1,73 @@
+<div class="widget-wrapper">
+  <div class="card">
+      <div class="card-header">
+          {{ title }}
+      </div>
+
+      <div class="card-body">
+        <form (ngSubmit)="onSubmit()">
+          <div class="form-group row">
+            <label for="input-interval" class="col-6 col-sm-3 col-form-label">Interval:</label>
+            <div class="col-6 col-sm-3">
+              <div class="dropdown">
+                <select name="interval" class="form-control" (change)="changeInterval($event)" #interval>
+                  <option value="1">1 hour</option>
+                  <option value="6">6 hours</option>
+                  <option value="12">12 hours</option>
+                  <option value="24">1 day</option>
+                  <option value="168">1 week</option>
+                  <option value="336">2 weeks</option>
+                  <!-- <option value="0">custom</option> -->
+                </select>
+              </div>
+              <!-- <input class="form-control" type="text" value="Artisanal kale" id="input-interval"> -->
+            </div>
+
+            <label for="input-from" class="col-6 col-sm-1 offset-sm-1 col-form-label">From:</label>
+            <div class="col-6 col-sm-4">
+              <!-- TODO: create date directive instead of ngModel with piping -->
+              <input class="form-control" type="datetime-local"
+                [ngModel]="filter.dateFrom | date:'yyyy-MM-ddTHH:mm'"
+                (ngModelChange)="changeDateFrom($event)"
+                name="dateFrom">
+            </div>
+
+            <label for="input-aggregation" class="col-6 col-sm-3 col-form-label">Aggregation:</label>
+            <div class="col-6 col-sm-3">
+              <select name="aggregation" class="form-control" (change)="changeAggregation($event)">
+                <option value="10s">10 seconds</option>
+                <option value="30s">30 seconds</option>
+                <option value="1m">1 minute</option>
+                <option value="5m" selected>5 minutes</option>
+                <option value="30m">30 minutes</option>
+                <option value="1h">1 hour</option>
+              </select>
+            </div>
+
+            <label for="input-to" class="col-6 col-sm-1 offset-sm-1 col-form-label">To:</label>
+            <div class="col-6 col-sm-4">
+              <input class="form-control" type="datetime-local"
+                [ngModel]="filter.dateTo | date:'yyyy-MM-ddTHH:mm'"
+                (ngModelChange)="changeDateTo($event)"
+                name="dateTo">
+            </div>
+
+            <label for="ip-filter" class="col-6 col-sm-3 col-form-label">IP:</label>
+            <div class="col-6 col-sm-3">
+              <input
+                class="form-control"
+                type="text"
+                [ngModel]="filter.ip"
+                (ngModelChange)="changeIPFilter($event)"
+                name="ip"
+                #ipInput>
+            </div>
+
+            <div class="col-12 col-sm-5 offset-sm-1">
+              <button class="btn btn-primary btn-block" type="submit" name="button">Filter</button>
+            </div>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
