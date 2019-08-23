@@ -18,3 +18,4 @@
     - name: aggregation
     - name: mining
     - name: matching
+    - name: aida-output
