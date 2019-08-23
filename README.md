@@ -44,9 +44,9 @@ Check rules `select * from rule;`
 
 Activate all rules `update rule set active=1;`
 
-Restart Matching to start matching activated rules `sudo journalctl restart matching`
+Restart Matching to start matching activated rules `sudo systemctl restart matching`
 
-Send some more data into aida `nc localhost 4146 < data'` to generate predicted rules.
+Send some more data into aida `nc localhost 4146 < data` to generate predicted rules.
 
 **Check outputs**
 
