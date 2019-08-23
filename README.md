@@ -28,11 +28,33 @@ AIDA framework will start in few minutes. Then, send your data to the framework 
 
 If you do not have your own data, we recommend trying AIDA framework out with our [dataset](http://dx.doi.org/10.17632/p6tym3fghz.1). Download and unzip the main file in the datase (dataset.idea.zip) and use it in the command above.
 
-TODO run data mining
+**Run data mining**
 
-TODO update rules
+`sudo systemctl start mining`
 
-TODO check outputs
+Check mining stats
+
+`sudo journalctl -u mining`
+
+**Update rules**
+
+Open database `sqlite3 /var/aida/rules/rule.db`
+
+Check rules `select * from rule;`
+
+Activate all rules `update rule set active=1;`
+
+Restart Matching to start matching activated rules `sudo journalctl restart matching`
+
+Send some more data into aida `nc localhost 4146 < data'` to generate predicted rules.
+
+**Check outputs**
+
+Predicted rules are saved in root directory of this repository in `predictions.json` file.
+
+You can also get the predictions directly from kafka.
+
+`/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic predictions --from-beginning` 
 
 ## How to cite
 
