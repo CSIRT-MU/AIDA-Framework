@@ -9,7 +9,7 @@ RemainAfterExit=true
 User={{ kafka_user }}
 Group={{ kafka_user }}
 ExecStartPre=/bin/sleep 4
-ExecStart={{ kafka_dir }}/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic %i
+ExecStart=/bin/sh -c "{{ kafka_dir }}/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list | grep '%i' || {{ kafka_dir }}/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic %i"
 ExecStop={{ kafka_dir }}/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic %i
 
 [Install]
