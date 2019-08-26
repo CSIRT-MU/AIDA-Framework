@@ -105,8 +105,6 @@ If you are interested in our work, you might be interested in our papers related
 
 ## Acknowledgement
 
-AIDA Framework integrates [SPMF library](http://www.philippe-fournier-viger.com/spmf/) distributed under GPL v3 license.
-
 The development of the framework and related research were supported by the Security Research Programme of the Czech Republic 2015 - 2020 (BV III / 1 VS) granted by the Ministry of the Interior of the Czech Republic under No. VI20162019029 The Sharing and analysis of security events in the Czech Republic.
 
 Further research was supported by ERDF "CyberSecurity, CyberCrime and Critical Information Infrastructures Center of Excellence" (No.CZ.02.1.01/0.0/0.0/16\_019/0000822).
