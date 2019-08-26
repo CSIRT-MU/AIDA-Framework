@@ -10,10 +10,6 @@ AIDA is an analytical framework for processing intrusion detection alerts with a
 
 ![Schema of the AIDA Framework](/aida_schema.png "Schema of the AIDA Framework")
 
-## Use-cases
-
-TODO
-
 ## Getting started
 
 For a quick start, go to the provision directory and run Vagrant:
