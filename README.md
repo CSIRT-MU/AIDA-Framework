@@ -26,29 +26,41 @@ If you do not have your own data, we recommend trying AIDA framework out with ou
 
 **Run data mining**
 
+Trigger the data mining procedure (otherwise, it starts every 24 hours that you would have to wait):
+
 `sudo systemctl start mining`
 
-Check mining stats
+Check the logs of the data mining component:
 
 `sudo journalctl -u mining`
 
 **Update rules**
 
-Open database `sqlite3 /var/aida/rules/rule.db`
+Open the database with the mined rules:
 
-Check rules `select * from rule;`
+`sqlite3 /var/aida/rules/rule.db`
 
-Activate all rules `update rule set active=1;`
+Check the rules in the database:
 
-Restart Matching to start matching activated rules `sudo systemctl restart matching`
+`select * from rule;`
 
-Send some more data into aida `nc localhost 4146 < data` to generate predicted rules.
+Activate all the rules so that they are used by the rule matching component:
+
+`update rule set active=1;`
+
+Restart matching component to start matching activated rules:
+
+`sudo systemctl restart matching`
+
+Send some more data into AIDA, they will be matched against the rules to predict upcoming events:
+
+`nc localhost 4164 < path_to_file_with_your_data`
 
 **Check outputs**
 
-Predicted rules are saved in root directory of this repository in `predictions.json` file.
+Predicted rules are saved in the root directory of this repository in `predictions.json` file.
 
-You can also get the predictions directly from kafka.
+You can also get the predictions directly from Kafka:
 
 `/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic predictions --from-beginning` 
 
