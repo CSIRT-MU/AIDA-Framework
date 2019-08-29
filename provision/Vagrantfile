@@ -21,11 +21,14 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "../dashboard/frontend", "/srv/frontend", create: true, type: "rsync", rsync__exclude: ['node_modules/']
   config.vm.synced_folder "../dashboard/backend", "/srv/backend", owner: "www-data"
 
+  config.vm.synced_folder "../services/restapi", "/var/www/restapi", create: true, owner: "www-data"
+
   config.vm.network :private_network, type: "dhcp"
   config.vm.network :forwarded_port, guest: 4164, host: 4164
   # dashboard ports
   config.vm.network "forwarded_port", guest: 80, host: 8080
   config.vm.network "forwarded_port", guest: 8000, host: 8000
+  config.vm.network "forwarded_port", guest: 7777, host: 7777
 
   # Sometimes Vagrant does not install pip while using Ansible provisioning
   config.vm.provision :shell,
