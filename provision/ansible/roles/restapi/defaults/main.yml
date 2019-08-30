@@ -1,0 +1,4 @@
+---
+restapi_path: /var/www/restapi/manage.py
+config_path: /var/www/restapi/rest/rest.ini
+config_dir_path: /etc/aida/

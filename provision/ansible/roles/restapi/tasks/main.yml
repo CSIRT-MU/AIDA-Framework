@@ -1,0 +1,24 @@
+- name: Install Python dependencies
+  pip:
+    name:
+      - django
+      - djangorestframework
+      - django-cors-headers
+      - git+https://github.com/emlid/systemd-manager.git
+    executable: pip3
+
+- name: Set permissions
+  file:
+    path: "{{ restapi_path }}"
+    mode: 0777
+
+- name: Create config directory
+  file:
+    path: "{{ config_dir_path }}"
+    state: directory
+    mode: 0777
+    recurse: yes
+
+- name: Move rest.ini to config file
+  command: mv "{{ config_path  }}" "{{ config_dir_path }}"
+  become: yes
