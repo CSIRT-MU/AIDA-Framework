@@ -1,15 +1,13 @@
-from datetime import datetime
 from configparser import ConfigParser
-# from json import loads
+from datetime import datetime
 from os import popen
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from sysdmanager import SystemdManager
-from time import sleep
 
 import sqlite3
 
-CFG_FILE = '/var/www/restapi/rest/config.ini'
+CFG_FILE = '/etc/aida/rest.ini'
 
 
 def get_manager():
@@ -178,10 +176,5 @@ def enforce_data_mining(request):
 @api_view(['POST'])
 def reload_rule_matching(request):
     manager = get_manager()
-    if is_running("matching"):
-        manager.stop_unit("matching.service")
-        sleep(5)
-        manager.start_unit("matching.service")
-    else:
-        manager.start_unit("matching.service")
+    manager.restart_unit("matching.service")
     return Response()

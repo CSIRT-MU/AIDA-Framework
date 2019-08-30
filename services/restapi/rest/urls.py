@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^db/activerules/(?P<rule_id>\d+)/$', views.activate_rule, name='activate_rule'),
     url(r'^db/inactiverules/(?P<rule_id>\d+)/$', views.deactivate_rule, name='deactivate_rule'),
     url(r'^db/deleterules/(?P<rule_id>\d+)/$', views.delete_rule, name='delete_rule'),
-    url(r'^db/addrules/(?P<given_rule>[a-zA-Z0-9._]{3,},[a-zA-Z0-9._]{3,} => [a-zA-Z0-9._]{3,})/$', views.add_rule, name='add_rule'),
+    url(r'^db/addrules/(?P<given_rule>[a-zA-Z0-9._,]{3,} => [a-zA-Z0-9._]{3,})/$', views.add_rule, name='add_rule'),
     url(r'^enforcedatamining/$', views.enforce_data_mining, name='enforce_data_mining'),
     url(r'^reloadrulematching/$', views.reload_rule_matching, name='reload_rule_matching')
 ]

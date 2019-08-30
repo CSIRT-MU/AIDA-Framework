@@ -27,9 +27,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 CORS_ORIGIN_WHITELIST = (
-    'sabu-testbed.cesnet.cz',
-    'localhost:8000',
-    '127.0.0.1:9000'
+    'http://sabu-testbed.cesnet.cz',
+    'http://localhost:8000',
+    'http://127.0.0.1:9000'
 )
 
 # Application definition
