@@ -117,10 +117,14 @@ plainpages=false,            % fix duplicated pages when roman/arabic numbering 
 	frame=single,
 	breaklines=true,
 	rulecolor=\color{listingbg},
-	aboveskip=10pt
+	aboveskip=10pt,
+	xleftmargin=1cm
 }
 
 \begin{document}
+
+% do not indent first line in a paragraph
+\setlength{\parindent}{0cm}
 
 % title page
 {
@@ -190,8 +194,7 @@ To cite the paper, we recommend using the following bibtex entry:
  pages = {81:1--81:8},
  doi = {10.1145/3339252.3340513},
  publisher = {ACM},
- address = {New York, NY, USA},
- keywords = {alert correlation, data mining, information sharing, intrusion detection, prediction}
+ address = {New York, NY, USA}
 }
 \end{lstlisting}
 
@@ -246,15 +249,15 @@ OrganizationA.IDS1_Attempt.Login_22
 
 \cleardoublepage
 
-\section{Quick Start}
+
+\section{User Guide}
+
+\subsection{Quick Start using Command Line}
 
 For a quick start, go to the provision directory and run Vagrant:
 
 \begin{lstlisting}[]
 cd provision
-\end{lstlisting}
-
-\begin{lstlisting}[]
 vagrant up
 \end{lstlisting}
 
@@ -266,11 +269,83 @@ nc localhost 4164 < path_to_file_with_your_data
 
 If you do not have your own data, we recommend trying AIDA framework out with our dataset\footnote{\url{http://dx.doi.org/10.17632/p6tym3fghz.1}}. Download and unzip the main file in the datase (dataset.idea.zip) and use it in the command above.
 
-TODO run data mining
+\subsubsection*{Run data mining}
 
-TODO update rules
+Trigger the data mining procedure (otherwise, it starts every 24 hours that you would have to wait):
 
-TODO check outputs
+\begin{lstlisting}[]
+sudo systemctl start mining
+\end{lstlisting}
+
+Check the logs of the data mining component:
+
+\begin{lstlisting}[]
+sudo journalctl -u mining
+\end{lstlisting}
+
+\subsubsection*{Update rules}
+
+Open the database with the mined rules:
+
+\begin{lstlisting}[]
+sqlite3 /var/aida/rules/rule.db
+\end{lstlisting}
+
+Check the rules in the database:
+
+\begin{lstlisting}[]
+select * from rule;
+\end{lstlisting}
+
+Activate all the rules so that they are used by the rule matching component:
+
+\begin{lstlisting}[]
+update rule set active=1;
+\end{lstlisting}
+
+Restart matching component to start matching activated rules:
+
+\begin{lstlisting}[]
+sudo systemctl restart matching
+\end{lstlisting}
+
+Send some more data into AIDA, they will be matched against the rules to predict upcoming events:
+
+\begin{lstlisting}[]
+nc localhost 4164 < path_to_file_with_your_data
+\end{lstlisting}
+
+\subsubsection*{Check outputs}
+
+Predicted rules are saved in the root directory of this repository in `predictions.json` file.
+
+You can also get the predictions directly from Kafka:
+
+\begin{lstlisting}[]
+`/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic predictions --from-beginning`
+\end{lstlisting}
+
+\cleardoublepage
+
+\subsection{Quick Start using AIDA Dashboard}
+
+http://localhost:8000/admin/
+
+admin
+aida.admin
+
+http://localhost:8080
+
+Username: admin
+Password: aida.admin
+
+\includegraphics[width=0.75\textwidth]{fig/dashboard_login}
+
+\includegraphics[width=0.75\textwidth]{fig/dashboard_overview}
+
+\includegraphics[width=0.75\textwidth]{fig/dashboard_rules}
+
+\includegraphics[width=0.75\textwidth]{fig/dashboard_spark}
 
 \cleardoublepage
 
@@ -281,8 +356,6 @@ deployment
 \subsection{Prerequisities}
 
 \subsection{Installation}
-
-h1. Instalace iABU na testbedu
 
 h2. Java
 
@@ -623,20 +696,6 @@ finální stav - crontab uživatele iabu (jako root: crontab -e -u iabu):
 * * * * * find /var/iabu/warden_receiver/incoming/* -mmin +1 -exec rm {} \; 2> /dev/null
 * * * * * find /var/iabu/mentat_inspector/incoming/* -mmin +1 -exec rm {} \; 2> /dev/null
 \end{lstlisting}
-
-\cleardoublepage
-
-\section{User Guide}
-
-incl. screenshots
-
-\includegraphics[width=0.75\textwidth]{fig/dashboard_login}
-
-\includegraphics[width=0.75\textwidth]{fig/dashboard_overview}
-
-\includegraphics[width=0.75\textwidth]{fig/dashboard_rules}
-
-\includegraphics[width=0.75\textwidth]{fig/dashboard_spark}
 
 \cleardoublepage
 

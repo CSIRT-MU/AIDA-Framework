@@ -1,1 +1,1 @@
-export const url : string = "http://sabu-testbed.cesnet.cz:8080/"
+export const url : string = "http://localhost:8080/"

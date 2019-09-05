@@ -13,7 +13,7 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class DataService {
 
-  url = 'http://sabu-testbed.cesnet.cz:7777';
+  url = 'http://localhost:7777';
 
   constructor(private http: HttpClient) { }
 

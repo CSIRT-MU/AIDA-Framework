@@ -8,6 +8,6 @@ export const environment = {
   itemsPerPage: 10,
   oidcApiURL: 'http://localhost:8000/oidc-api/oidc-protected/',
   simpleLoginApiUrl: 'http://localhost:8000/rest-api/',
-  postLogoutUrl: 'http://localhost:4200/login',
+  postLogoutUrl: 'http://localhost:8080/login',
   authUrl: 'http://localhost:8000/api-token-auth/'
 };
