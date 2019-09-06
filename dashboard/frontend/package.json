@@ -37,7 +37,7 @@
     "easy-pie-chart": "^2.1.7",
     "file-loader": "^1.1.5",
     "fullcalendar": "^3.6.2",
-    "jquery": "^3.2.1",
+    "jquery": "^3.4.0",
     "jquery-sparkline": "^2.4.0",
     "jvectormap": "^2.0.4",
     "load-google-maps-api": "^1.0.0",
