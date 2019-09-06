@@ -29,7 +29,7 @@
     "@swimlane/ngx-charts": "^10.0.0",
     "angular-oauth2-oidc": "^5.0.2",
     "babel-polyfill": "^6.26.0",
-    "bootstrap": "4.1.x",
+    "bootstrap": "4.3.x",
     "bootstrap-datepicker": "^1.7.1",
     "chart.js": "^2.7.1",
     "core-js": "^2.4.1",
