@@ -351,39 +351,78 @@ Password: aida.admin
 
 \section{Installation Instructions}
 
-deployment
+Simplest way how to install and use AIDA is by running vagrant box \texttt{vagrant up} from \texttt{provision} directory.
+If you want to install AIDA on an already existing machine, you can follow the following instructions. There is a Quick Installation
+section whereby you can install AIDA just by running Ansible playbook. Or you can install AIDA manually step by step from
+the instructions in Manual Installation section.
 
-\subsection{Prerequisities}
+\subsection{Prerequisites}
 
-\subsection{Installation}
-
-h2. Java
-
-Java je nainštalovaná nasledovným spôsobom:
-* najnovšia verzia (jdk-8u92) stiahnutá z webu Oracle
-* pomocou java-package zostavený balík .deb
-* .deb následne nainštalovaný do systému
-
-OpenJDK 8 nainstalováno z backport balíku
-* přidaný zdroj "deb http://ftp.cz.debian.org/debian jessie-backports main" v /etc/apt/sources.list
+Installed Ubuntu 18.04.2 and AIDA repository downloaded or cloned into \texttt{/vagrant} directory. You can choose any
+other directory, but we will refer the repository root as \texttt{/vagrant}. You should have also installed following dependencies.
 
 
-h2. Maven
+\begin{itemize}
+    \item Installed Java JDK version 1.8
+    \item Installed Maven version 3.6
+    \item Installed Python 2.7 as \texttt{python}
+    \item Installed Python 3.6 as \texttt{python3}
+    \item Installed Pip for python 2.7 as \texttt{pip}
+    \item Installed Pip for python 3.6 as \texttt{pip3}
+\end{itemize}
 
-Standardní instalace Apache Maven 3.0.5
-Maven home: /usr/share/maven
+You can install the above prerequisites by running
 
-h2. Python
-
-Téměř všechny nástroje používají python verze 3 (krom Warden klienta).
-Nainstalované balíčky (pro python3):
-\begin{lstlisting}[]
-python-daemon==2.1.2
-kafka-python==1.4.1
-ujson==1.35
-python-dateutil==2.6.1
-neo4j-driver==1.4.0
+\begin{lstlisting}
+$ sudo apt-get update
+$ sudo apt-get -y install openjdk-8-jdk maven python-pip python3-pip
 \end{lstlisting}
+
+\subsection{Quick Installation}
+
+The simplest way how to install AIDA is by running Ansible playbook.
+
+You have to have Ansible installed. You can do it by running following command.
+
+\begin{lstlisting}
+$ sudo apt-get -y install ansible
+\end{lstlisting}
+
+Then run ansible playbook.
+
+\begin{lstlisting}
+$ cd /vagrant/provision/ansible
+$ ansible-playbook -i inventory-local.ini install-aida.yml
+\end{lstlisting}
+
+Note that the Ansible will also install Java 8, Python 3 and other packages listed in prerequisites section.
+
+% TODO provide simple command to check status of all AIDA services
+You can check that the main AIDA services are up and running by running.
+\begin{lstlisting}
+$ sudo systemctl status aida-input sanitization aggregation matching
+\end{lstlisting}
+
+\subsection{Manual Installation}
+
+We will describe here creating of new users for almost each AIDA service, but you can of course create just one user for
+all AIDA services.
+
+\subsubsection{Install aida-input service}
+
+\subsubsection{Install sanitization service}
+
+\subsubsection{Install aggregation service}
+
+\subsubsection{Install mining service}
+
+\subsubsection{Install matching service}
+
+\subsubsection{Install aida-output service}
+
+\subsubsection{Install restapi service}
+
+\subsubsection{Install dashboard service}
 
 h2. Uživatelé
 
