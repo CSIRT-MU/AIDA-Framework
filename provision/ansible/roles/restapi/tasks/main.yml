@@ -19,6 +19,6 @@
     mode: 0777
     recurse: yes
 
-- name: Move rest.ini to config file
-  command: mv "{{ config_path  }}" "{{ config_dir_path }}"
+- name: Copy rest.ini to config file
+  command: cp "{{ config_path  }}" "{{ config_dir_path }}"
   become: yes
