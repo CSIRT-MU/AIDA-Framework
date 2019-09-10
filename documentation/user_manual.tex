@@ -161,45 +161,9 @@ plainpages=false,            % fix duplicated pages when roman/arabic numbering 
 
 \pdfbookmark[1]{Content}{pdf_contents}
 
-\setcounter{tocdepth}{3}
+\setcounter{tocdepth}{2}
 
 \tableofcontents
-
-\vspace*{\fill}
-
-\normalfont
-
-\pdfbookmark[1]{Acknowledgement}{Acknowledgement}
-\section*{Acknowledgment}
-
-The authors of the AIDA framework are Martin Hus\'{a}k, Jaroslav Ka\v{s}ar, and Milan \v{Z}iaran. The authors would like to thank Michal Pav\'{u}k, V\'{i}t Rus\v{n}\'{a}k, and Jakub Kolman for the dashboard, and Petr Velan and Samuel \v{S}u\v{l}an for testing the framework.
-
-% AIDA Framework integrates SPMF library\footnote{\url{http://www.philippe-fournier-viger.com/spmf/}} distributed under GPL v3 license.
-
-There is a design paper describing the AIDA framework, see:
-\begin{lstlisting}[]
-Martin Husák and Jaroslav Kašpar. 2019. AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts. In Proceedings of the 14th International Conference on Availability, Reliability and Security (ARES '19). ACM, New York, NY, USA, Article 81, 8 pages. DOI: https://doi.org/10.1145/3339252.3340513
-\end{lstlisting}
-
-To cite the paper, we recommend using the following bibtex entry:
-\begin{lstlisting}[]
-@inproceedings{AIDAframework,
- author = {Hus\'{a}k, Martin and Ka\v{s}par, Jaroslav},
- title = {AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts},
- booktitle = {Proceedings of the 14th International Conference on Availability, Reliability and Security},
- series = {ARES '19},
- year = {2019},
- isbn = {978-1-4503-7164-3},
- location = {Canterbury, CA, United Kingdom},
- pages = {81:1--81:8},
- doi = {10.1145/3339252.3340513},
- publisher = {ACM},
- address = {New York, NY, USA}
-}
-\end{lstlisting}
-
-The development of the framework and related research were supported by the Security Research Programme of the Czech Republic 2015 - 2020 (BV III / 1 VS) granted by the Ministry of the Interior of the Czech Republic under No. VI20162019029 The Sharing and analysis of security events in the Czech Republic. 
-Further research was supported by ERDF ``CyberSecurity, CyberCrime and Critical Information Infrastructures Center of Excellence'' (No.CZ.02.1.01/0.0/0.0/16\_019/0000822).
 
 \cleardoublepage
 
@@ -207,18 +171,19 @@ Further research was supported by ERDF ``CyberSecurity, CyberCrime and Critical 
 
 AIDA is an analytical framework for processing intrusion detection alerts with a focus on alert correlation and predictive analytics. The framework contains components that filter, aggregate, and correlate the alerts, and predict future security events using the predictive rules distilled from historical records. The components are based on stream processing and use selected features of data mining (namely sequential rule mining) and complex event processing. The framework was designed to be deployed as an analytical component of an alert processing platform. Alternatively, it can be deployed locally for experimentations over datasets.
 
+\begin{figure}[h]
 \includegraphics[width=\textwidth]{fig/aida_schema}
+\caption{Example of a sequential rule.}
+\label{fig:aida}
+\end{figure}
 
-IDEA\footnote{\url{https://idea.cesnet.cz/}}
+Schema of the AIDA framework is presented in Figure~\ref{fig:aida}. The central component of the framework is Kafka message broker\footnote{\url{https://kafka.apache.org/}} that takes the data from inputs and distributes them among the other components while ensuring the correct order of processing of the alerts. Particular components can then be found in two component groups based on their underlying software platform. On the left side, we can see a group of components implemented as applications in Spark analytical engine\footnote{\url{https://spark.apache.org/}}. These applications typically receive a stream of alerts from Kafka, process them, and return them to Kafka. Some applications, such as the Data Mining component, have another output, such as a database for long-term storage of results of data processing. On the right side of the schema, we can see an application based on Esper\footnote{\url{http://www.espertech.com/esper/}}, another event stream processing framework. The component implemented using Esper uses its features, such as a powerful query language, for the benefits of the whole AIDA framework. The Rule Matching component is also one of the few that provide outputs outside the framework. Outputs are in the same form as inputs, i.e., intrusion detection alerts, so the output channel is implemented analogously. More details on particular components are discussed further in this section.
 
-\begin{lstlisting}[]
-OrganizationA.Honeypot1_Recon.Scanning_22,
-OrganizationB.IDS1_Attempt.Login_22
-==>
-OrganizationA.IDS1_Attempt.Login_22
-#SUPP: 0.0011 #CONF: 0.6111
-\end{lstlisting}
+\bigskip
 
+AIDA framework expects the input alerts to be formatted in IDEA (Intrusion Detection Extensible Alert) format\footnote{\url{https://idea.cesnet.cz/en/index}}. IDEA is inspired by IDMEF, a popular alert exchange format\footnote{\url{https://www.ietf.org/rfc/rfc4765.txt}}. Contrary to IDMEF, IDEA is extensible, includes a classification of alerts based on taxonomies from CSIRT communities, and is adjusted to suit practical needs. See the example of an intrusion detection alert in IDEA format in Figure~\ref{fig:idea}.
+
+\begin{figure}[h]
 \begin{lstlisting}[]
 {
   "Format": "IDEA0",
@@ -246,13 +211,31 @@ OrganizationA.IDS1_Attempt.Login_22
   ]
 }
 \end{lstlisting}
+\caption{Example of an intrusion detection alert in IDEA format.}
+\label{fig:idea}
+\end{figure}
+
+AIDA framework extracts sequential rules from the intrusion detection alerts. The sequential rules are then used to predict upcoming attacks. An example of a sequential rule is presented in Figure~\ref{fig:seqrule}. It consists of ordered $n$-tuples (sensor name, type of event, destination port) and support and confidence values. The $n$-tuples fold two groups; the first group implies the second group. Support value indicates the number of sequences in the sequential database that conform to the rule divided by the total number of all the sequences. The confidence value is a conditional probability of the second part of the rule given the first part of the rule.
+
+\begin{figure}[h]
+\begin{lstlisting}[]
+OrganizationA.Honeypot1_Recon.Scanning_22,
+OrganizationB.IDS1_Attempt.Login_22
+==>
+OrganizationA.IDS1_Attempt.Login_22
+#SUPP: 0.0011 #CONF: 0.6111
+\end{lstlisting}
+\caption{Example of a sequential rule.}
+\label{fig:seqrule}
+\end{figure}
+
+The remainder of this documents contains a user guide, installation instructions, and technical documentation. See the user guide for a quick start on how to work with AIDA framework, either via command line or via graphical interface. The quick start should be sufficient to those users, who wish to run AIDA framework locally, e.g., to experiment over datasets. Installation instructions are recommended for users who want to deploy AIDA framework in their environment, and run it operationally. Finally, the technical documentation is intended for developers and advanced users interested in the implementation and exact procedures executed by the framework.
 
 \cleardoublepage
 
-
 \section{User Guide}
 
-\subsection{Quick Start using Command Line}
+\subsection{Quick Start Using Command Line}
 
 For a quick start, go to the provision directory and run Vagrant:
 
@@ -327,7 +310,7 @@ You can also get the predictions directly from Kafka:
 
 \cleardoublepage
 
-\subsection{Quick Start using AIDA Dashboard}
+\subsection{Quick Start Using AIDA Dashboard}
 
 http://localhost:8000/admin/
 
@@ -837,5 +820,39 @@ Testovacia databáza: /var/www/restapi/sabu-test.db
 \subsection{Dashboard}
 
 \subsection{Ansbile and Vagrant}
+
+\cleardoublepage
+
+\section{Acknowledgment}
+
+The authors of the AIDA framework are Martin Hus\'{a}k, Jaroslav Ka\v{s}ar, and Milan \v{Z}iaran. The authors would like to thank Michal Pav\'{u}k, V\'{i}t Rus\v{n}\'{a}k, and Jakub Kolman for the dashboard, and Petr Velan and Samuel \v{S}u\v{l}an for testing the framework.
+
+\bigskip
+
+The design of the AIDA framework is described in the research paper:
+\begin{lstlisting}[]
+Martin Husák and Jaroslav Kašpar. 2019. AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts. In Proceedings of the 14th International Conference on Availability, Reliability and Security (ARES '19). ACM, New York, NY, USA, Article 81, 8 pages. DOI: https://doi.org/10.1145/3339252.3340513
+\end{lstlisting}
+
+To cite the paper, we recommend using the following bibtex entry:
+\begin{lstlisting}[]
+@inproceedings{AIDAframework,
+ author = {Hus\'{a}k, Martin and Ka\v{s}par, Jaroslav},
+ title = {AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts},
+ booktitle = {Proceedings of the 14th International Conference on Availability, Reliability and Security},
+ series = {ARES '19},
+ year = {2019},
+ isbn = {978-1-4503-7164-3},
+ location = {Canterbury, CA, United Kingdom},
+ pages = {81:1--81:8},
+ doi = {10.1145/3339252.3340513},
+ publisher = {ACM},
+ address = {New York, NY, USA}
+}
+\end{lstlisting}
+
+The development of the framework and related research were supported by the Security Research Programme of the Czech Republic 2015 - 2020 (BV III / 1 VS) granted by the Ministry of the Interior of the Czech Republic under No. VI20162019029 The Sharing and analysis of security events in the Czech Republic.
+
+% Further research using the framework was supported by ERDF ``CyberSecurity, CyberCrime and Critical Information Infrastructures Center of Excellence'' (No.CZ.02.1.01/0.0/0.0/16\_019/0000822).
 
 \end{document}
