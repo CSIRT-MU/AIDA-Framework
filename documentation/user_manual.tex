@@ -418,12 +418,12 @@ $ sudo apt-get -y install zookeeperd
 Download Kafka binary into \texttt{/opt/kafka}
 \begin{lstlisting}
 $ sudo su
-$ mkdir /opt/kafka
-$ cd /opt/kafka
-$ wget https://archive.apache.org/dist/kafka/2.3.0/kafka_2.12-2.3.0.tgz -O kafka.tgz
-$ tar -xzf kafka.tgz --strip-components=1
-$ rm kafka.tgz
-$ sudo chown -R kafka:kafka ./
+# mkdir /opt/kafka
+# cd /opt/kafka
+# wget https://archive.apache.org/dist/kafka/2.3.0/kafka_2.12-2.3.0.tgz -O kafka.tgz
+# tar -xzf kafka.tgz --strip-components=1
+# rm kafka.tgz
+# chown -R kafka:kafka ./
 \end{lstlisting}
 
 Create systemd unit file for \texttt{kafka} service
@@ -478,29 +478,29 @@ $ sudo useradd -M spark
 Download Spark binary
 \begin{lstlisting}
 $ sudo su
-$ mkdir -p /opt/spark/spark
-$ cd /opt/spark/spark
-$ wget https://archive.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz -O spark.tgz
-$ tar -xzf spark.tgz --strip-components=1
-$ rm spark.tgz
-$ wget https://search.maven.org/classic/remotecontent?filepath=org/apache/spark/spark-streaming-kafka-0-8-assembly_2.11/2.4.3/spark-streaming-kafka-0-8-assembly_2.11-2.4.3.jar -O /opt/spark/spark/jars/spark-streaming-kafka-0-8-assembly_2.11-2.4.3.jar
+# mkdir -p /opt/spark/spark
+# cd /opt/spark/spark
+# wget https://archive.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz -O spark.tgz
+# tar -xzf spark.tgz --strip-components=1
+# rm spark.tgz
+# wget https://search.maven.org/classic/remotecontent?filepath=org/apache/spark/spark-streaming-kafka-0-8-assembly_2.11/2.4.3/spark-streaming-kafka-0-8-assembly_2.11-2.4.3.jar -O /opt/spark/spark/jars/spark-streaming-kafka-0-8-assembly_2.11-2.4.3.jar
 \end{lstlisting}
 
 Prepare modules for Spark applications
 \begin{lstlisting}
 $ sudo su
-$ mkdir -p /opt/spark/applications
-$ cp -r /vagrant/commons/commons-python /opt/spark/applications/modules
-$ pip3 install -r /opt/spark/applications/modules/requirements.txt
-$ apt-get -y install zip
-$ zip -j -r /opt/spark/applications{.zip,}
+# mkdir -p /opt/spark/applications
+# cp -r /vagrant/commons/commons-python /opt/spark/applications/modules
+# pip3 install -r /opt/spark/applications/modules/requirements.txt
+# apt-get -y install zip
+# zip -j -r /opt/spark/applications{.zip,}
 \end{lstlisting}
 
 Prepare script for running Spark applications
 \begin{lstlisting}
 $ sudo su
-$ cp /vagrant/provision/ansible/roles/spark/templates/run-application.sh.j2 /opt/spark/applications/run-application.sh
-$ chmod +x /opt/spark/applications/run-application.sh
+# cp /vagrant/provision/ansible/roles/spark/templates/run-application.sh.j2 /opt/spark/applications/run-application.sh
+# chmod +x /opt/spark/applications/run-application.sh
 \end{lstlisting}
 
 Now you have to replace placeholder \texttt{\{\{ spark\_home\_dir \}\}} with \texttt{/opt/spark/spark}
