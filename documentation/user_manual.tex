@@ -785,19 +785,208 @@ $ sudo systemctl status aida-output
 
 \subsection{Inputs and Outputs}
 
+Simplest way for the alerts to enter AIDA framework is via TCP socket on port 4164. AIDA contains systemd service \texttt{aida-input}
+which is simple unix pipeline of Netcat listening on TCP socket and forwarding the data into Kafka via
+Kafka console producer. This alerts are being send into Kafka topic \texttt{input}. There are expected one IDEA alert
+per line.
+You can of course skip this service and send the data directly into the topic by yourself.
+
+The predicted alerts are stored in file \texttt{predictions.json} in the root directory of repository. There is systemd
+service called \texttt{aida-output} which is also simple unix pipeline reading alerts from Kafka topic
+\texttt{predictions} and then saving them into the file.
+You can of course skip this service and consume the data directly from the Kafka topic.
+
+
 \subsection{Kafka}
+
+Kafka is used as the primary communication channel between components and the way of moving alerts through the system.
+Kafka is installed in version 2.3.0 in the directory \texttt{/opt/kafka/}.
+Managing of Kafka broker is done via systemd service \texttt{kafka}.
+For managing of Kafka topics is created systemd template service \texttt{kafka-topic@}.
+
+AIDA uses several kafka topics for asynchronous communication:
+
+\begin{itemize}
+\item input
+\item sanitized
+\item aggregated
+\item predictions
+\item observations
+\end{itemize}
+
 
 \subsection{Spark}
 
+Spark is installed in version 2.4.3 with extension for Kafka streaming.
+Because AIDA is using just one machine, spark applications are being executed in local mode.
+
+
 \subsection{Sanitizer}
+
+The Sanitizer is a stream-processing tool for syntactic and semantic checks of the alerts on the input.
+Firstly, Sanitizer drops alerts which do not comply with a IDEA format.
+Secondly, it runs several semantics checks and drops or modify alerts of no interest in AIDA .
+Lastly, it remove unnecessary IDEA fields, which are not being used in AIDA, to to speed up data processing
+in the whole framework.
+
+Following semantic checks are being applied.
+\begin{itemize}
+\item drops alerts with category \texttt{Vulnerable} or \texttt{Abusive.Sexual}
+\item drops alerts with missing source IPv4, target IPv4 or target port
+\item remove nodes without name or with name containing \texttt{warden\_filer}
+\item remove \texttt{Test} category from the alerts
+\end{itemize}
+
+The Sanitizer is implemented as Kafka Streaming application which reads alerts from \texttt{input}
+topic and writes processed alerts into \texttt{sanitized} topic.
+Managing of this component is done via systemd service \texttt{sanitization}.
+
 
 \subsection{Aggregation}
 
+Task of Aggregation component is to find and mark redundant alerts so that these are not
+included in further analyses. AIDA is primarily focused on the aggregation of following two types of aggregates,
+duplicates and continuing alerts.
+Aggregation is a Spark Streaming application which runs in local mode (there is no necessity for running the whole
+Spark cluster with slaves) and is managed by the systemd service called \texttt{aggregation}.
+
+\subsubsection{Duplicates}
+
+Duplicates are processed in the batches with size of one minute, windows size of five minutes and sliding size of one
+minute.
+
+Two alerts are considered to be duplicates if their \texttt{source IPv4}, \texttt{destination IPv4},
+\texttt{alert category}, \texttt{detecting node name} and \texttt{detect time} equals and both appear in the five minute
+window. In this case one of these alerts is considered to be duplicate and AIDA duplicate field in the alert
+\texttt{\$.\_aida.Duplicate} is being set to \texttt{true}.
+
+\subsubsection{Continuing alerts}
+
+Continuing alerts are processed in the batches with size of one minute, windows size of seventy minutes and
+sliding size of one minute.
+
+The alert is considered to be continuing when it has the same \texttt{source IPv4}, \texttt{destination IPv4},
+\texttt{destination port}, \texttt{alert category}, \texttt{detecting node name} as some previous alert in the seventy
+minutes window. In this case the alert is considered to be a continuing and the value of AIDA continuing field in
+the alert \texttt{\$.\_aida.Continuing} is being set to the ID of the first alert with the same properties in the window.
+
+
 \subsection{Data Mining}
+
+Data Mining component generate sequential rules and stores them into database for late use by Rule Matching component.
+
+The component read all alerts currently buffered in \texttt{aggregated} Kafka topic. Retention of the topics is set to
+one day by default, so the Data Mining component is working with alerts from the last day. The component builds the
+sequential database from these alerts and then run algorithms on these sequences to generate rules.
+
+A sequence is a vector of items (n-tuples) that share a common property. In our implementation we chose pair of
+source IPv4 and target IPv4 as a common property, so the sequences represents behaviour of attacker in regards to a
+specific target. The item consists of an alert type, target port, and name of the node.
+
+The rules are generated by using the SPMF library. We are currently using Top Sequential Rules algorithm with \texttt{K}
+being set to 10 and minimal confidence being set to 0.5.
+
+Mined rules are stored into sqlite database \texttt{/var/aida/rules/rule.db}, which is in more detail described in the
+next section.
+
+The component can be run by oneshot systemd service called \texttt{mining}. Systemd timer is created for the purposes
+of running Mining automatically in defined interval. The timer interval is being set to one day, which corresponds to
+the Kafka retention interval.
+
 
 \subsection{Database}
 
+We are using sqlite3 database for storing and managing rules. It can be found in the file
+\texttt{/var/aida/rules/rule.db}.
+The database contains main table called \texttt{rule} described in \autoref{tab:aida_db}. Data Mining component adds new
+rules into the table or rules can be add manually. Then it's on the user of AIDA to activate rules he is interested in.
+Activated rules are going to be used in Rule Matching component to predict and aggregated alerts.
+
+\begin{table}[h]
+\centering
+\caption{Database scheme for storing sequential rules.}
+\label{tab:aida_db}
+\begin{tabular}{| l | l | m{9cm} |}
+\hline
+\rowcolor{gray!15}\textbf{Item} & \textbf{Type} & \textbf{Example} \
+\hline \hline
+id             & INT            & 123        \ \hline
+date           & CHARACTER (10) & 2018-10-20 \ \hline
+rule           & VARCHAR (255)  & "OrganizationA.Honeypot1\_Recon.Scanning\_22,\newline OrganizationB.IDS1\_Attempt.Login\_22\newline $=>$ OrganizationA.IDS1\_Attempt.Login\_22" \\ \hline
+support\_hits  & INT            & 42      \\ \hline
+support\_total & INT            & 100,000 \\ \hline
+confidence     & REAL           & 0.6789  \\ \hline
+active         & INT            & 0       \\ \hline
+comment        & VARCHAR (255)  & "This is a sample rule, do not use." \ \hline
+\end{tabular}
+\end{table}
+
+
 \subsection{Rule Matching}
+
+Rule Matching component processes the stream of alters and queries them for the presence of predefined rules.
+If the predefined rules is matched, an action is performed.
+
+The Rule Matching component is written as Esper streaming application.
+On the startup, the component reads active rules from the database and generate two EPL queries for each active rule.
+These queries are then deployed into the Esper runtime engine. Listener, creating predicted alerts and sending them
+to Kafka, is attached to the queries. All the queries are operating on one hour long sliding window
+\autoref{fig:twfill}, which also filters alerts of no interest for Matching, like duplicates and continuing aggregates.
+
+
+\begin{figure}[h!]
+\begin{lstlisting}[]
+@public create window IdeaWindow.ext:time_order(detectTime.getTime(),1 hours) as select * from Idea
+insert into IdeaWindow
+select * from Idea
+where
+source is not null and
+(source.where(x => x.IP4 is not null).anyOf(x => (x.IP4.countOf())>0)) and
+target is not null and
+(target.where(x => x.IP4 is not null).anyOf(x => (x.IP4.countOf())>0)) and
+(additionalProperties is null or (additionalProperties.get("_AIDA")) is null or
+(cast(additionalProperties.get("_AIDA"),java.util.Map).get("Duplicate")) is null and
+(cast(additionalProperties.get("_AIDA"),java.util.Map).get("Continuing")) is null)
+\end{lstlisting}
+\caption{Filling the time window for optimized pattern matching in EPL.}
+\label{fig:twfill}
+\end{figure}
+
+There are two EPL queries created for each active rule.
+
+The first query is marked as \texttt{PREDICTION} and is matching the first part of the rule \autoref{fig:query}.
+When the first part is matched, the attached listener is invoked. The listener creates predicted alerts, based
+on the alerts that appear in the second part of the rule, and sends them into Kafka topic \texttt{predictions}.
+
+The second query is marked as \texttt{OBSERVATION}. It matches the whole rule. When the entire rule is matched,
+the observation listener is invoked. The listener sends alert into Kafka topic called \texttt{observations},
+noticing that the predicted alert from the previous query was confirmed.
+
+\begin{figure}[h!]
+\begin{lstlisting}[]
+@Rule(
+value='OrganizationA.Honeypot1_Recon.Scanning_22, OrganizationB.IDS1_Attempt.Login_22 ==> OrganizationA.IDS1_Attempt.Login_22',
+confidence=0.6111,
+type=StatementType.PREDICTION)
+select * from IdeaWindow(
+(category.contains("Recon.Scanning")) and (node.anyOf(x => x.name="OrganizationA.Honeypot1")) and (target.anyOf(x => x.port.contains(22))) or
+(category.contains("Attempt.Login")) and (node.anyOf(x => x.name="OrganizationB.IDS1")) and (target.anyOf(x => x.port.contains(22)))
+)
+match_recognize (
+partition by source[0].IP4[0], target[0].IP4[0]
+measures A[0] as A, B[0] as B
+pattern (match_recognize_permute(A+,B+))
+define
+A as (A.category.contains("Recon.Scanning")) and (A.node.anyOf(x => x.name="OrganizationA.Honeypot1")) and (A.target.anyOf(x => x.port.contains(22))),
+B as (B.category.contains("Attempt.Login")) and (B.node.anyOf(x => x.name="OrganizationB.IDS1")) and (B.target.anyOf(x => x.port.contains(22)))
+)
+\end{lstlisting}
+\caption{Predictive rule converted into optimized EPL query.}
+\label{fig:query}
+\end{figure}
+
+Rule Matching component is managed by the systemd service called \texttt{matching}.
+
 
 \subsection{Feedback}
 
