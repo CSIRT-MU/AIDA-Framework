@@ -825,6 +825,10 @@ AIDA uses several kafka topics for asynchronous communication:
 Spark is installed in version 2.4.3 with extension for Kafka streaming.
 Because AIDA is using just one machine, spark applications are being executed in local mode.
 
+It the case a Dashboard will run on different machine, you will need to set CORS headers into
+Spark UI. This can be done by implementing simple Java Servlet Filter. Put jar with the filter into
+\texttt{/opt/spark/spark/jars} directory. Then set the filter by specifying the filter class name in
+\texttt{spark.ui.filters} configuration in the \texttt{/opt/spark/spark/conf/spark-defaults.conf} file.
 
 \subsection{Sanitizer}
 
