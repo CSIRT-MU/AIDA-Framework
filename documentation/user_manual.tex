@@ -6,6 +6,7 @@
 \def\uvt{Institute of Computer Science}
 \def\street{Botanick\'{a} 68a}
 \def\psc{602\,00 Brno}
+\def\contactemail{husakm@ics.muni.cz}
 
 \def\projectname{AIDA Framework}
 
@@ -21,12 +22,10 @@
 \usepackage[T1]{fontenc}
 \usepackage[hyphens]{url}
 \usepackage{hyperref}
-\usepackage[usenames, dvipsnames]{xcolor}
-% \usepackage{lastpage}
+\usepackage{array}
+\usepackage[table, usenames, dvipsnames]{xcolor}
 \usepackage{indentfirst}
 \usepackage{graphicx}
-% \usepackage{booktabs}
-% \usepackage{multirow}
 \DeclareGraphicsExtensions{.pdf, .ps, .eps, .png}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Colors %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -111,6 +110,10 @@ plainpages=false,            % fix duplicated pages when roman/arabic numbering 
 \definecolor{listingbg}{RGB}{242,242,242}
 \lstset{
 	basicstyle=\footnotesize\ttfamily,
+	inputencoding=utf8,
+% 	extendedchars=true,
+% 	literate={á}{\'{a}}1 {š}{\v{s}}1,
+  escapeinside={\%*}{*)},
 	captionpos=b,
 	backgroundcolor=\color{listingbg},
 	framesep=4pt,
@@ -144,6 +147,8 @@ plainpages=false,            % fix duplicated pages when roman/arabic numbering 
       \hyphenpenalty=10000 % prevent names from hyphenating
          \begin{tabular}{rl }
             Authors & \reportauthor \\
+             & \\
+            Contact email & \contactemail \\
              & \\
             Contact address & \muni \\
              & \uvt \\
@@ -908,16 +913,16 @@ Activated rules are going to be used in Rule Matching component to predict and a
 \label{tab:aida_db}
 \begin{tabular}{| l | l | m{9cm} |}
 \hline
-\rowcolor{gray!15}\textbf{Item} & \textbf{Type} & \textbf{Example} \
+\rowcolor{gray!15}\textbf{Item} & \textbf{Type} &W \textbf{Example} \\
 \hline \hline
-id             & INT            & 123        \ \hline
-date           & CHARACTER (10) & 2018-10-20 \ \hline
-rule           & VARCHAR (255)  & "OrganizationA.Honeypot1\_Recon.Scanning\_22,\newline OrganizationB.IDS1\_Attempt.Login\_22\newline $=>$ OrganizationA.IDS1\_Attempt.Login\_22" \\ \hline
+id             & INT            & 123        \\ \hline
+date           & CHARACTER (10) & ``2018-10-20''W \\ \hline
+rule           & VARCHAR (255)  & ``OrganizationA.Honeypot1\_Recon.Scanning\_22,\newline OrganizationB.IDS1\_Attempt.Login\_22\newline $=>$ OrganizationA.IDS1\_Attempt.Login\_22'' \\ \hline
 support\_hits  & INT            & 42      \\ \hline
 support\_total & INT            & 100,000 \\ \hline
 confidence     & REAL           & 0.6789  \\ \hline
 active         & INT            & 0       \\ \hline
-comment        & VARCHAR (255)  & "This is a sample rule, do not use." \ \hline
+comment        & VARCHAR (255)  & ``This is a sample rule, do not use.'' \\ \hline
 \end{tabular}
 \end{table}
 
@@ -1020,7 +1025,7 @@ The authors of the AIDA framework are Martin Hus\'{a}k, Jaroslav Ka\v{s}ar, and 
 
 The design of the AIDA framework is described in the research paper:
 \begin{lstlisting}[]
-Martin Husák and Jaroslav Kašpar. 2019. AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts. In Proceedings of the 14th International Conference on Availability, Reliability and Security (ARES '19). ACM, New York, NY, USA, Article 81, 8 pages. DOI: https://doi.org/10.1145/3339252.3340513
+Martin Hus%*á*)k and Jaroslav Ka%*š*)par. 2019. AIDA Framework: Real-Time Correlation and Prediction of Intrusion Detection Alerts. In Proceedings of the 14th International Conference on Availability, Reliability and Security (ARES '19). ACM, New York, NY, USA, Article 81, 8 pages. DOI: https://doi.org/10.1145/3339252.3340513
 \end{lstlisting}
 
 To cite the paper, we recommend using the following bibtex entry:
