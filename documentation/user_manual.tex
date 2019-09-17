@@ -25,6 +25,7 @@
 \usepackage{array}
 \usepackage[table, usenames, dvipsnames]{xcolor}
 \usepackage{indentfirst}
+\usepackage{enumitem}
 \usepackage{graphicx}
 \DeclareGraphicsExtensions{.pdf, .ps, .eps, .png}
 
@@ -240,9 +241,11 @@ The remainder of this documents contains a user guide, installation instructions
 
 \section{User Guide}
 
+The user has two options on how to use the AIDA framework. In he first part of the user guide, we provide a quick start using a command line that provides full control over the data and their processing. The second part of user guide descirbes quick start using web interface (dashboard) that is recommended for users that need only basic functionality or prefer data visualizations.
+
 \subsection{Quick Start Using Command Line}
 
-For a quick start, go to the provision directory and run Vagrant:
+For a quick start using command line, go to the provision directory and run Vagrant:
 
 \begin{lstlisting}[]
 cd provision
@@ -317,23 +320,52 @@ You can also get the predictions directly from Kafka:
 
 \subsection{Quick Start Using AIDA Dashboard}
 
-http://localhost:8000/admin/
+For a quick start using AIDA dashboard, go to the provision directory and run Vagrant:
 
-admin
-aida.admin
+\begin{lstlisting}[]
+cd provision
+vagrant up
+\end{lstlisting}
 
-http://localhost:8080
+AIDA framework will start in few minutes. When everything is up and running, open the dashboard on the following URL:
 
-Username: admin
-Password: aida.admin
+\begin{lstlisting}[]
+http://localhost:8080/
+\end{lstlisting}
+
+You should see the login page. Type in the following default credentials:
+\begin{itemize}[noitemsep,nolistsep]
+  \item[] Username: admin
+  \item[] Password: aida.admin
+\end{itemize}
+The login page looks as follows:
 
 \includegraphics[width=0.75\textwidth]{fig/dashboard_login}
 
+After the login, you should the Overview panel with the status of the components of the system. Green circles indicate running component, red indicated problems with the component. Hover cursor over the icon of the component, a hover text with status text and last lines in log of the component will appear. If you see black circles, there are no information on status available. In such case, check the system.
+
 \includegraphics[width=0.75\textwidth]{fig/dashboard_overview}
+
+On the left side of the screen, you can see a navigation panel with links to other tabs. The \textbf{Rules} tab allows the user to go through the mined rules in and activate or inactivate them. The first table from top of the poge shows the rules mined on a given day. Default is the current day, user may change the day usign the calender in the right top corner. The second table shows all the active rules. Both tables show read or green circles that indicate if the rule is active or not. Click them to change the status and activate or inactivate the rule on the line. Finally, at the bottom of the page, there is a box where users may enter their own rules. Fill all the fields and click \textbf{Submit} to add your custom rule to the database.
 
 \includegraphics[width=0.75\textwidth]{fig/dashboard_rules}
 
+Users interested in performance of the framework should see the panel \textbf{Spark log}, where they can access the user interface of Spark framework, on which many components are based. Information on the umber and load of workers, memory consumptions, and time to finish jobs are presented there.
+
 \includegraphics[width=0.75\textwidth]{fig/dashboard_spark}
+
+Finally, for the configuration of the dashboard, visit the following URL:
+
+\begin{lstlisting}[]
+http://localhost:8000/admin/
+\end{lstlisting}
+
+to access the configuration page. Use the same credentials as for the dashboard, the defaults are:
+\begin{itemize}[noitemsep,nolistsep]
+  \item[] Username: admin
+  \item[] Password: aida.admin
+\end{itemize}
+In the ocnfiguration, you can add or remove user accounts, and customize the framework.
 
 \cleardoublepage
 
