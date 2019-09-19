@@ -32,10 +32,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Colors %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \definecolor{projectcolor}{RGB}{93,118,168}
-\definecolor{uvtcolor}{RGB}{188,4,78}
 \definecolor{textcolor}{RGB}{90,90,90}
-\definecolor{notecolor}{RGB}{150, 150, 150}
-\definecolor{emphcolor}{RGB}{93,118,168}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Settings for pdf output %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -87,7 +84,7 @@ plainpages=false,            % fix duplicated pages when roman/arabic numbering 
 \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
                    {-3.25ex\@plus -1ex \@minus -.2ex}%
                    {1.5ex \@plus .2ex}%
-                   {\normalfont\normalsize\sffamily\bfseries\color{projectcolor}}}
+                   {\normalfont\sffamily\normalsize\bfseries\color{projectcolor}}}
 \makeatother
 
 \newenvironment{itemize*}%
@@ -376,15 +373,11 @@ If you want to install AIDA on an already existing machine, you can follow the f
 section whereby you can install AIDA just by running Ansible playbook. Or you can install AIDA manually step by step from
 the instructions in Manual Installation section.
 
-
-
 \subsection{Prerequisites}
 
 Installed Ubuntu 18.04.2 and AIDA repository downloaded or cloned into \texttt{/vagrant} directory. You can choose any
-other directory, but we will refer the repository root as \texttt{/vagrant}. You should have also installed following dependencies.
-
-
-\begin{itemize}
+other directory, but we will refer the repository root as \texttt{/vagrant}. You should have also installed the following dependencies:
+\begin{itemize}[nolistsep,noitemsep]
     \item Installed Java JDK version 1.8
     \item Installed Maven version 3.6
     \item Installed Python 2.7 as \texttt{python}
@@ -392,16 +385,12 @@ other directory, but we will refer the repository root as \texttt{/vagrant}. You
     \item Installed Pip for python 2.7 as \texttt{pip}
     \item Installed Pip for python 3.6 as \texttt{pip3}
 \end{itemize}
-
-You can install the above prerequisites by running
-
+You can install the above prerequisites by running:
 \begin{lstlisting}
 $ sudo apt-get update
 $ sudo apt-get -y install openjdk-8-jdk maven python-pip python3-pip
 $ sudo update-java-alternatives --set java-1.8.0-openjdk-amd64
 \end{lstlisting}
-
-
 
 \subsection{Quick Installation}
 
@@ -470,7 +459,7 @@ $ sudo cp /vagrant/provision/ansible/roles/kafka/templates/kafka.service.j2 /etc
 
 Then you have to replace following placeholders in the newly created file \texttt{/etc/systemd/system/kafka.service}.
 
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ kafka\_user \}\}} with \texttt{kafka} or other user you had chosen to use
 \item \texttt{\{\{ kafka\_dir \}\}} with \texttt{/opt/kafka}
 \end{itemize}
@@ -579,7 +568,7 @@ $ sudo cp /vagrant/provision/ansible/roles/aida-input/templates/aida-input.servi
 \end{lstlisting}
 
 Replace following placeholders in the newly created file \texttt{/etc/systemd/system/aida-input.service}.
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ kafka\_user \}\}} with \texttt{kafka} or other user you had chosen to use while installing Kafka
 \item \texttt{\{\{ kafka\_dir \}\}} with \texttt{/opt/kafka}
 \item \texttt{\{\{ aida\_input\_port \}\}} with \texttt{4164}
@@ -618,7 +607,7 @@ $ sudo cp /vagrant/provision/ansible/roles/sanitization/templates/sanitization.s
 \end{lstlisting}
 
 Then replace following placeholders in newly created file
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ sanitization\_user \}\}} with \texttt{sanitization} or other user you had chosen
 \item \texttt{\{\{ sanitization\_dir \}\}} with \texttt{/opt/sanitization}
 \end{itemize}
@@ -654,7 +643,7 @@ $ sudo cp /vagrant/provision/ansible/roles/aggregation/templates/aggregation.ser
 \end{lstlisting}
 
 Then replace following placeholders in newly created file
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ spark\_user \}\}} with \texttt{spark}
 \item \texttt{\{\{ spark\_run\_app\_script \}\}} with \texttt{/opt/spark/applications/run-application.sh}
 \item \texttt{\{\{ aggregation\_install\_dir \}\}} with \texttt{/opt/spark/applications/aggregation}
@@ -710,7 +699,7 @@ $ sudo cp /vagrant/provision/ansible/roles/mining/templates/mining.service.j2 /e
 \end{lstlisting}
 
 Then replace following placeholders in newly created unit file
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ mining\_user \}\}} with \texttt{mining} or other user you had chosen
 \item \texttt{\{\{ mining\_dir \}\}} with \texttt{/opt/mining}
 \item \texttt{\{\{ database\_path \}\}} with \texttt{/var/aida/rules/rule.db}
@@ -760,7 +749,7 @@ $ sudo cp /vagrant/provision/ansible/roles/matching/templates/matching.service.j
 \end{lstlisting}
 
 Then replace following placeholders in newly created file
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ matching\_user \}\}} with \texttt{matching} or other user you had chosen
 \item \texttt{\{\{ matching\_dir \}\}} with \texttt{/opt/matching}
 \item \texttt{\{\{ database\_path \}\}} with \texttt{/var/aida/rules/rule.db}
@@ -793,7 +782,7 @@ $ sudo cp /vagrant/provision/ansible/roles/aida-output/templates/aida-output.ser
 \end{lstlisting}
 
 Replace following placeholders in the newly created unit file.
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ kafka\_user \}\}} with \texttt{kafka} or other user you had chosen to use while installing Kafka
 \item \texttt{\{\{ kafka\_dir \}\}} with \texttt{/opt/kafka}
 \item \texttt{\{\{ predictions\_file\_path \}\}} with \texttt{/vagrant/predictions.json}
@@ -820,6 +809,8 @@ $ sudo systemctl status aida-output
 
 \section{Technical Documentation}
 
+This section contains the technical documentation for the AIDA framework. The documentation is provided separately for each component, starting with the description of the inputs and outputs.
+
 \subsection{Inputs and Outputs}
 
 Simplest way for the alerts to enter AIDA framework is via TCP socket on port 4164. AIDA contains systemd service \texttt{aida-input}
@@ -842,7 +833,6 @@ Managing of Kafka broker is done via systemd service \texttt{kafka}.
 For managing of Kafka topics is created systemd template service \texttt{kafka-topic@}.
 
 AIDA uses several kafka topics for asynchronous communication:
-
 \begin{itemize}
 \item input
 \item sanitized
@@ -854,34 +844,22 @@ AIDA uses several kafka topics for asynchronous communication:
 
 \subsection{Spark}
 
-Spark is installed in version 2.4.3 with extension for Kafka streaming.
-Because AIDA is using just one machine, spark applications are being executed in local mode.
+Spark is installed in version 2.4.3 with extension for Kafka streaming. Because AIDA is using just one machine, spark applications are being executed in local mode.
 
-It the case a Dashboard will run on different machine, you will need to set CORS headers into
-Spark UI. This can be done by implementing simple Java Servlet Filter. Put jar with the filter into
-\texttt{/opt/spark/spark/jars} directory. Then set the filter by specifying the filter class name in
-\texttt{spark.ui.filters} configuration in the \texttt{/opt/spark/spark/conf/spark-defaults.conf} file.
+It the case a Dashboard will run on different machine, you will need to set CORS headers into Spark UI. This can be done by implementing simple Java Servlet Filter. Put jar with the filter into \texttt{/opt/spark/spark/jars} directory. Then set the filter by specifying the filter class name in \texttt{spark.ui.filters} configuration in the \texttt{/opt/spark/spark/conf/spark-defaults.conf} file.
 
 \subsection{Sanitizer}
 
-The Sanitizer is a stream-processing tool for syntactic and semantic checks of the alerts on the input.
-Firstly, Sanitizer drops alerts which do not comply with a IDEA format.
-Secondly, it runs several semantics checks and drops or modify alerts of no interest in AIDA .
-Lastly, it remove unnecessary IDEA fields, which are not being used in AIDA, to to speed up data processing
-in the whole framework.
+The Sanitizer is a stream-processing tool for syntactic and semantic checks of the alerts on the input. Firstly, Sanitizer drops alerts which do not comply with a IDEA format. Secondly, it runs several semantics checks and drops or modify alerts of no interest in AIDA. Lastly, it remove unnecessary IDEA fields, which are not being used in AIDA, to to speed up data processing in the whole framework.
 
-Following semantic checks are being applied.
-\begin{itemize}
-\item drops alerts with category \texttt{Vulnerable} or \texttt{Abusive.Sexual}
-\item drops alerts with missing source IPv4, target IPv4 or target port
-\item remove nodes without name or with name containing \texttt{warden\_filer}
-\item remove \texttt{Test} category from the alerts
+Following semantic checks are being applied:
+\begin{itemize}[noitemsep,nolistsep]
+\item Drop alerts with category \texttt{Vulnerable} or \texttt{Abusive.Sexual}.
+\item Drop alerts with missing source IPv4, target IPv4 or target port.
+\item Remove nodes without name or with name containing \texttt{warden\_filer}.
+\item Remove \texttt{Test} category from the alerts.
 \end{itemize}
-
-The Sanitizer is implemented as Kafka Streaming application which reads alerts from \texttt{input}
-topic and writes processed alerts into \texttt{sanitized} topic.
-Managing of this component is done via systemd service \texttt{sanitization}.
-
+The Sanitizer is implemented as Kafka Streaming application which reads alerts from \texttt{input} topic and writes processed alerts into \texttt{sanitized} topic. Managing of this component is done via systemd service \texttt{sanitization}.
 
 \subsection{Aggregation}
 
@@ -916,32 +894,20 @@ the alert \texttt{\$.\_aida.Continuing} is being set to the ID of the first aler
 
 Data Mining component generate sequential rules and stores them into database for late use by Rule Matching component.
 
-The component read all alerts currently buffered in \texttt{aggregated} Kafka topic. Retention of the topics is set to
-one day by default, so the Data Mining component is working with alerts from the last day. The component builds the
-sequential database from these alerts and then run algorithms on these sequences to generate rules.
+The component read all alerts currently buffered in \texttt{aggregated} Kafka topic. Retention of the topics is set to one day by default, so the Data Mining component is working with alerts from the last day. The component builds the sequential database from these alerts and then run algorithms on these sequences to generate rules.
 
-A sequence is a vector of items (n-tuples) that share a common property. In our implementation we chose pair of
-source IPv4 and target IPv4 as a common property, so the sequences represents behaviour of attacker in regards to a
-specific target. The item consists of an alert type, target port, and name of the node.
+A sequence is a vector of items (n-tuples) that share a common property. In our implementation we chose pair of source IPv4 and target IPv4 as a common property, so the sequences represents behaviour of attacker in regards to a specific target. The item consists of an alert type, target port, and name of the node.
 
-The rules are generated by using the SPMF library. We are currently using Top Sequential Rules algorithm with \texttt{K}
-being set to 10 and minimal confidence being set to 0.5.
+The rules are generated by using the SPMF library. We are currently using Top Sequential Rules algorithm with \texttt{K} being set to 10 and minimal confidence being set to 0.5.
 
-Mined rules are stored into sqlite database \texttt{/var/aida/rules/rule.db}, which is in more detail described in the
-next section.
+Mined rules are stored into sqlite database \texttt{/var/aida/rules/rule.db}, which is in more detail described in the next section.
 
-The component can be run by oneshot systemd service called \texttt{mining}. Systemd timer is created for the purposes
-of running Mining automatically in defined interval. The timer interval is being set to one day, which corresponds to
-the Kafka retention interval.
+The component can be run by oneshot systemd service called \texttt{mining}. Systemd timer is created for the purposes of running Mining automatically in defined interval. The timer interval is being set to one day, which corresponds to the Kafka retention interval.
 
 
 \subsection{Database}
 
-We are using sqlite3 database for storing and managing rules. It can be found in the file
-\texttt{/var/aida/rules/rule.db}.
-The database contains main table called \texttt{rule} described in \autoref{tab:aida_db}. Data Mining component adds new
-rules into the table or rules can be add manually. Then it's on the user of AIDA to activate rules he is interested in.
-Activated rules are going to be used in Rule Matching component to predict and aggregated alerts.
+We are using sqlite3 database for storing and managing rules. It can be found in the \texttt{/var/aida/rules/rule.db} file. The database contains main table called \texttt{rule} described in \autoref{tab:aida_db}. Data Mining component adds new rules into the table or rules can be add manually. Then it's on the user of AIDA to activate rules he is interested in. Activated rules are going to be used in Rule Matching component to predict and aggregated alerts.
 
 \begin{table}[h]
 \centering
@@ -949,7 +915,7 @@ Activated rules are going to be used in Rule Matching component to predict and a
 \label{tab:aida_db}
 \begin{tabular}{| l | l | m{9cm} |}
 \hline
-\rowcolor{gray!15}\textbf{Item} & \textbf{Type} &W \textbf{Example} \\
+\rowcolor{gray!15}\textbf{Item} & \textbf{Type} & \textbf{Example} \\
 \hline \hline
 id             & INT            & 123        \\ \hline
 date           & CHARACTER (10) & ``2018-10-20''W \\ \hline
@@ -1082,7 +1048,5 @@ To cite the paper, we recommend using the following bibtex entry:
 \end{lstlisting}
 
 The development of the framework and related research were supported by the Security Research Programme of the Czech Republic 2015 - 2020 (BV III / 1 VS) granted by the Ministry of the Interior of the Czech Republic under No. VI20162019029 The Sharing and analysis of security events in the Czech Republic.
-
-% Further research using the framework was supported by ERDF ``CyberSecurity, CyberCrime and Critical Information Infrastructures Center of Excellence'' (No.CZ.02.1.01/0.0/0.0/16\_019/0000822).
 
 \end{document}
