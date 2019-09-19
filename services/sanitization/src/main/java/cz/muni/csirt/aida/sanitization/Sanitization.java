@@ -81,10 +81,8 @@ public class Sanitization {
                 .filterNot(new HasCategoryWithPrefix("Vulnerable"))
                 .filterNot(new HasCategoryWithPrefix("Abusive.Sexual"))
 
-                // Drop alerts without Source IP or Target IP or Target Port
+                // Drop alerts without Source IP
                 .filter(new HasSourceIp())
-                .filter(new HasTargetIp())
-                .filter(new HasTargetPort())
 
                 // Remove unwanted Nodes
                 .mapValues(new RemoveNodesWithoutName())

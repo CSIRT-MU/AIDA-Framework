@@ -74,7 +74,7 @@ public class Mining {
 		// Create sequential database
 
 		IdeaSequenceDatabase sequenceDb = SequenceDatabases.fromKafka(kafkaInputTopic, kafkaBrokers,
-				kafkaConsumerGroupId, KeyType.SRC_TAR_IPV4);
+				kafkaConsumerGroupId, KeyType.SRC_IPV4);
 
 		// Run algorithm
 
@@ -91,7 +91,7 @@ public class Mining {
 		// Save results into db
 
 		if (spmfRules.isEmpty()) {
-			// Have to exit execution because when the RedBlackTree is empty the iterator returns null
+			// Have to exit execution because when the RedBlackTree is empty the iterator returns null -> NPE
 			return;
 		}
 

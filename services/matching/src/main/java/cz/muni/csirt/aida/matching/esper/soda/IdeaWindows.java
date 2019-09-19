@@ -99,7 +99,6 @@ public class IdeaWindows {
      *
      *      insert into IdeaWindow select * from Idea where
      *          (source is not null and source.where(s => s.IP4 is not null).anyOf(s => s.IP4.countOf() > 0) ) and
-     *          (target is not null and target.where(s => s.IP4 is not null).anyOf(s => s.IP4.countOf() > 0) ) and
      *          (
      *              additionalProperties is null or
      *              additionalProperties.get('_aida') is null or
@@ -120,7 +119,6 @@ public class IdeaWindows {
         model.whereClause(
                 Expressions.and(
                         IdeaExpressions.hasSourceIPv4(),
-                        IdeaExpressions.hasTargetIPv4(),
                         IdeaExpressions.hasNotAidaProperties(Arrays.asList("Duplicate", "Continuing"))
                 )
         );

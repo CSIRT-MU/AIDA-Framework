@@ -48,10 +48,13 @@ public class RuleStatements {
 
         MatchRecognizeClause matchRecognize = new MatchRecognizeClause();
 
-        // partition by source[0].IP4[0], target[0].IP4[0]
+//         partition by source[0].IP4[0], target[0].IP4[0]
+//        matchRecognize.setPartitionExpressions(
+//                Arrays.asList(IdeaExpressions.sourceFirstIPv4(), IdeaExpressions.targetFirstIPv4()));
 
-        matchRecognize.setPartitionExpressions(
-                Arrays.asList(IdeaExpressions.sourceFirstIPv4(), IdeaExpressions.targetFirstIPv4()));
+        // partition by source[0].IP4[0]
+
+        matchRecognize.setPartitionExpressions(Collections.singletonList(IdeaExpressions.sourceFirstIPv4()));
 
         // Fill 'pattern', 'defines' and 'measures' with events
 
