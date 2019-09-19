@@ -8,7 +8,7 @@ Type=simple
 User={{ spark_user }}
 Group={{ spark_user }}
 ExecStart=/bin/bash {{ spark_run_app_script }} {{ aggregation_install_dir }}/spark_app.py --input sanitized --output aggregated --zookeeper-in localhost:2181 --kafka-brokers-out localhost:9092
-Restart=on-failure
+Restart=no
 SuccessExitStatus=143
 
 [Install]
