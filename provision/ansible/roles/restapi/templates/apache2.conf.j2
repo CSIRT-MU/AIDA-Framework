@@ -1,0 +1,20 @@
+Listen 7777
+<VirtualHost *:7777>
+    DocumentRoot /var/www
+
+    Alias /static {{ restapi_dir }}/static/
+    <Directory {{ restapi_dir }}/static/>
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    <Directory {{ restapiaida_dir }}>
+        <Files wsgi.py>
+            Require all granted
+        </Files>
+    </Directory>
+    WSGIDaemonProcess restapi python-path={{ restapi_dir }} python-home={{ venv_dir }}
+    WSGIProcessGroup restapi
+    WSGIScriptAlias / {{ restapiaida_dir }}/wsgi.py process-group=restapi
+
+</VirtualHost>

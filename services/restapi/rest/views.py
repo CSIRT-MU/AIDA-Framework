@@ -76,9 +76,9 @@ def system_state_with_more_info(request):
     components_dict = {'kafka': {'status': is_running('kafka'),
                                  'description': print_info('kafka'),
                                  'log': print_logs('kafka')},
-                       'kafka_filer': {'status': is_running('kafka-filer'),
-                                       'description': print_info('kafka-filer'),
-                                       'log': print_logs('kafka-filer')},
+                       'kafka_filer': {'status': is_running('aida-input'),
+                                       'description': print_info('aida-input'),
+                                       'log': print_logs('aida-input')},
                        'warden': {'receiver': {'status': is_running('warden_filer_receiver'),
                                                'description': print_info('warden_filer_receiver'),
                                                'log': print_logs('warden_filer_receiver')},
@@ -94,17 +94,17 @@ def system_state_with_more_info(request):
                                                   'description': print_info('sanitization'),
                                                   'log': print_logs('sanitization')
                                                   },
-                                 'aggregation': {'status': is_running('sparkapp-aggregation'),
-                                                 'description': print_info('sparkapp-aggregation'),
-                                                 'log': print_logs('sparkapp-aggregation')},
-                                 'data_mining': {'status': is_running('sparkapp-mining'),
-                                                 'description': print_info('sparkapp-mining'),
-                                                 'log': print_logs('sparkapp-mining')}
+                                 'aggregation': {'status': is_running('aggregation'),
+                                                 'description': print_info('aggregation'),
+                                                 'log': print_logs('aggregation')},
+                                 'data_mining': {'status': is_running('mining'),
+                                                 'description': print_info('mining'),
+                                                 'log': print_logs('mining')}
                                  },
-                       # TODO esper and feedback components status
-                       'esper': {'status': 0,
-                                 'description': "",
-                                 'log': ""},
+                       'esper': {'status': is_running('matching'),
+                                 'description': print_info('matching'),
+                                 'log': print_logs('matching')},
+                       # TODO feedback components status
                        'feedback': {'status': 0,
                                     'description': "",
                                     'log': ""}

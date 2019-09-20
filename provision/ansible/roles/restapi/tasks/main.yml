@@ -1,24 +1,66 @@
-- name: Install Python dependencies
-  pip:
-    name:
-      - django
-      - djangorestframework
-      - django-cors-headers
-      - git+https://github.com/emlid/systemd-manager.git
-    executable: pip3
+- name: Install Apache2
+  apt:
+    name: ["apache2", "libapache2-mod-wsgi-py3"]
+    update_cache: yes
+    state: latest
 
-- name: Set permissions
-  file:
-    path: "{{ restapi_path }}"
-    mode: 0777
+- name: Install dbus dependencies for python systemd-manager
+  apt:
+    name: ["dbus", "libdbus-glib-1-dev", "libdbus-1-dev", "python-dbus"]
+    update_cache: yes
+    state: latest
 
-- name: Create config directory
+- name: Check for restapi installation folder {{ restapi_dir }}
+  stat:
+    path: "{{ restapi_dir }}"
+  changed_when: false
+  register: restapi_installed
+- when: not restapi_installed.stat.exists
+  block:
+    - name: Copy restapi files into {{ restapi_dir }}
+      command: "cp -r {{ restapi_repository_location }}  {{ restapi_dir }}"
+      args:
+          creates: "{{ restapi_dir }}"
+    - name: Set {{ apache_user }} as owner of {{ restapi_dir }}
+      file:
+        dest: "{{ restapi_dir }}"
+        owner: "{{ apache_user }}"
+        group: "{{ apache_user }}"
+        recurse: yes
+    - name: Install virtualenv for python3
+      pip:
+        name: virtualenv
+        executable: pip3
+    - name: Create python virtualenv
+      pip:
+        requirements: "{{ restapi_dir }}/requirements.txt"
+        virtualenv: "{{ venv_dir }}"
+        virtualenv_python: python3
+        virtualenv_site_packages: yes
+
+- name: Create config directory {{ config_dir_path }}
   file:
     path: "{{ config_dir_path }}"
     state: directory
     mode: 0777
     recurse: yes
 
-- name: Copy rest.ini to config file
-  command: cp "{{ config_path  }}" "{{ config_dir_path }}"
-  become: yes
+- name: Create app config file {{ config_dir_path }}/rest.ini
+  template:
+    src: rest.ini.j2
+    dest: "{{ config_dir_path }}/rest.ini"
+    mode: 0644
+    group: "{{ apache_user }}"
+    owner: "{{ apache_user }}"
+
+- name: Create Apache2 config file
+  template:
+    src: apache2.conf.j2
+    dest: /etc/apache2/sites-enabled/rest-aida.conf
+    mode: 0777
+
+- name: Restart Apache2
+  service:
+    name: apache2
+    state: restarted
+    enabled: yes
