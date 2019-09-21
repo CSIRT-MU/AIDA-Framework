@@ -801,6 +801,59 @@ $ sudo systemctl status aida-output
 
 \subsubsection{Install restapi service}
 
+Restapi service provides REST API which is used for communications with Dashboard. API is exposed on port 7777.
+This service is not mandatory, if you are not planning to use Dashboard you can skip this part.
+
+Restapi is Django application which will run on Apache2 with WSGI.
+Firstly install Apache2 with WSGI support for Python 3.
+\begin{lstlisting}
+$ sudo apt-get -y install apache2 libapache2-mod-wsgi-py3
+\end{lstlisting}
+
+Restapi is getting information about AIDA services via dbus systemd interface, so we will have to install dbus dependencies.
+\begin{lstlisting}
+$ sudo apt-get -y install dbus libdbus-glib-1-dev libdbus-1-dev python-dbus
+\end{lstlisting}
+
+Now we will place the Django application into correct directory.
+\begin{lstlisting}
+$ sudo cp -r /vagrant/services/restapi  /var/www/restapi
+\end{lstlisting}
+
+Create python virtualenv
+\begin{lstlisting}
+$ sudo su
+# apt-get -y install python3-venv
+# cd /var/www/restapi
+# sudo python3 -m venv venv --system-site-packages
+# source venv/bin/activate
+# pip install -r requirements.txt
+# deactivate
+\end{lstlisting}
+
+Create config file for the application
+\begin{lstlisting}
+$ sudo mkdir /etc/aida/
+$ sudo cp /vagrant/provision/ansible/roles/restapi/templates/rest.ini.j2 /etc/aida/rest.ini
+\end{lstlisting}
+And replace placeholder \texttt{\{\{ database\_path \}\}} in the file with \texttt{/var/aida/rules/rule.db}
+
+Now we create config file for Apache.
+\begin{lstlisting}
+$ sudo cp /vagrant/provision/ansible/roles/restapi/templates/apache2.conf.j2 /etc/apache2/sites-enabled/rest-aida.conf
+\end{lstlisting}
+Replace placeholders in newly created config file
+\begin{itemize}[noitemsep,nolistsep]
+\item \texttt{\{\{ restapi\_dir \}\}} with \texttt{/var/www/restapi}
+\item \texttt{\{\{ restapiaida\_dir \}\}} with \texttt{/var/www/restapi/restapiaida}
+\item \texttt{\{\{ venv\_dir \}\}} with \texttt{/var/www/restapi/venv}
+\end{itemize}
+
+Now we just need to restart Apache2 and check that REST API is responding on address \texttt{localhost:7777}.
+\begin{lstlisting}
+$ sudo systemctl restart apache2
+\end{lstlisting}
+
 
 \subsubsection{Install dashboard service}
 
