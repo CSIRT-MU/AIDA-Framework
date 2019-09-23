@@ -337,19 +337,31 @@ You should see the login page. Type in the following default credentials:
 \end{itemize}
 The login page looks as follows:
 
-\includegraphics[width=0.75\textwidth]{fig/dashboard_login}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.75\textwidth]{fig/dashboard_login}
+\end{figure}
 
 After the login, you should the Overview panel with the status of the components of the system. Green circles indicate running component, red indicated problems with the component. Hover cursor over the icon of the component, a hover text with status text and last lines in log of the component will appear. If you see black circles, there are no information on status available. In such case, check the system.
 
-\includegraphics[width=0.75\textwidth]{fig/dashboard_overview}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.75\textwidth]{fig/dashboard_overview}
+\end{figure}
 
 On the left side of the screen, you can see a navigation panel with links to other tabs. The \textbf{Rules} tab allows the user to go through the mined rules in and activate or inactivate them. The first table from top of the poge shows the rules mined on a given day. Default is the current day, user may change the day usign the calender in the right top corner. The second table shows all the active rules. Both tables show read or green circles that indicate if the rule is active or not. Click them to change the status and activate or inactivate the rule on the line. Finally, at the bottom of the page, there is a box where users may enter their own rules. Fill all the fields and click \textbf{Submit} to add your custom rule to the database.
 
-\includegraphics[width=0.75\textwidth]{fig/dashboard_rules}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.75\textwidth]{fig/dashboard_rules}
+\end{figure}
 
 Users interested in performance of the framework should see the panel \textbf{Spark log}, where they can access the user interface of Spark framework, on which many components are based. Information on the umber and load of workers, memory consumptions, and time to finish jobs are presented there.
 
-\includegraphics[width=0.75\textwidth]{fig/dashboard_spark}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.75\textwidth]{fig/dashboard_spark}
+\end{figure}
 
 Finally, for the configuration of the dashboard, visit the following URL:
 
@@ -368,15 +380,11 @@ In the ocnfiguration, you can add or remove user accounts, and customize the fra
 
 \section{Installation Instructions}
 
-Simplest way how to install and use AIDA is by running vagrant box \texttt{vagrant up} from \texttt{provision} directory.
-If you want to install AIDA on an already existing machine, you can follow the following instructions. There is a Quick Installation
-section whereby you can install AIDA just by running Ansible playbook. Or you can install AIDA manually step by step from
-the instructions in Manual Installation section.
+Simplest way how to install and use AIDA is by running vagrant box \texttt{vagrant up} from \texttt{provision} directory. If you want to install AIDA on an already existing machine, you can follow the following instructions. There is a Quick Installation section whereby you can install AIDA just by running Ansible playbook. Or you can install AIDA manually step by step from the instructions in Manual Installation section.
 
 \subsection{Prerequisites}
 
-Installed Ubuntu 18.04.2 and AIDA repository downloaded or cloned into \texttt{/vagrant} directory. You can choose any
-other directory, but we will refer the repository root as \texttt{/vagrant}. You should have also installed the following dependencies:
+Installed Ubuntu 18.04.2 and AIDA repository downloaded or cloned into \texttt{/vagrant} directory. You can choose any other directory, but we will refer the repository root as \texttt{/vagrant}. You should have also installed the following dependencies:
 \begin{itemize}[nolistsep,noitemsep]
     \item Installed Java JDK version 1.8
     \item Installed Maven version 3.6
@@ -396,13 +404,13 @@ $ sudo update-java-alternatives --set java-1.8.0-openjdk-amd64
 
 The simplest way how to install AIDA is by running Ansible playbook.
 
-You have to have Ansible installed. You can do it by running following command.
+You have to have Ansible installed. You can do it by running following command:
 
 \begin{lstlisting}
 $ sudo apt-get -y install ansible
 \end{lstlisting}
 
-Then run ansible playbook.
+Then run ansible playbook:
 
 \begin{lstlisting}
 $ cd /vagrant/provision/ansible
@@ -417,31 +425,28 @@ You can check that the main AIDA services are up and running by running.
 $ sudo systemctl status aida-input sanitization aggregation matching
 \end{lstlisting}
 
-
+% Install Dashboard
+% TODO
 
 \subsection{Manual Installation}
 
-Installing AIDA on existing machine step by step.
-
-We will describe here creating of new users for almost each AIDA service, but you can of course create just one user for
-all AIDA services.
-
+This section provides step-by-step instructions on how to install AIDA framework on an existing machine without ansible. This process is more complicated and, thus, is recommended only to advanced users, and users interesting in implementation of the framework. During the installation, we are going to create dedicated user accounts for almost every AIDA service. However, you can create just one user for all the AIDA services, and run the framework under on user.
 
 \subsubsection{Install Kafka}
 
-We will install Kafka and Zookeper and run single kafka broker on the machine.
+We will install Kafka and Zookeper and run single Kafka broker on the machine.
 
-Create Kafka user
+First, create Kafka user:
 \begin{lstlisting}
 $ sudo useradd -M kafka
 \end{lstlisting}
 
-Install Zookeper service
+Install Zookeper service:
 \begin{lstlisting}
 $ sudo apt-get -y install zookeeperd
 \end{lstlisting}
 
-Download Kafka binary into \texttt{/opt/kafka}
+Download Kafka binary into \texttt{/opt/kafka}:
 \begin{lstlisting}
 $ sudo su
 # mkdir /opt/kafka
@@ -452,40 +457,34 @@ $ sudo su
 # chown -R kafka:kafka ./
 \end{lstlisting}
 
-Create systemd unit file for \texttt{kafka} service
+Create systemd unit file for \texttt{kafka} service:
 \begin{lstlisting}
 $ sudo cp /vagrant/provision/ansible/roles/kafka/templates/kafka.service.j2 /etc/systemd/system/kafka.service
 \end{lstlisting}
 
-Then you have to replace following placeholders in the newly created file \texttt{/etc/systemd/system/kafka.service}.
-
+Then you have to replace following placeholders in the newly created file \texttt{/etc/systemd/system/kafka.service} as follows:
 \begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ kafka\_user \}\}} with \texttt{kafka} or other user you had chosen to use
 \item \texttt{\{\{ kafka\_dir \}\}} with \texttt{/opt/kafka}
 \end{itemize}
 
-Create systemd unit file for \texttt{kafka-topic} services
-
+Create systemd unit file for \texttt{kafka-topic} services:
 \begin{lstlisting}
 $ sudo cp /vagrant/provision/ansible/roles/kafka/templates/kafka-topic.service.j2 /etc/systemd/system/kafka-topic@.service
 \end{lstlisting}
+Then, replace the same placeholders as in previous step in the newly created file.
 
-Then replace the same placeholders as in previous step in the newly created file.
-
-Now you can start the \texttt{kafka} service by running
-
+Now you can start the \texttt{kafka} service by running:
 \begin{lstlisting}
 $ sudo systemctl start kafka
 \end{lstlisting}
 
-And check that it's running.
-
+And check that it's running:
 \begin{lstlisting}
 $ sudo systemctl status kafka
 \end{lstlisting}
 
-Also check that \texttt{kafka-topic} service is working by creating \texttt{input} topic.
-
+Also check that \texttt{kafka-topic} service is working by creating \texttt{input} topic:
 \begin{lstlisting}
 $ sudo systemctl start kafka-topic@input
 $ sudo systemctl status kafka-topic@input
@@ -496,12 +495,12 @@ $ sudo systemctl status kafka-topic@input
 
 We will install and configure Spark so we are able to run Spark applications in local mode.
 
-Create Spark user
+First, create Spark user:
 \begin{lstlisting}
 $ sudo useradd -M spark
 \end{lstlisting}
 
-Download Spark binary
+Download Spark binary:
 \begin{lstlisting}
 $ sudo su
 # mkdir -p /opt/spark/spark
@@ -512,7 +511,7 @@ $ sudo su
 # wget https://search.maven.org/classic/remotecontent?filepath=org/apache/spark/spark-streaming-kafka-0-8-assembly_2.11/2.4.3/spark-streaming-kafka-0-8-assembly_2.11-2.4.3.jar -O /opt/spark/spark/jars/spark-streaming-kafka-0-8-assembly_2.11-2.4.3.jar
 \end{lstlisting}
 
-Prepare modules for Spark applications
+Prepare modules for Spark applications:
 \begin{lstlisting}
 $ sudo su
 # mkdir -p /opt/spark/applications
@@ -522,26 +521,23 @@ $ sudo su
 # zip -j -r /opt/spark/applications{.zip,}
 \end{lstlisting}
 
-Prepare script for running Spark applications
+Prepare script for running Spark applications:
 \begin{lstlisting}
 $ sudo su
 # cp /vagrant/provision/ansible/roles/spark/templates/run-application.sh.j2 /opt/spark/applications/run-application.sh
 # chmod +x /opt/spark/applications/run-application.sh
 \end{lstlisting}
 
-Now you have to replace placeholder \texttt{\{\{ spark\_home\_dir \}\}} with \texttt{/opt/spark/spark}
-in the \texttt{run-application.sh} file.
+Now, you have to replace placeholder \texttt{\{\{ spark\_home\_dir \}\}} with \texttt{/opt/spark/spark} in the \texttt{run-application.sh} file.
 
-Create configuration file
+Create configuration file:
 \begin{lstlisting}
 $ sudo cp /vagrant/provision/ansible/roles/spark/templates/spark-defaults.conf.j2 /opt/spark/spark/conf/spark-defaults.conf
 \end{lstlisting}
 
-Replace placeholder \texttt{\{\{ spark\_modules\_zip \}\}} with \texttt{/opt/spark/applications/modules/modules.zip}
-in the newly created configuration file. You can also increase the \texttt{spark.driver.memory} due to available
-memory to be able to pass more data into AIDA.
+Replace placeholder \texttt{\{\{ spark\_modules\_zip \}\}} with \texttt{/opt/spark/applications/modules/modules.zip} in the newly created configuration file. You can also increase the \texttt{spark.driver.memory} due to available memory to be able to pass more data into AIDA.
 
-Make \texttt{spark} user owner of the \texttt{/opt/spark} dir
+Make \texttt{spark} user owner of the \texttt{/opt/spark} directory:
 \begin{lstlisting}
 $ sudo chown -R spark:spark /opt/spark/
 \end{lstlisting}
@@ -549,8 +545,7 @@ $ sudo chown -R spark:spark /opt/spark/
 
 \subsubsection{Install commons of AIDA services}
 
-Install Java commons modules for AIDA services.
-
+Install Java commons modules for AIDA services:
 %TODO sudo or not sudo
 \begin{lstlisting}
 $ cd /vagrant/commons/commons-idea
@@ -562,24 +557,24 @@ $ mvn clean install
 
 \subsubsection{Install aida-input service}
 
-Install \texttt{aida-input} service which will listen on port 4164 and will send all incoming events into AIDA.
+Install \texttt{aida-input} service which will listen on port 4164 and will send all the incoming events into AIDA:
 \begin{lstlisting}
 $ sudo cp /vagrant/provision/ansible/roles/aida-input/templates/aida-input.service.j2 /etc/systemd/system/aida-input.service
 \end{lstlisting}
 
-Replace following placeholders in the newly created file \texttt{/etc/systemd/system/aida-input.service}.
+Replace following placeholders in the newly created file \texttt{/etc/systemd/system/aida-input.service} as follows:
 \begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ kafka\_user \}\}} with \texttt{kafka} or other user you had chosen to use while installing Kafka
 \item \texttt{\{\{ kafka\_dir \}\}} with \texttt{/opt/kafka}
 \item \texttt{\{\{ aida\_input\_port \}\}} with \texttt{4164}
 \end{itemize}
 
-Run the \texttt{aida-input} service
+Run the \texttt{aida-input} service:
 \begin{lstlisting}
 $ sudo systemctl start aida-input
 \end{lstlisting}
 
-Check that the service is running
+Check that the service is running:
 \begin{lstlisting}
 $ sudo systemctl status aida-input
 \end{lstlisting}
@@ -587,12 +582,12 @@ $ sudo systemctl status aida-input
 
 \subsubsection{Install sanitization service}
 
-Create sanitization user
+Create sanitization user:
 \begin{lstlisting}
 $ sudo useradd -M sanitization
 \end{lstlisting}
 
-Install sanitization
+Install sanitization:
 \begin{lstlisting}
 $ sudo mkdir /opt/sanitization
 $ cd /vagrant/services/sanitization
@@ -601,23 +596,23 @@ $ cp ./target/*jar-with-dependencies.jar /opt/sanitization/sanitization.jar
 $ sudo chown -R sanitization:sanitization /opt/sanitization
 \end{lstlisting}
 
-Create systemd unit file for \texttt{sanitization} service
+Create systemd unit file for \texttt{sanitization} service:
 \begin{lstlisting}
 $ sudo cp /vagrant/provision/ansible/roles/sanitization/templates/sanitization.service.j2 /etc/systemd/system/sanitization.service
 \end{lstlisting}
 
-Then replace following placeholders in newly created file
+Then, replace the following placeholders in the newly created file:
 \begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ sanitization\_user \}\}} with \texttt{sanitization} or other user you had chosen
 \item \texttt{\{\{ sanitization\_dir \}\}} with \texttt{/opt/sanitization}
 \end{itemize}
 
-Run the \texttt{sanitization} service
+Run the \texttt{sanitization} service:
 \begin{lstlisting}
 $ sudo systemctl start sanitization
 \end{lstlisting}
 
-Check that the service is running
+Check that the service is running:
 \begin{lstlisting}
 $ sudo systemctl status sanitization
 \end{lstlisting}
@@ -625,65 +620,64 @@ $ sudo systemctl status sanitization
 
 \subsubsection{Install aggregation service}
 
-Put Aggregation Spark application into required directory
-
+Put Aggregation Spark application into required directory:
 \begin{lstlisting}
 $ sudo cp -r /vagrant/services/aggregation /opt/spark/applications/aggregation
 $ sudo chown -R spark:spark /opt/spark/applications/aggregation
 \end{lstlisting}
 
-Install python dependencies
+Install python dependencies:
 \begin{lstlisting}
 $ sudo pip3 install -r /opt/spark/applications/aggregation/requirements.txt
 \end{lstlisting}
 
-Create systemd unit file for \texttt{aggregation} service
+Create systemd unit file for \texttt{aggregation} service:
 \begin{lstlisting}
 $ sudo cp /vagrant/provision/ansible/roles/aggregation/templates/aggregation.service.j2 /etc/systemd/system/aggregation.service
 \end{lstlisting}
 
-Then replace following placeholders in newly created file
+Then replace following placeholders in newly created file:
 \begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ spark\_user \}\}} with \texttt{spark}
 \item \texttt{\{\{ spark\_run\_app\_script \}\}} with \texttt{/opt/spark/applications/run-application.sh}
 \item \texttt{\{\{ aggregation\_install\_dir \}\}} with \texttt{/opt/spark/applications/aggregation}
 \end{itemize}
 
-Run the \texttt{aggregation} service
+Run the \texttt{aggregation} service:
 \begin{lstlisting}
 $ sudo systemctl start aggregation
 \end{lstlisting}
 
-Check that the service is running
+Check that the service is running:
 \begin{lstlisting}
 $ sudo systemctl status aggregation
 \end{lstlisting}
 
 
 \subsubsection{Prepare Rules database}
+
 We are going to create sqlite3 database file with \texttt{rule} table for mined rules.
 
-Create directory
+First, create the directory:
 \begin{lstlisting}
 $ sudo mkdir -p /var/aida/rules
 \end{lstlisting}
 
-Install sqlite3 and create database file with required permissions.
+Install sqlite3 and create database file with required permissions:
 \begin{lstlisting}
 $ sudo apt-get -y install sqlite3
 $ sudo sqlite3 /var/aida/rules/rule.db 'CREATE TABLE rule (id INTEGER PRIMARY KEY, inserted DATETIME DEFAULT CURRENT_TIMESTAMP, rule TEXT NOT NULL, support INTEGER, number_of_sequences INTEGER, confidence REAL, active INTEGER DEFAULT 0, comment TEXT, database TEXT, algorithm TEXT )'
 $ sudo chmod 0666 /var/aida/rules/rule.db
 \end{lstlisting}
 
-
 \subsubsection{Install mining service}
 
-Create mining user
+Create mining user:
 \begin{lstlisting}
 $ sudo useradd -M mining
 \end{lstlisting}
 
-Install mining binary
+Install mining binary:
 \begin{lstlisting}
 $ sudo mkdir /opt/mining
 $ cd /vagrant/services/mining
@@ -693,35 +687,34 @@ $ sudo cp ./target/*jar-with-dependencies.jar /opt/mining/mining.jar
 $ sudo chown mining:mining /opt/mining
 \end{lstlisting}
 
-Create systemd unit file for \texttt{mining} service
+Create systemd unit file for \texttt{mining} service:
 \begin{lstlisting}
 $ sudo cp /vagrant/provision/ansible/roles/mining/templates/mining.service.j2 /etc/systemd/system/mining.service
 \end{lstlisting}
 
-Then replace following placeholders in newly created unit file
+Then replace following placeholders in newly created unit file:
 \begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ mining\_user \}\}} with \texttt{mining} or other user you had chosen
 \item \texttt{\{\{ mining\_dir \}\}} with \texttt{/opt/mining}
 \item \texttt{\{\{ database\_path \}\}} with \texttt{/var/aida/rules/rule.db}
 \end{itemize}
 
-Create systemd timer for \texttt{mining} service
+Create systemd timer for \texttt{mining} service:
 \begin{lstlisting}
 $ sudo cp /vagrant/provision/ansible/roles/mining/templates/mining.timer.j2 /etc/systemd/system/mining.timer
 \end{lstlisting}
 
-Note that mining is a one-shot service. It will run the mining on all event currently available in Kafka and then finish.
-You can trigger the mining by starting the service.
+Note that mining is a one-shot service. It will run the mining on all event currently available in Kafka and then finish. You can trigger the mining by starting the service:
 \begin{lstlisting}
 $ sudo systemctl start mining
 \end{lstlisting}
 
-Then check it did exit successfully
+Then, check it did exit successfully:
 \begin{lstlisting}
 $ sudo systemctl status mining
 \end{lstlisting}
 
-Or you can check the logs
+Alternatively, you can check the logs:
 \begin{lstlisting}
 $ sudo journalctl -u mining
 \end{lstlisting}
@@ -729,12 +722,12 @@ $ sudo journalctl -u mining
 
 \subsubsection{Install matching service}
 
-Create matching user
+Create matching user:
 \begin{lstlisting}
 $ sudo useradd -M matching
 \end{lstlisting}
 
-Install matching binary
+Install matching binary:
 \begin{lstlisting}
 $ sudo mkdir /opt/matching
 $ cd /vagrant/services/matching
@@ -743,24 +736,24 @@ $ sudo cp ./target/*jar-with-dependencies.jar /opt/matching/matching.jar
 $ sudo chown -R matching:matching /opt/matching
 \end{lstlisting}
 
-Create systemd unit file for \texttt{matching} service
+Create systemd unit file for \texttt{matching} service:
 \begin{lstlisting}
 $ sudo cp /vagrant/provision/ansible/roles/matching/templates/matching.service.j2 /etc/systemd/system/matching.service
 \end{lstlisting}
 
-Then replace following placeholders in newly created file
+Then replace following placeholders in newly created file:
 \begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ matching\_user \}\}} with \texttt{matching} or other user you had chosen
 \item \texttt{\{\{ matching\_dir \}\}} with \texttt{/opt/matching}
 \item \texttt{\{\{ database\_path \}\}} with \texttt{/var/aida/rules/rule.db}
 \end{itemize}
 
-Run the \texttt{matching} service
+Run the \texttt{matching} service:
 \begin{lstlisting}
 $ sudo systemctl start matching
 \end{lstlisting}
 
-Check that the service is running
+Check that the service is running:
 \begin{lstlisting}
 $ sudo systemctl status matching
 \end{lstlisting}
@@ -768,59 +761,57 @@ $ sudo systemctl status matching
 
 \subsubsection{Install aida-output service}
 
-\texttt{aida-output} will read predictions from Kafka and save them into file.
+The \texttt{aida-output} service will read predictions from Kafka and save them into file.
 
-Create predictions file with permission of same user used for Kafka
+First, create predictions file with permission of same user used for Kafka:
 \begin{lstlisting}
 $ touch /vagrant/predictions.json
 $ chown kafka:kafka /vagrant/predictions.json
 \end{lstlisting}
 
-Create systemd unit file for \texttt{aida-output} service
+Create systemd unit file for \texttt{aida-output} service:
 \begin{lstlisting}
 $ sudo cp /vagrant/provision/ansible/roles/aida-output/templates/aida-output.service.j2 /etc/systemd/system/aida-output.service
 \end{lstlisting}
 
-Replace following placeholders in the newly created unit file.
+Replace following placeholders in the newly created unit file:
 \begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ kafka\_user \}\}} with \texttt{kafka} or other user you had chosen to use while installing Kafka
 \item \texttt{\{\{ kafka\_dir \}\}} with \texttt{/opt/kafka}
 \item \texttt{\{\{ predictions\_file\_path \}\}} with \texttt{/vagrant/predictions.json}
 \end{itemize}
 
-Run the \texttt{aida-output} service
+Run the \texttt{aida-output} service:
 \begin{lstlisting}
 $ sudo systemctl start aida-output
 \end{lstlisting}
 
-Check that the service is running
+Check that the service is running:
 \begin{lstlisting}
 $ sudo systemctl status aida-output
 \end{lstlisting}
 
 
-\subsubsection{Install restapi service}
+\subsubsection{Install REST API}
 
-Restapi service provides REST API which is used for communications with Dashboard. API is exposed on port 7777.
-This service is not mandatory, if you are not planning to use Dashboard you can skip this part.
+REST API is used for communications with the AIDA Dashboard. The API is open on port 7777. This service is not mandatory, if you are not planning to use Dashboard you can skip this part.
 
-Restapi is Django application which will run on Apache2 with WSGI.
-Firstly install Apache2 with WSGI support for Python 3.
+REST API is implemented as a Django application which will run on Apache2 with WSGI. First, install Apache2 with WSGI support for Python 3:
 \begin{lstlisting}
 $ sudo apt-get -y install apache2 libapache2-mod-wsgi-py3
 \end{lstlisting}
 
-Restapi is getting information about AIDA services via dbus systemd interface, so we will have to install dbus dependencies.
+REST API is getting information about the AIDA services via dbus systemd interface, so we will have to install dbus dependencies:
 \begin{lstlisting}
 $ sudo apt-get -y install dbus libdbus-glib-1-dev libdbus-1-dev python-dbus
 \end{lstlisting}
 
-Now we will place the Django application into correct directory.
+Now, place the Django application into correct directory:
 \begin{lstlisting}
 $ sudo cp -r /vagrant/services/restapi  /var/www/restapi
 \end{lstlisting}
 
-Create python virtualenv
+Create python virtual environment for REST API:
 \begin{lstlisting}
 $ sudo su
 # apt-get -y install python3-venv
@@ -831,14 +822,14 @@ $ sudo su
 # deactivate
 \end{lstlisting}
 
-Create config file for the application
+Create config file for the application:
 \begin{lstlisting}
 $ sudo mkdir /etc/aida/
 $ sudo cp /vagrant/provision/ansible/roles/restapi/templates/rest.ini.j2 /etc/aida/rest.ini
 \end{lstlisting}
-And replace placeholder \texttt{\{\{ database\_path \}\}} in the file with \texttt{/var/aida/rules/rule.db}
+and replace the placeholder \texttt{\{\{ database\_path \}\}} in the file with \texttt{/var/aida/rules/rule.db}.
 
-Now we create config file for Apache.
+Now, create config file for Apache:
 \begin{lstlisting}
 $ sudo cp /vagrant/provision/ansible/roles/restapi/templates/apache2.conf.j2 /etc/apache2/sites-enabled/rest-aida.conf
 \end{lstlisting}
@@ -849,14 +840,19 @@ Replace placeholders in newly created config file
 \item \texttt{\{\{ venv\_dir \}\}} with \texttt{/var/www/restapi/venv}
 \end{itemize}
 
-Now we just need to restart Apache2 and check that REST API is responding on address \texttt{localhost:7777}.
+Finally, restart Apache2:
 \begin{lstlisting}
 $ sudo systemctl restart apache2
 \end{lstlisting}
+and check that REST API is responding on address \texttt{localhost:7777}. For example, the following command:
+\begin{lstlisting}
+$ curl http://localhost:7777/componentsinfo
+\end{lstlisting}
+should return a JSON with status of the AIDA components.
 
-
-\subsubsection{Install dashboard service}
-
+% \subsubsection{Install Dashboard}
+% 
+% TODO
 
 \cleardoublepage
 
@@ -866,34 +862,22 @@ This section contains the technical documentation for the AIDA framework. The do
 
 \subsection{Inputs and Outputs}
 
-Simplest way for the alerts to enter AIDA framework is via TCP socket on port 4164. AIDA contains systemd service \texttt{aida-input}
-which is simple unix pipeline of Netcat listening on TCP socket and forwarding the data into Kafka via
-Kafka console producer. This alerts are being send into Kafka topic \texttt{input}. There are expected one IDEA alert
-per line.
-You can of course skip this service and send the data directly into the topic by yourself.
+Simplest way for the alerts to enter AIDA framework is via TCP socket on port 4164. AIDA contains systemd service \texttt{aida-input}, which is simple unix pipeline of Netcat listening on TCP socket and forwarding the data into Kafka via Kafka console producer. This alerts are being send into Kafka topic \texttt{input}. There are expected one IDEA alert per line. You can of course skip this service and send the data directly into the topic by yourself.
 
-The predicted alerts are stored in file \texttt{predictions.json} in the root directory of repository. There is systemd
-service called \texttt{aida-output} which is also simple unix pipeline reading alerts from Kafka topic
-\texttt{predictions} and then saving them into the file.
-You can of course skip this service and consume the data directly from the Kafka topic.
-
+The predicted alerts are stored in file \texttt{predictions.json} in the root directory of repository. There is systemd service called \texttt{aida-output} which is also simple unix pipeline reading alerts from Kafka topic \texttt{predictions} and then saving them into the file. You can of course skip this service and consume the data directly from the Kafka topic.
 
 \subsection{Kafka}
 
-Kafka is used as the primary communication channel between components and the way of moving alerts through the system.
-Kafka is installed in version 2.3.0 in the directory \texttt{/opt/kafka/}.
-Managing of Kafka broker is done via systemd service \texttt{kafka}.
-For managing of Kafka topics is created systemd template service \texttt{kafka-topic@}.
+Kafka is used as the primary communication channel between components and the way of moving alerts through the system. Kafka is installed in version 2.3.0 in the directory \texttt{/opt/kafka/}. Managing of Kafka broker is done via systemd service \texttt{kafka}. For managing of Kafka topics is created systemd template service \texttt{kafka-topic@}.
 
-AIDA uses several kafka topics for asynchronous communication:
-\begin{itemize}
-\item input
-\item sanitized
-\item aggregated
-\item predictions
-\item observations
+AIDA uses the following Kafka topics for asynchronous communication:
+\begin{itemize}[nolistsep,noitemsep]
+\item input,
+\item sanitized,
+\item aggregated,
+\item predictions,
+\item observations.
 \end{itemize}
-
 
 \subsection{Spark}
 
@@ -916,31 +900,19 @@ The Sanitizer is implemented as Kafka Streaming application which reads alerts f
 
 \subsection{Aggregation}
 
-Task of Aggregation component is to find and mark redundant alerts so that these are not
-included in further analyses. AIDA is primarily focused on the aggregation of following two types of aggregates,
-duplicates and continuing alerts.
-Aggregation is a Spark Streaming application which runs in local mode (there is no necessity for running the whole
-Spark cluster with slaves) and is managed by the systemd service called \texttt{aggregation}.
+Task of Aggregation component is to find and mark redundant alerts so that these are not included in further analyses. AIDA is primarily focused on the aggregation of following two types of aggregates, duplicates and continuing alerts. Aggregation is a Spark Streaming application which runs in local mode (there is no necessity for running the whole Spark cluster with slaves) and is managed by the systemd service called \texttt{aggregation}.
 
 \subsubsection{Duplicates}
 
-Duplicates are processed in the batches with size of one minute, windows size of five minutes and sliding size of one
-minute.
+Duplicates are processed in the batches with size of one minute, windows size of five minutes and sliding size of one minute.
 
-Two alerts are considered to be duplicates if their \texttt{source IPv4}, \texttt{destination IPv4},
-\texttt{alert category}, \texttt{detecting node name} and \texttt{detect time} equals and both appear in the five minute
-window. In this case one of these alerts is considered to be duplicate and AIDA duplicate field in the alert
-\texttt{\$.\_aida.Duplicate} is being set to \texttt{true}.
+Two alerts are considered to be duplicates if their \texttt{source IPv4}, \texttt{destination IPv4}, \texttt{alert category}, \texttt{detecting node name} and \texttt{detect time} equals and both appear in the five minute window. In this case one of these alerts is considered to be duplicate and AIDA duplicate field in the alert \texttt{\$.\_aida.Duplicate} is being set to \texttt{true}.
 
 \subsubsection{Continuing alerts}
 
-Continuing alerts are processed in the batches with size of one minute, windows size of seventy minutes and
-sliding size of one minute.
+Continuing alerts are processed in the batches with size of one minute, windows size of seventy minutes and sliding size of one minute.
 
-The alert is considered to be continuing when it has the same \texttt{source IPv4}, \texttt{destination IPv4},
-\texttt{destination port}, \texttt{alert category}, \texttt{detecting node name} as some previous alert in the seventy
-minutes window. In this case the alert is considered to be a continuing and the value of AIDA continuing field in
-the alert \texttt{\$.\_aida.Continuing} is being set to the ID of the first alert with the same properties in the window.
+The alert is considered to be continuing when it has the same \texttt{source IPv4}, \texttt{destination IPv4}, \texttt{destination port}, \texttt{alert category}, \texttt{detecting node name} as some previous alert in the seventy minutes window. In this case the alert is considered to be a continuing and the value of AIDA continuing field in the alert \texttt{\$.\_aida.Continuing} is being set to the ID of the first alert with the same properties in the window.
 
 
 \subsection{Data Mining}
@@ -984,15 +956,9 @@ comment        & VARCHAR (255)  & ``This is a sample rule, do not use.'' \\ \hli
 
 \subsection{Rule Matching}
 
-Rule Matching component processes the stream of alters and queries them for the presence of predefined rules.
-If the predefined rules is matched, an action is performed.
+Rule Matching component processes the stream of alters and queries them for the presence of predefined rules. If the predefined rules is matched, an action is performed.
 
-The Rule Matching component is written as Esper streaming application.
-On the startup, the component reads active rules from the database and generate two EPL queries for each active rule.
-These queries are then deployed into the Esper runtime engine. Listener, creating predicted alerts and sending them
-to Kafka, is attached to the queries. All the queries are operating on one hour long sliding window
-\autoref{fig:twfill}, which also filters alerts of no interest for Matching, like duplicates and continuing aggregates.
-
+The Rule Matching component is written as Esper streaming application. On the startup, the component reads active rules from the database and generate two EPL queries for each active rule. These queries are then deployed into the Esper runtime engine. Listener, creating predicted alerts and sending them to Kafka, is attached to the queries. All the queries are operating on one hour long sliding window \autoref{fig:twfill}, which also filters alerts of no interest for Matching, like duplicates and continuing aggregates.
 
 \begin{figure}[h!]
 \begin{lstlisting}[]
@@ -1014,13 +980,9 @@ target is not null and
 
 There are two EPL queries created for each active rule.
 
-The first query is marked as \texttt{PREDICTION} and is matching the first part of the rule \autoref{fig:query}.
-When the first part is matched, the attached listener is invoked. The listener creates predicted alerts, based
-on the alerts that appear in the second part of the rule, and sends them into Kafka topic \texttt{predictions}.
+The first query is marked as \texttt{PREDICTION} and is matching the first part of the rule \autoref{fig:query}. When the first part is matched, the attached listener is invoked. The listener creates predicted alerts, based on the alerts that appear in the second part of the rule, and sends them into Kafka topic \texttt{predictions}.
 
-The second query is marked as \texttt{OBSERVATION}. It matches the whole rule. When the entire rule is matched,
-the observation listener is invoked. The listener sends alert into Kafka topic called \texttt{observations},
-noticing that the predicted alert from the previous query was confirmed.
+The second query is marked as \texttt{OBSERVATION}. It matches the whole rule. When the entire rule is matched, the observation listener is invoked. The listener sends alert into Kafka topic called \texttt{observations}, noticing that the predicted alert from the previous query was confirmed.
 
 \begin{figure}[h!]
 \begin{lstlisting}[]
@@ -1047,28 +1009,36 @@ B as (B.category.contains("Attempt.Login")) and (B.node.anyOf(x => x.name="Organ
 
 Rule Matching component is managed by the systemd service called \texttt{matching}.
 
-
-\subsection{Feedback}
+% \subsection{Feedback}
+% 
+% % TODO
 
 \subsection{REST API}
 
-    /componentsinfo/ - rozšířený stav komponent iABU (včetně výpisů systemd a posledních x řádků logu)
+REST API is implemented using Django framework and offers several endpoint that allow communication and data exchange between dashboard and the rest of the framework. 
 
-    /db/rules/YYYY-MM-DD/ - Zoznam pravidiel z daného dňa.
-    /db/activerules/ - Zoznam aktívnych pravidiel.
-    POST /db/activerules/id/ - Aktivuje pravidlo s daným ID.
-    POST /db/inactiverules/id/ - Deaktivuje pravidlo s daným ID.
-    POST /db/deleterules/id/ - Zmaže pravidlo s daným ID.
-    POST /db/addrules/pravidlo/ - Vytvorí nové pravidlo.
+The following endpoints are implemented in the REST API:
+\begin{itemize}[nolistsep,noitemsep]
+  \item GET /componentsinfo/ -- extended status of AIDA components, including indicators of application running, systemd status, and last 5 lines of logs.
+  \item GET /db/rules/YYYY-MM-DD/ -- returns the list of rules mined on the given day.
+  \item GET /db/activerules/ -- returns the list of active rules, i.e., rules with \textt{active} flag set.
+  \item POST /db/activerules/ID/ -- activates the rule with given ID.
+  \item POST /db/inactiverules/ID/ -- deactivates the rule with given ID.
+  \item POST /db/deleterules/ID/ -- deletes rule with given ID.
+  \item POST /db/addrules/pravidlo/ -- creates new rule.
+  \item /enforcedatamining/ -- enforces the data mining procedure over the current sequential database and formats it.
+  \item /reloadrulematching/ - enforces restart of Rule Matching component that loads set of currently active rules.
+\end{itemize}
 
-    /enforcedatamining/ - vynutí spuštění data miningu nad současnou databází její smazání
-    /reloadrulematching/ - vynutí restart Rule Matching komponenty spojený s načtením nové sady pravidel
+The database used by REST API and the other components is located at: \texttt{/var/www/restapi/sabu-test.db}.
 
-Testovacia databáza: /var/www/restapi/sabu-test.db
+% \subsection{Dashboard}
+% 
+% % TODO
 
-\subsection{Dashboard}
-
-\subsection{Ansbile and Vagrant}
+% \subsection{Ansbile and Vagrant}
+% 
+% TODO
 
 \cleardoublepage
 
