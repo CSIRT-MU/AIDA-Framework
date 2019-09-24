@@ -135,7 +135,7 @@
         state: present
 
     - name: Preinstall Node.js
-      shell: curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+      shell: curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 
     - name: Install Node.js
       apt:
@@ -153,7 +153,7 @@
         creates: "{{ frontend_root }}/node-modules/"
 
     - name: Build angular application via Angular CLI
-      command: ng build --prod
+      command: ng build
       sudo: false
       args:
         chdir: "{{ frontend_root }}"
