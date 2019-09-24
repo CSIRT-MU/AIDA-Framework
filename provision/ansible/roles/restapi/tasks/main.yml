@@ -59,6 +59,12 @@
     dest: /etc/apache2/sites-enabled/rest-aida.conf
     mode: 0777
 
+- name: Create Apache2 config file
+  template:
+    src: apache2_ports.conf.j2
+    dest: /etc/apache2/ports.conf
+    mode: 0644
+
 - name: Restart Apache2
   service:
     name: apache2
