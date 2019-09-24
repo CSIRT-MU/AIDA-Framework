@@ -47,11 +47,6 @@
     args:
       creates: "{{ virtualenv_path }}"
 
-  # - name: Open ports 8000 and 80 on Apache
-  #   template:
-  #     src: ./apache-ports.conf.j2
-  #     dest: /etc/apache2/ports.conf
-
   - name: Enable Apache WSGI module
     apache2_module:
       state: present
@@ -61,33 +56,6 @@
     apache2_module:
       state: present
       name: rewrite
-
-  # - name: Create Apache virtual host for front-end
-  #   template:
-  #     src: ./vhost-frontend.conf.j2
-  #     dest: /etc/apache2/sites-available/frontend.conf
-
-  # - name: Create Apache virtual host for back-end
-  #   template:
-  #     src: vhost-backend.conf.j2
-  #     dest: /etc/apache2/sites-available/backend.conf
-
-  # - name: Delete default virtualhost file
-  #   file:
-  #     path: /etc/apache2/sites-enabled/000-default.conf
-  #     state: absent
-
-  # - name: Enable front-end virtual host
-  #   file:
-  #     src: /etc/apache2/sites-available/frontend.conf
-  #     dest: /etc/apache2/sites-enabled/frontend.conf
-  #     state: link
-
-  # - name: Enable back-end virtual host
-  #   file:
-  #     src: /etc/apache2/sites-available/backend.conf
-  #     dest: /etc/apache2/sites-enabled/backend.conf
-  #     state: link
 
   - name: Download mod_auth_openidc module for Apache2
     get_url:

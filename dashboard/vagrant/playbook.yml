@@ -6,10 +6,7 @@
     backend_root: /srv/backend
     backend_app: /srv/backend/dashboard
     virtualenv_path: /home/vagrant/django-venv
-  # roles:
-  #   - geerlingguy.repo-epel
-  #   - geerlingguy.nodejs
-  tasks:    
+  tasks:
     - name: Update apt cache
       apt: update_cache=yes
 
@@ -21,58 +18,7 @@
     - name: Set DJANGO_DEBUG=true in Apache2 env variables
       lineinfile:
         dest: /etc/apache2/envvars
-        line: export DJANGO_DEBUG=true   
-
-    # - name: Install apt tools
-    #   apt:
-    #     name: apt-transport-https
-    #     state: present
-    #
-    # - name: Install Node
-    #   apt:
-    #     name: nodejs
-    #     state: present
-    #
-    # - name: Install NPM
-    #   apt:
-    #     name: npm=5.8.0
-    #     state: present
-
-    # - name: Add Nodesource Keys
-    #   become: yes
-    #   apt_key:
-    #     url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-    #     state: present
-    #
-    # - name: Add Nodesource Keys
-    #   apt_key:
-    #     url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-    #     state: present
-    #     validate_certs: no
-    #
-    # # Note: "xenial" is ubuntu-speak for 16.04
-    # - name: Add Nodesource Apt Sources
-    #   apt_repository:
-    #     repo: '{{ item }}'
-    #     state: present
-    #   with_items:
-    #     - 'deb https://deb.nodesource.com/node_6.x xenial main'
-    #     - 'deb-src https://deb.nodesource.com/node_6.x xenial main'
-    #
-    # - name: Install NodeJS and NPM
-    #   apt:
-    #     name: '{{ item }}'
-    #     state: latest
-    #     update_cache: yes
-    #   with_items:
-    #     - nodejs
-    #     - nodejs-legacy
-    #     - npm
-
-    # - name: Install Apache WSGI module
-    #   apt:
-    #     name: libapache2-mod-wsgi-py3
-    #     state: present
+        line: export DJANGO_DEBUG=true
 
     - name: Install Apache WSGI module
       apt:
@@ -83,21 +29,6 @@
       apt:
         name: python-pip
         state: present
-    #
-    # - name: Install pip
-    #   apt:
-    #     name: python-pip
-    #     state: present
-
-    # - name: Add repository with Python 3.6
-    #   apt_repository:
-    #     repo: ppa:jonathonf/python-3.6
-    #     state: present
-    #
-    # - name: Install Python 3.6
-    #   apt:
-    #     name: python3.6
-    #     state: present
 
     - name: Install virtualenv
       pip:
@@ -172,23 +103,15 @@
         dest: /etc/apache2/sites-enabled/backend.conf
         state: link
 
-    - name: Download mod_auth_openidc module for Apache2
-      get_url:
-        url: https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.9/libapache2-mod-auth-openidc_2.3.9-1.stretch+1_amd64.deb
-        dest: /tmp/libapache2-mod-auth-openidc_2.3.7-1.stretch.1_amd64.deb
-
-    - name: Download libcjose package
-      get_url:
-        url: https://github.com/zmartzone/mod_auth_openidc/releases/download/v2.3.0/libcjose0_0.5.1-1.stretch.1_amd64.deb
-        dest: /tmp/libcjose0_0.5.1-1.stretch.1_amd64.deb
+    - name: Install mod_auth_openidc module for Apache2
+      apt:
+        name: libapache2-mod-auth-openidc
+        state: present
 
     - name: Install libcjose
       apt:
-        deb: /tmp/libcjose0_0.5.1-1.stretch.1_amd64.deb
-
-    - name: Install mod_auth_openidc
-      apt:
-        deb: /tmp/libapache2-mod-auth-openidc_2.3.7-1.stretch.1_amd64.deb
+        name: libcjose0
+        state: present
 
     - name: Install previously missed dependencies
       command: apt-get install -f
@@ -206,25 +129,6 @@
     - name: Enable OpenIDC protected routes configuration
       command: a2enconf openid.conf
 
-    # - name: Install frontend node dependencies
-    #   npm:
-    #     path: "{{ frontend_root }}"
-    #
-    # - name: Build angular
-    #   command: npm run build
-
-    # - name: Watch backend directory and reload Apache on change
-    #   command: iwatch -r -c "service apache2 reload" /srv/backend/ > /dev/null 2>&1 &
-    #   async: 1
-    #   poll: 0
-
-    # - name: Change backend folder permissions
-    #   file:
-    #     path: /srv/backend
-    #     group: www-data
-    #     recurse: true
-    #     state: directory
-    
     - name: Install Curl
       apt:
         name: curl
@@ -249,7 +153,7 @@
         creates: "{{ frontend_root }}/node-modules/"
 
     - name: Build angular application via Angular CLI
-      command: ng build
+      command: ng build --prod
       sudo: false
       args:
         chdir: "{{ frontend_root }}"

@@ -3,7 +3,7 @@ import { AuthConfig } from 'angular-oauth2-oidc';
 export const authConfig: AuthConfig = {
 
   // Url of the Identity Provider
-  issuer: 'https://oidc.ics.muni.cz/oidc/',
+  issuer: 'http://localhost:8000/oidc-api/',
 
   // URL of the SPA to redirect the user after silent refresh
   silentRefreshRedirectUri: window.location.origin + '/silent-refresh.html',
@@ -20,5 +20,5 @@ export const authConfig: AuthConfig = {
 
   sessionChecksEnabled: false,
 
-  userinfoEndpoint: 'https://oidc.ics.muni.cz/oidc/userinfo'
+  userinfoEndpoint: 'http://localhost:8000/oidc-api/userinfo'
 };

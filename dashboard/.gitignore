@@ -3,4 +3,3 @@
 .vscode
 *.pyc
 vagrant/**/*.retry
-backend/api/external_apis_config.py

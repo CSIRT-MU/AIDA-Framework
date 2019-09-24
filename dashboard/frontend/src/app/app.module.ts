@@ -96,7 +96,7 @@ import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
     OAuthModule.forRoot(
       {
         resourceServer: {
-          allowedUrls: ['https://oidc.ics.muni.cz/oidc/userinfo', 'http://localhost:8000/api/panels'],
+          allowedUrls: ['http://localhost:8000/api/panels'],
           sendAccessToken: true
         }
       }
