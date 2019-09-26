@@ -535,7 +535,7 @@ Create configuration file:
 $ sudo cp /vagrant/provision/ansible/roles/spark/templates/spark-defaults.conf.j2 /opt/spark/spark/conf/spark-defaults.conf
 \end{lstlisting}
 
-Replace placeholder \texttt{\{\{ spark\_modules\_zip \}\}} with \texttt{/opt/spark/applications/modules/modules.zip} in the newly created configuration file. You can also increase the \texttt{spark.driver.memory} due to available memory to be able to pass more data into AIDA.
+Replace placeholder \texttt{\{\{ spark\_modules\_zip \}\}} with \texttt{/opt/spark/applications/\\modules/modules.zip} in the newly created configuration file. You can also increase the \texttt{spark.driver.memory} due to available memory to be able to pass more data into AIDA.
 
 Make \texttt{spark} user owner of the \texttt{/opt/spark} directory:
 \begin{lstlisting}
@@ -543,9 +543,9 @@ $ sudo chown -R spark:spark /opt/spark/
 \end{lstlisting}
 
 
-\subsubsection{Install commons of AIDA services}
+\subsubsection{Install Java commons for AIDA components}
 
-Install Java commons modules for AIDA services:
+Install Java commons modules for AIDA components:
 %TODO sudo or not sudo
 \begin{lstlisting}
 $ cd /vagrant/commons/commons-idea
@@ -562,7 +562,7 @@ Install \texttt{aida-input} service which will listen on port 4164 and will send
 $ sudo cp /vagrant/provision/ansible/roles/aida-input/templates/aida-input.service.j2 /etc/systemd/system/aida-input.service
 \end{lstlisting}
 
-Replace following placeholders in the newly created file \texttt{/etc/systemd/system/aida-input.service} as follows:
+Replace following placeholders in the newly created file \texttt{/etc/systemd/system/\\aida-input.service} as follows:
 \begin{itemize}[noitemsep,nolistsep]
 \item \texttt{\{\{ kafka\_user \}\}} with \texttt{kafka} or other user you had chosen to use while installing Kafka
 \item \texttt{\{\{ kafka\_dir \}\}} with \texttt{/opt/kafka}
@@ -580,7 +580,7 @@ $ sudo systemctl status aida-input
 \end{lstlisting}
 
 
-\subsubsection{Install sanitization service}
+\subsubsection{Install Sanitization component}
 
 Create sanitization user:
 \begin{lstlisting}
@@ -618,9 +618,9 @@ $ sudo systemctl status sanitization
 \end{lstlisting}
 
 
-\subsubsection{Install aggregation service}
+\subsubsection{Install Aggregation component}
 
-Put Aggregation Spark application into required directory:
+Put Aggregation Spark application into the required directory:
 \begin{lstlisting}
 $ sudo cp -r /vagrant/services/aggregation /opt/spark/applications/aggregation
 $ sudo chown -R spark:spark /opt/spark/applications/aggregation
@@ -656,14 +656,14 @@ $ sudo systemctl status aggregation
 
 \subsubsection{Prepare Rules database}
 
-We are going to create sqlite3 database file with \texttt{rule} table for mined rules.
+We are going to create SQLite3 database file with \texttt{rule} table for mined rules.
 
 First, create the directory:
 \begin{lstlisting}
 $ sudo mkdir -p /var/aida/rules
 \end{lstlisting}
 
-Install sqlite3 and create database file with required permissions:
+Install SQLite3 and create database file with required permissions:
 \begin{lstlisting}
 $ sudo apt-get -y install sqlite3
 $ sudo sqlite3 /var/aida/rules/rule.db 'CREATE TABLE rule (id INTEGER PRIMARY KEY, inserted DATETIME DEFAULT CURRENT_TIMESTAMP, rule TEXT NOT NULL, support INTEGER, number_of_sequences INTEGER, confidence REAL, active INTEGER DEFAULT 0, comment TEXT, database TEXT, algorithm TEXT )'
@@ -720,14 +720,14 @@ $ sudo journalctl -u mining
 \end{lstlisting}
 
 
-\subsubsection{Install matching service}
+\subsubsection{Install Matching component}
 
-Create matching user:
+Create user for the Matching component:
 \begin{lstlisting}
 $ sudo useradd -M matching
 \end{lstlisting}
 
-Install matching binary:
+Install binary for the Matching component:
 \begin{lstlisting}
 $ sudo mkdir /opt/matching
 $ cd /vagrant/services/matching
@@ -827,9 +827,9 @@ Create config file for the application:
 $ sudo mkdir /etc/aida/
 $ sudo cp /vagrant/provision/ansible/roles/restapi/templates/rest.ini.j2 /etc/aida/rest.ini
 \end{lstlisting}
-and replace the placeholder \texttt{\{\{ database\_path \}\}} in the file with \texttt{/var/aida/rules/rule.db}.
+and replace the placeholder \texttt{\{\{ database\_path \}\}} in the file with \texttt{/var/aida/rules/\\rule.db}.
 
-Now, create config file for Apache:
+Now, create the config file for Apache:
 \begin{lstlisting}
 $ sudo cp /vagrant/provision/ansible/roles/restapi/templates/apache2.conf.j2 /etc/apache2/sites-enabled/rest-aida.conf
 \end{lstlisting}
@@ -904,14 +904,12 @@ Task of Aggregation component is to find and mark redundant alerts so that these
 
 \subsubsection{Duplicates}
 
-Duplicates are processed in the batches with size of one minute, windows size of five minutes and sliding size of one minute.
-
+Duplicates are processed in the batches with size of one minute, windows size of five minutes and sliding size of one minute. 
 Two alerts are considered to be duplicates if their \texttt{source IPv4}, \texttt{destination IPv4}, \texttt{alert category}, \texttt{detecting node name} and \texttt{detect time} equals and both appear in the five minute window. In this case one of these alerts is considered to be duplicate and AIDA duplicate field in the alert \texttt{\$.\_aida.Duplicate} is being set to \texttt{true}.
 
 \subsubsection{Continuing alerts}
 
-Continuing alerts are processed in the batches with size of one minute, windows size of seventy minutes and sliding size of one minute.
-
+Continuing alerts are processed in the batches with size of one minute, windows size of seventy minutes and sliding size of one minute. 
 The alert is considered to be continuing when it has the same \texttt{source IPv4}, \texttt{destination IPv4}, \texttt{destination port}, \texttt{alert category}, \texttt{detecting node name} as some previous alert in the seventy minutes window. In this case the alert is considered to be a continuing and the value of AIDA continuing field in the alert \texttt{\$.\_aida.Continuing} is being set to the ID of the first alert with the same properties in the window.
 
 
@@ -1021,7 +1019,7 @@ The following endpoints are implemented in the REST API:
 \begin{itemize}[nolistsep,noitemsep]
   \item GET /componentsinfo/ -- extended status of AIDA components, including indicators of application running, systemd status, and last 5 lines of logs.
   \item GET /db/rules/YYYY-MM-DD/ -- returns the list of rules mined on the given day.
-  \item GET /db/activerules/ -- returns the list of active rules, i.e., rules with \textt{active} flag set.
+  \item GET /db/activerules/ -- returns the list of active rules, i.e., rules with \texttt{active} flag set.
   \item POST /db/activerules/ID/ -- activates the rule with given ID.
   \item POST /db/inactiverules/ID/ -- deactivates the rule with given ID.
   \item POST /db/deleterules/ID/ -- deletes rule with given ID.
