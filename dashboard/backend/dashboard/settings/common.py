@@ -84,11 +84,14 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 # CORS settings
 CORS_ORIGIN_WHITELIST = (
-    'localhost:8080',
-    'localhost:4200',
-    '127.0.0.1:8080',
-    '127.0.0.1:4200',
-    'dashboard.csirt.muni.cz'
+    'http://localhost:80',
+    'http://localhost:4200'
+    'http://localhost:8000',
+    'http://localhost:8080',
+    'http://127.0.0.1:80',
+    'http://127.0.0.1:4200',
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:8080'
 )
 
 MIDDLEWARE = [
