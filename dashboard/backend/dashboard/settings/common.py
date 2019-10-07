@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '(tgq_c92jx2^fasfsf$7ob*heps_cl5szu8esfs014jzr4-@oru%ti26d@l')
-ALLOWED_HOSTS = ['dashboard.csirt.muni.cz', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -83,16 +83,20 @@ ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_EMAIL_REQUIRED = True
 
 # CORS settings
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:80',
-    'http://localhost:4200'
-    'http://localhost:8000',
-    'http://localhost:8080',
-    'http://127.0.0.1:80',
-    'http://127.0.0.1:4200',
-    'http://127.0.0.1:8000',
-    'http://127.0.0.1:8080'
-)
+#CORS_ORIGIN_WHITELIST = (
+    #'http://localhost:80',
+    #'http://localhost:4200',
+    #'http://localhost:8000',
+    #'http://localhost:8080',
+    #'http://127.0.0.1:80',
+    #'http://127.0.0.1:4200',
+    #'http://127.0.0.1:8000',
+    #'http://127.0.0.1:8080',
+#)
+
+# CORS Config
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -102,8 +106,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # CORS middleware
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
