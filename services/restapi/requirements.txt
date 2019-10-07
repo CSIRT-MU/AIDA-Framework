@@ -1,5 +1,5 @@
-Django==2.2.5
-django-cors-headers==3.1.0
-djangorestframework==3.10.3
+Django==1.11.23
+django-cors-headers==2.1.0
+djangorestframework==3.9.1
 dbus-python==1.2.12
 git+https://github.com/emlid/systemd-manager.git

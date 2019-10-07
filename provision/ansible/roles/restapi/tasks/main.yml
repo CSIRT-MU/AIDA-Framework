@@ -1,6 +1,6 @@
 - name: Install Apache2
   apt:
-    name: ["apache2", "libapache2-mod-wsgi-py3"]
+    name: ["apache2", "libapache2-mod-wsgi", "python-configparser"]
     update_cache: yes
     state: latest
 
@@ -27,15 +27,15 @@
         owner: "{{ apache_user }}"
         group: "{{ apache_user }}"
         recurse: yes
-    - name: Install virtualenv for python3
+    - name: Install virtualenv for python
       pip:
         name: virtualenv
-        executable: pip3
+        executable: pip
     - name: Create python virtualenv
       pip:
         requirements: "{{ restapi_dir }}/requirements.txt"
         virtualenv: "{{ venv_dir }}"
-        virtualenv_python: python3
+        virtualenv_python: python
         virtualenv_site_packages: yes
 
 - name: Create config directory {{ config_dir_path }}
