@@ -11,8 +11,8 @@
       <p *ngIf="componentName==='kafka'" class="line-breaker">
           {{ this.componentInfo.kafka.description }}
       </p>
-      <p *ngIf="componentName==='wardenSender'" class="line-breaker">
-          {{ this.componentInfo.warden.sender.description }}
+      <p *ngIf="componentName==='wardenReceiver'" class="line-breaker">
+          {{ this.componentInfo.warden.receiver.description }}
       </p>
       <p *ngIf="componentName==='sparkAA'" class="line-breaker">
           {{ this.componentInfo.spark.aggregation.description }}
@@ -26,8 +26,8 @@
       <p *ngIf="componentName==='esperSRM'" class="line-breaker">
           {{ this.componentInfo.esper.description }}
       </p>
-      <p *ngIf="componentName==='wardenReceiver'" class="line-breaker">
-          {{ this.componentInfo.warden.receiver.description }}
+      <p *ngIf="componentName==='wardenSender'" class="line-breaker">
+          {{ this.componentInfo.warden.sender.description }}
       </p>
   </mat-card-content>
   </mat-card>
@@ -41,8 +41,8 @@
         <p *ngIf="componentName==='kafka'" class="line-breaker">
             {{ this.componentInfo.kafka.log }}
         </p>
-        <p *ngIf="componentName==='wardenSender'" class="line-breaker">
-            {{ this.componentInfo.warden.sender.log }}
+        <p *ngIf="componentName==='wardenReceiver'" class="line-breaker">
+            {{ this.componentInfo.warden.receiver.log }}
         </p>
         <p *ngIf="componentName==='sparkAA'" class="line-breaker">
             {{ this.componentInfo.spark.aggregation.log }}
@@ -56,8 +56,8 @@
         <p *ngIf="componentName==='esperSRM'" class="line-breaker">
             {{ this.componentInfo.esper.log }}
         </p>
-        <p *ngIf="componentName==='wardenReceiver'" class="line-breaker">
-            {{ this.componentInfo.warden.receiver.log }}
+        <p *ngIf="componentName==='wardenSender'" class="line-breaker">
+            {{ this.componentInfo.warden.sender.log }}
         </p>
     </mat-card-content>
   </mat-card>
