@@ -24,7 +24,11 @@ public class Item {
     public Item(Idea idea) {
         nodeName = idea.getNode().get(0).getName();
         category = idea.getCategory().get(0);
-        port = idea.getTarget().get(0).getPort().get(0);
+        try {
+            port = idea.getTarget().get(0).getPort().get(0);
+        } catch (IndexOutOfBoundsException | NullPointerException e) {
+            port = null;
+        }
     }
 
     public String getNodeName() {

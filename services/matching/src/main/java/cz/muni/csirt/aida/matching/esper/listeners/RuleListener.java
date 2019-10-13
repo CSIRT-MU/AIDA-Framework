@@ -74,6 +74,7 @@ public class RuleListener implements UpdateListener {
             // Get events on which the predicted event is triggered
 
             List<Idea> basedOn = Arrays.stream(eventBean.getEventType().getPropertyNames())
+                    .sorted()
                     .map(x -> (Idea) eventBean.get(x))
                     .collect(Collectors.toList());
 
@@ -93,7 +94,9 @@ public class RuleListener implements UpdateListener {
                         }
 
                         predicted.getCategory().add(event.getCategory());
-                        predicted.getTarget().get(0).setPort(Collections.singletonList(event.getPort()));
+                        if (event.getPort() != null) {
+                            predicted.getTarget().get(0).setPort(Collections.singletonList(event.getPort()));
+                        }
                         predicted.setNode(Collections.singletonList(
                                 new Node(event.getNodeName(), null, null, null, null)
                         ));
@@ -114,6 +117,9 @@ public class RuleListener implements UpdateListener {
                     if (rule.getConfidence() != 0) {
                         observation.setConfidence(rule.getConfidence());
                     }
+
+                    observation.setAdditionalProperty("mitigationTime", getMitigationTime(rule, basedOn));
+
                     sendToKafka(observation);
                     break;
             }
@@ -159,7 +165,11 @@ public class RuleListener implements UpdateListener {
         // Set Targets
 
         Target target = new Target();
-        target.setIP4(singletonList(basedOn.get(0).getTarget().get(0).getIP4().get(0)));
+        try {
+            target.setIP4(singletonList(basedOn.get(0).getTarget().get(0).getIP4().get(0)));
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
+            logger.debug("Missing target IPv4. Predicted/observed event will be without target.");
+        }
         idea.setTarget(singletonList(target));
 
         return idea;
@@ -174,6 +184,26 @@ public class RuleListener implements UpdateListener {
             throw new RuntimeException(
                     String.format("Unable to send idea message '%s' to kafka topic '%s'.", idea, outputKafkaTopic), e);
         }
+    }
+
+    private static long getMitigationTime(Rule rule, List<Idea> basedOn) {
+        List<Idea> antecedents = basedOn.subList(0, rule.getAntecedent().size());
+        List<Idea> consequences = basedOn.subList(rule.getAntecedent().size(), basedOn.size());
+
+        Date latestAntecedent = antecedents.stream()
+                .max(Comparator.comparing(Idea::getDetectTime))
+                .get().getDetectTime();
+
+        Date earliestConsequent = consequences.stream()
+                .min(Comparator.comparing(Idea::getDetectTime))
+                .get().getDetectTime();
+
+        return dateDiff(latestAntecedent, earliestConsequent, TimeUnit.SECONDS);
+    }
+
+    private static long dateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+        long diffInMillies = date2.getTime() - date1.getTime();
+        return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
     }
 
 }
