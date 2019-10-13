@@ -14,3 +14,5 @@ spark_version: spark-2.4.3-bin-hadoop2.7
 spark_tgz: "/tmp/{{ spark_version }}.tgz"
 spark_kafka_assembly: https://search.maven.org/classic/remotecontent?filepath=org/apache/spark/spark-streaming-kafka-0-8-assembly_2.11/2.4.3/spark-streaming-kafka-0-8-assembly_2.11-2.4.3.jar
 spark_kafka_assembly_checksum: sha512:88d0ae269c83e8ea1955ee3538239a3f21c98e789fc4e593f7ec49e452bf31436f542d59d45f0753744d750494432941ac8415ca12fd80f9fbc88e81c0d7da41
+
+spark_ui_filters_dir: "{{ commons_dir }}/spark-ui-filters"

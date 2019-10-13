@@ -21,6 +21,18 @@
     dest: "{{ spark_home_dir }}/jars/"
     mode: "0755"
     checksum: "{{ spark_kafka_assembly_checksum }}"
+- name: Package spark-ui-filters jar
+  command: mvn clean package
+  args:
+    chdir: "{{ spark_ui_filters_dir }}"
+- name: Copy spark-ui-filters jar into {{ spark_home_dir }}/jars/
+  copy:
+    src: "{{ item }}"
+    dest: "{{ spark_home_dir }}/jars/"
+    mode: '0755'
+    remote_src: yes
+  with_fileglob:
+    - "{{ spark_ui_filters_dir }}/target/*.jar"
 - name: Set {{ spark_user }} as owner of {{ spark_home_dir }}
   file:
     dest: "{{ spark_home_dir }}"
