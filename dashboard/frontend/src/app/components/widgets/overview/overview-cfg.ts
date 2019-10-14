@@ -34,4 +34,4 @@ export const components = [{name: 'kafka',
                             svgId: 'feedback'}
                           ];
 export const additionalSVGIds = ['sparkIcon'];
-export const SVG_path = 'assets/images/iabu.svg';
+export const SVG_path = 'assets/images/aida.svg';

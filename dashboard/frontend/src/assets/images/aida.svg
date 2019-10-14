@@ -16,7 +16,7 @@
    version="1.1"
    id="svg3834"
    inkscape:version="0.92.4 5da689c313, 2019-01-14"
-   sodipodi:docname="iabu.svg">
+   sodipodi:docname="aida.svg">
   <defs
      id="defs3828">
     <marker
@@ -356,11 +356,11 @@
          style="font-size:2.82222199px;line-height:1.25;stroke-width:0.28222221px"
          id="tspan3631"
          y="122.95011"
-         x="47.509159"> Relationship</tspan><tspan
+         x="47.509159">         Data</tspan><tspan
          style="font-size:2.82222199px;line-height:1.25;stroke-width:0.28222221px"
          id="tspan4446"
          y="126.47788"
-         x="47.509159">   Discovery</tspan></text>
+         x="47.509159"> Sanitization</tspan></text>
     <g
        id="sparkRDcog"
        transform="translate(0.47542398)">
