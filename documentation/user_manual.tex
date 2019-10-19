@@ -866,6 +866,12 @@ Simplest way for the alerts to enter AIDA framework is via TCP socket on port 41
 
 The predicted alerts are stored in file \texttt{predictions.json} in the root directory of repository. There is systemd service called \texttt{aida-output} which is also simple unix pipeline reading alerts from Kafka topic \texttt{predictions} and then saving them into the file. You can of course skip this service and consume the data directly from the Kafka topic.
 
+If you would like to use Warden\footnote{\url{https://warden.cesnet.cz}} as a source of incoming events (or send predicted events into the Warden),
+you have to configure your Warden sender/receiver. Then you can use prepared script \texttt{kafka\_producer.py} for reading events from a directory,
+as the Warden receiver saves one event per file into a directory, and sending them into a Kafka topic.
+Or you can use \texttt{kafka\_consumer.py}, which will read events from a Kafka topic and saves one event per file into a directory, as Warden sender expects.
+Both scripts are in the directory \texttt{services/warden-kafka-clients}.
+
 \subsection{Kafka}
 
 Kafka is used as the primary communication channel between components and the way of moving alerts through the system. Kafka is installed in version 2.3.0 in the directory \texttt{/opt/kafka/}. Managing of Kafka broker is done via systemd service \texttt{kafka}. For managing of Kafka topics is created systemd template service \texttt{kafka-topic@}.
