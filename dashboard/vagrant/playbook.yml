@@ -147,10 +147,13 @@
 
     - name: Install dashboard modules
       command: npm install --no-bin-links
-      sudo: false
       args:
         chdir: "{{ frontend_root }}"
         creates: "{{ frontend_root }}/node-modules/"
+
+    - name: Fix access rights
+      command: "chown -R vagrant:vagrant /srv/frontend/node_modules"
+      sudo: true
 
     - name: Build angular application via Angular CLI
       command: ng build
