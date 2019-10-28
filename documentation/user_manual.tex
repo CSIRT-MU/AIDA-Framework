@@ -180,7 +180,7 @@ AIDA is an analytical framework for processing intrusion detection alerts with a
 \label{fig:aida}
 \end{figure}
 
-Schema of the AIDA framework is presented in Figure~\ref{fig:aida}. The central component of the framework is Kafka message broker\footnote{\url{https://kafka.apache.org/}} that takes the data from inputs and distributes them among the other components while ensuring the correct order of processing of the alerts. Particular components can then be found in two component groups based on their underlying software platform. On the left side, we can see a group of components implemented as applications in Spark analytical engine\footnote{\url{https://spark.apache.org/}}. These applications typically receive a stream of alerts from Kafka, process them, and return them to Kafka. Some applications, such as the Data Mining component, have another output, such as a database for long-term storage of results of data processing. On the right side of the schema, we can see an application based on Esper\footnote{\url{http://www.espertech.com/esper/}}, another event stream processing framework. The component implemented using Esper uses its features, such as a powerful query language, for the benefits of the whole AIDA framework. The Rule Matching component is also one of the few that provide outputs outside the framework. Outputs are in the same form as inputs, i.e., intrusion detection alerts, so the output channel is implemented analogously. More details on particular components are discussed further in this section.
+Schema of the AIDA framework is presented in Figure~\ref{fig:aida}. The central component of the framework is Kafka message broker\footnote{\url{https://kafka.apache.org/}} that takes the data from inputs and distributes them among the other components while ensuring the correct order of processing of the alerts. Particular components can then be found in two component groups based on their underlying software platform. On the left side, we can see a group of components implemented as applications in Spark analytical engine\footnote{\url{https://spark.apache.org/}}. These applications typically receive a stream of alerts from Kafka, process them, and return them to Kafka. Some applications, such as the Data Mining component, have another output, such as a database for long-term storage of results of data processing. On the right side of the schema, we can see an application based on Esper\footnote{\url{http://www.espertech.com/esper/}}, another event stream processing framework. The component implemented using Esper uses its features, such as a powerful query language, for the benefits of the whole AIDA framework. The Rule Matching component is also one of the few that provide outputs outside the framework. Outputs are in the same form as inputs, i.e., intrusion detection alerts, so the output channel is implemented analogously. More details on particular components are discussed further in this document.
 
 \bigskip
 
@@ -238,7 +238,7 @@ The remainder of this documents contains a user guide, installation instructions
 
 \section{User Guide}
 
-The user has two options on how to use the AIDA framework. In he first part of the user guide, we provide a quick start using a command line that provides full control over the data and their processing. The second part of user guide descirbes quick start using web interface (dashboard) that is recommended for users that need only basic functionality or prefer data visualizations.
+The user has two options on how to use the AIDA framework. In he first part of the user guide, we provide a quick start using a command line that provides full control over the data and their processing. The second part of user guide describes quick start using web interface (dashboard) that is recommended for users that need only basic functionality or prefer data visualizations.
 
 \subsection{Quick Start Using Command Line}
 
@@ -256,6 +256,8 @@ nc localhost 4164 < path_to_file_with_your_data
 \end{lstlisting}
 
 If you do not have your own data, we recommend trying AIDA framework out with our dataset\footnote{\url{http://dx.doi.org/10.17632/p6tym3fghz.1}}. Download and unzip the main file in the datase (dataset.idea.zip) and use it in the command above.
+
+% TODO vagrant ssh
 
 \subsubsection*{Run data mining}
 
@@ -356,7 +358,7 @@ On the left side of the screen, you can see a navigation panel with links to oth
   \includegraphics[width=0.75\textwidth]{fig/dashboard_rules}
 \end{figure}
 
-Users interested in performance of the framework should see the panel \textbf{Spark log}, where they can access the user interface of Spark framework, on which many components are based. Information on the umber and load of workers, memory consumptions, and time to finish jobs are presented there.
+Users interested in performance of the framework should see the panel \textbf{Spark log}, where they can access the user interface of Spark framework, on which many components are based. Information on the number and load of workers, memory consumptions, and time to finish jobs are presented there.
 
 \begin{figure}[h]
   \centering
@@ -374,13 +376,13 @@ to access the configuration page. Use the same credentials as for the dashboard,
   \item[] Username: admin
   \item[] Password: aida.admin
 \end{itemize}
-In the ocnfiguration, you can add or remove user accounts, and customize the framework.
+In the configuration, you can add or remove user accounts, and customize the framework.
 
 \cleardoublepage
 
 \section{Installation Instructions}
 
-Simplest way how to install and use AIDA is by running vagrant box \texttt{vagrant up} from \texttt{provision} directory. If you want to install AIDA on an already existing machine, you can follow the following instructions. There is a Quick Installation section whereby you can install AIDA just by running Ansible playbook. Or you can install AIDA manually step by step from the instructions in Manual Installation section.
+Simplest way how to install and use AIDA is by running vagrant box \texttt{vagrant up} from \texttt{provision} directory. If you want to install AIDA on an already existing machine, you can follow the following instructions. There is a Quick Installation section whereby you can install AIDA just by running Ansible playbook. Alternatively, you can install AIDA manually step by step from the instructions in Manual Installation section.
 
 \subsection{Prerequisites}
 
@@ -419,7 +421,6 @@ $ ansible-playbook -i inventory-local.ini install-aida.yml
 
 Note that the Ansible will also install Java 8, Python 3 and other packages listed in prerequisites section.
 
-% TODO provide simple command to check status of all AIDA services
 You can check that the main AIDA services are up and running by running.
 \begin{lstlisting}
 $ sudo systemctl status aida-input sanitization aggregation matching
@@ -430,7 +431,7 @@ $ sudo systemctl status aida-input sanitization aggregation matching
 
 \subsection{Manual Installation}
 
-This section provides step-by-step instructions on how to install AIDA framework on an existing machine without ansible. This process is more complicated and, thus, is recommended only to advanced users, and users interesting in implementation of the framework. During the installation, we are going to create dedicated user accounts for almost every AIDA service. However, you can create just one user for all the AIDA services, and run the framework under on user.
+This section provides step-by-step instructions on how to install AIDA framework on an existing machine without using Ansible. This process is more complicated and, thus, is recommended only to advanced users, and users interesting in implementation of the framework. During the installation, we are going to create dedicated user accounts for almost every AIDA service. However, you can create just one user for all the AIDA services, and run the framework under one user.
 
 \subsubsection{Install Kafka}
 
@@ -500,7 +501,7 @@ First, create Spark user:
 $ sudo useradd -M spark
 \end{lstlisting}
 
-Download Spark binary:
+Download Spark binary to the \textt{/opt/spark/spark} directory:
 \begin{lstlisting}
 $ sudo su
 # mkdir -p /opt/spark/spark
@@ -720,7 +721,9 @@ $ sudo journalctl -u mining
 \end{lstlisting}
 
 
-\subsubsection{Install Matching component}
+\subsubsection{Install Rule Matching component}
+
+Rule Matching component reads the rule database and predicts the upcoming alerts via matching the rules in the stream of data.
 
 Create user for the Matching component:
 \begin{lstlisting}
@@ -862,15 +865,12 @@ This section contains the technical documentation for the AIDA framework. The do
 
 \subsection{Inputs and Outputs}
 
-Simplest way for the alerts to enter AIDA framework is via TCP socket on port 4164. AIDA contains systemd service \texttt{aida-input}, which is simple unix pipeline of Netcat listening on TCP socket and forwarding the data into Kafka via Kafka console producer. This alerts are being send into Kafka topic \texttt{input}. There are expected one IDEA alert per line. You can of course skip this service and send the data directly into the topic by yourself.
+Simplest way for the alerts to enter AIDA framework is via TCP socket on port 4164. AIDA contains systemd service \texttt{aida-input}, which is simple unix pipeline of Netcat listening on TCP socket and forwarding the data into Kafka via Kafka console producer. These alerts are sent into Kafka topic \texttt{input}. One IDEA-formatted alert per line is expected. Alternatively, you may not use the service, and send the data directly into the Kafka topic.
 
-The predicted alerts are stored in file \texttt{predictions.json} in the root directory of repository. There is systemd service called \texttt{aida-output} which is also simple unix pipeline reading alerts from Kafka topic \texttt{predictions} and then saving them into the file. You can of course skip this service and consume the data directly from the Kafka topic.
+The predicted alerts are stored in file \texttt{predictions.json} in the root directory of repository (when run from Vagrant). There is also a  systemd service called \texttt{aida-output} which is also simple unix pipeline reading alerts from Kafka topic \texttt{predictions} and then saving them into the file. You can of course skip this service and consume the data directly from the Kafka topic.
 
-If you would like to use Warden\footnote{\url{https://warden.cesnet.cz}} as a source of incoming events (or send predicted events into the Warden),
-you have to configure your Warden sender/receiver. Then you can use prepared script \texttt{kafka\_producer.py} for reading events from a directory,
-as the Warden receiver saves one event per file into a directory, and sending them into a Kafka topic.
-Or you can use \texttt{kafka\_consumer.py}, which will read events from a Kafka topic and saves one event per file into a directory, as Warden sender expects.
-Both scripts are in the directory \texttt{services/warden-kafka-clients}.
+% TODO
+% If you would like to use Warden\footnote{\url{https://warden.cesnet.cz}} as a source of incoming events (or send predicted events into the Warden), you have to configure your Warden sender/receiver. Then you can use prepared script \texttt{kafka\_producer.py} for reading events from a directory, as the Warden receiver saves one event per file into a directory, and sending them into a Kafka topic. Or you can use \texttt{kafka\_consumer.py}, which will read events from a Kafka topic and saves one event per file into a directory, as Warden sender expects. Both scripts are in the directory \texttt{services/warden-kafka-clients}.
 
 \subsection{Kafka}
 
@@ -887,7 +887,7 @@ AIDA uses the following Kafka topics for asynchronous communication:
 
 \subsection{Spark}
 
-Spark is installed in version 2.4.3 with extension for Kafka streaming. Because AIDA is using just one machine, spark applications are being executed in local mode.
+Spark is a framework, on which several components of the AIDA framework were built. Spark is installed in version 2.4.3 with extension for Kafka streaming. Because AIDA is using just one machine, spark applications are being executed in local mode.
 
 It the case a Dashboard will run on different machine, you will need to set CORS headers into Spark UI. This can be done by implementing simple Java Servlet Filter. Put jar with the filter into \texttt{/opt/spark/spark/jars} directory. Then set the filter by specifying the filter class name in \texttt{spark.ui.filters} configuration in the \texttt{/opt/spark/spark/conf/spark-defaults.conf} file.
 
@@ -906,17 +906,17 @@ The Sanitizer is implemented as Kafka Streaming application which reads alerts f
 
 \subsection{Aggregation}
 
-Task of Aggregation component is to find and mark redundant alerts so that these are not included in further analyses. AIDA is primarily focused on the aggregation of following two types of aggregates, duplicates and continuing alerts. Aggregation is a Spark Streaming application which runs in local mode (there is no necessity for running the whole Spark cluster with slaves) and is managed by the systemd service called \texttt{aggregation}.
+Task of Aggregation component is to find and mark redundant alerts so that these are not included in further analyses. AIDA is primarily focused on the aggregation of following two types of aggregates, duplicates and continuing alerts. Aggregation is a Spark Streaming application, and is managed by the systemd service called \texttt{aggregation}.
 
-\subsubsection{Duplicates}
+% \subsubsection{Duplicates}
 
 Duplicates are processed in the batches with size of one minute, windows size of five minutes and sliding size of one minute. 
-Two alerts are considered to be duplicates if their \texttt{source IPv4}, \texttt{destination IPv4}, \texttt{alert category}, \texttt{detecting node name} and \texttt{detect time} equals and both appear in the five minute window. In this case one of these alerts is considered to be duplicate and AIDA duplicate field in the alert \texttt{\$.\_aida.Duplicate} is being set to \texttt{true}.
+Two alerts are considered to be duplicates if their \texttt{source IPv4}, \texttt{destination IPv4}, \texttt{destination port}, \texttt{alert category}, \texttt{detecting node name} and \texttt{detect time} equals and both appear in the five minute window. In this case one of these alerts is considered to be duplicate and AIDA duplicate field in the alert \texttt{\$.\_aida.Duplicate} is being set to \texttt{true}.
 
-\subsubsection{Continuing alerts}
+% \subsubsection{Continuing alerts}
 
 Continuing alerts are processed in the batches with size of one minute, windows size of seventy minutes and sliding size of one minute. 
-The alert is considered to be continuing when it has the same \texttt{source IPv4}, \texttt{destination IPv4}, \texttt{destination port}, \texttt{alert category}, \texttt{detecting node name} as some previous alert in the seventy minutes window. In this case the alert is considered to be a continuing and the value of AIDA continuing field in the alert \texttt{\$.\_aida.Continuing} is being set to the ID of the first alert with the same properties in the window.
+The alert is considered to be continuing when it has the same \texttt{source IPv4}, \texttt{destination IPv4}, \texttt{destination port}, \texttt{alert category}, \texttt{detecting node name} as some previous alert in the seventy minutes window (default value is 1 hour, 10 minutes are added to catch delayed alerts). In this case the alert is considered to be a continuing and the value of AIDA continuing field in the alert \texttt{\$.\_aida.Continuing} is being set to the ID of the first alert with the same properties in the window.
 
 
 \subsection{Data Mining}
@@ -960,9 +960,9 @@ comment        & VARCHAR (255)  & ``This is a sample rule, do not use.'' \\ \hli
 
 \subsection{Rule Matching}
 
-Rule Matching component processes the stream of alters and queries them for the presence of predefined rules. If the predefined rules is matched, an action is performed.
+Rule Matching component processes the stream of alerts and queries them for the presence of predefined rules. If the predefined rules is matched, an action is performed.
 
-The Rule Matching component is written as Esper streaming application. On the startup, the component reads active rules from the database and generate two EPL queries for each active rule. These queries are then deployed into the Esper runtime engine. Listener, creating predicted alerts and sending them to Kafka, is attached to the queries. All the queries are operating on one hour long sliding window \autoref{fig:twfill}, which also filters alerts of no interest for Matching, like duplicates and continuing aggregates.
+The Rule Matching component is written as Esper streaming application. On the startup, the component reads active rules from the database and generate two EPL queries for each active rule. These queries are then deployed into the Esper runtime engine. Listener that creates predicted alerts and sends them to Kafka is attached to the queries. All the queries are operating on one hour long sliding window \autoref{fig:twfill}, which also filters alerts of no interest for Matching, like duplicates and continuing aggregates.
 
 \begin{figure}[h!]
 \begin{lstlisting}[]
