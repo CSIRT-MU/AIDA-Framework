@@ -47,6 +47,7 @@ public class Rules {
 
     private static Set<Item> parseItemSet(String events) {
         return Arrays.stream(events.trim().split(","))
+                .map(String::trim)
                 .map(Item::fromString)
                 .collect(Collectors.toSet());
     }
