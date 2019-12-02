@@ -1,0 +1,47 @@
+---
+
+- name: Create {{ feedback_user }} user
+  user:
+    name: "{{ feedback_user }}"
+    shell: "/usr/sbin/nologin"
+    create_home: no
+    system: yes
+    state: present
+
+- name: Check for folder {{ feedback_dir }}
+  stat:
+    path: "{{ feedback_dir }}"
+  changed_when: false
+  register: install_dir
+- when: not install_dir.stat.exists
+  block:
+    - name: Package jar
+      command: mvn clean package
+      args:
+        chdir: "{{ feedback_repository_location }}"
+    - name: Creates {{ feedback_dir }} directory
+      file:
+        path: "{{ feedback_dir }}"
+        state: directory
+    - name: Copy jar into {{ feedback_dir }}
+      copy:
+        src: "{{ item }}"
+        dest: "{{ feedback_dir }}/feedback.jar"
+        mode: '0644'
+        remote_src: yes
+      with_fileglob:
+        - "{{ feedback_repository_location }}/target/*jar-with-dependencies.jar"
+    - name: Set {{ feedback_user }} as owner of {{ feedback_dir }}
+      file: 
+        dest: "{{ feedback_dir }}"
+        owner: "{{ feedback_user }}"
+        group: "{{ feedback_user }}"
+        recurse: yes
+
+- name: Create systemd unit file for Feedback
+  template:
+    src: feedback.service.j2
+    dest: /etc/systemd/system/feedback.service
+    mode: 0644
+    owner: root
+    group: root

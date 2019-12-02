@@ -1,0 +1,5 @@
+---
+
+feedback_user: feedback
+feedback_dir: /opt/feedback
+feedback_repository_location: "{{ services_dir }}/feedback"

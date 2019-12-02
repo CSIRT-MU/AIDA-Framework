@@ -13,6 +13,8 @@ public class AidaUtils {
 	private static final String OVERLAPPING = "Overlapping";
 	private static final String NON_OVERLAPPING = "NonOverlapping";
 
+	private static final String MITIGATION_TIME = "mitigationTime";
+
 	private AidaUtils() {
 	}
 
@@ -39,5 +41,31 @@ public class AidaUtils {
 
 	public static boolean isNonOverlapping(Idea idea) {
 		return getAidaAttribute(idea).containsKey(NON_OVERLAPPING);
+	}
+
+	public static int getMitigationTime(Idea idea) {
+		Object aida = idea.getAdditionalProperties().get(MITIGATION_TIME);
+
+		if (aida == null) {
+			throw new IllegalStateException("Idea event doesn't have '" + MITIGATION_TIME + "' attribute");
+		}
+
+		if (aida instanceof Integer) {
+			return (Integer) aida;
+		}
+		throw new IllegalStateException("Idea event has '" + MITIGATION_TIME + "' attribute with invalid value '" +
+				aida + "'");
+	}
+
+	public static String getSourceIP4(Idea idea) {
+		return idea.getSource().get(0).getIP4().get(0);
+	}
+
+	public static Integer getTargetPort(Idea idea) {
+		try {
+			return idea.getTarget().get(0).getPort().get(0);
+		} catch (NullPointerException | IndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 }

@@ -1,0 +1,15 @@
+[Unit]
+Description=Consume some Kafka topics and measure data on them
+Requires=kafka-topic@aggregated.service kafka-topic@predictions.service kafka-topic@observations.service
+After=kafka-topic@aggregated.service kafka-topic@predictions.service kafka-topic@observations.service
+
+[Service]
+Type=simple
+User={{ feedback_user }}
+Group={{ feedback_user }}
+ExecStart=/usr/bin/env java -jar {{ feedback_dir }}/feedback.jar --kafka-brokers localhost:9092 --kafka-aggregates-topic aggregated --kafka-predictions-topic predictions --kafka-observations-topic observations
+Restart=on-failure
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

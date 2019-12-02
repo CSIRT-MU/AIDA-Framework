@@ -1,0 +1,10 @@
+---
+- name: Install Feedback service
+  include_tasks: install.yml
+  become: yes
+
+- name: Start Feedback service
+  service: 
+    name: feedback
+    state: started
+    enabled: yes
