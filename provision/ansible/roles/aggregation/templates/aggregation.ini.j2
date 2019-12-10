@@ -1,0 +1,14 @@
+[kafka]
+topic_in = sanitized
+topic_out = aggregated
+zookeper_in = localhost:2181
+kafka_brokers_out = localhost:9092
+offset = offset01
+
+[streaming]
+batch_size = 60
+slide_size = 60
+window_duplicate = 300
+window_continuing = 4200
+window_overlapping = 300
+window_nonoverlapping = 300

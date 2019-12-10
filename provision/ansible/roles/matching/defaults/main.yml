@@ -3,3 +3,4 @@
 matching_user: matching
 matching_dir: /opt/matching
 matching_repository_location: "{{ services_dir }}/matching"
+matching_config_file: "{{ config_dir }}/matching.ini"

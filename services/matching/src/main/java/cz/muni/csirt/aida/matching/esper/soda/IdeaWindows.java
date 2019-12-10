@@ -3,7 +3,6 @@ package cz.muni.csirt.aida.matching.esper.soda;
 
 import com.espertech.esper.common.client.soda.AnnotationPart;
 import com.espertech.esper.common.client.soda.CreateWindowClause;
-import com.espertech.esper.common.client.soda.DotExpression;
 import com.espertech.esper.common.client.soda.EPStatementObjectModel;
 import com.espertech.esper.common.client.soda.Expression;
 import com.espertech.esper.common.client.soda.Expressions;
@@ -59,7 +58,7 @@ public class IdeaWindows {
      *      create window IdeaWindow.ext:time_order(detectTime.getTime(),1 hours) as select * from Idea
      * @return statement
      */
-    public static EPStatementObjectModel createIdeaWindow() {
+    public static EPStatementObjectModel createIdeaWindow(int windowSize) {
 
         // Create window clause
 
@@ -68,15 +67,11 @@ public class IdeaWindows {
 
         // Add views into window clause
 
-        DotExpression detectTime = new DotExpression(Expressions.property("detectTime"));
-        detectTime.add("getTime", Collections.emptyList(), false);
-
-        List<Expression> viewParams = Arrays.asList(
-//                Expressions.property("detectTime.getTime()"),
-                detectTime,
-                Expressions.timePeriod(null, 1, null, null, null)
+        // http://esper.espertech.com/release-5.5.0/esper-reference/html/epl-views.html#view-win-time
+        List<Expression> viewParams = Collections.singletonList(
+                Expressions.timePeriod(null, null, windowSize, null, null)
         );
-        window.addView("ext", "time_order", viewParams);
+        window.addView("win", "time", viewParams);
 
         // Create model
 

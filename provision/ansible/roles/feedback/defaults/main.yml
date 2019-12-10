@@ -3,3 +3,4 @@
 feedback_user: feedback
 feedback_dir: /opt/feedback
 feedback_repository_location: "{{ services_dir }}/feedback"
+feedback_config_file: "{{ config_dir }}/feedback.ini"

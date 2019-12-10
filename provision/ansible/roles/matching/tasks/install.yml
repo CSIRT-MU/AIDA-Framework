@@ -8,6 +8,12 @@
     system: yes
     state: present
 
+- name: Create config file {{ matching_config_file }}
+  template:
+    src: matching.ini.j2
+    dest: "{{ matching_config_file }}"
+    mode: 0644
+
 - name: Check for folder {{ matching_dir }}
   stat:
     path: "{{ matching_dir }}"

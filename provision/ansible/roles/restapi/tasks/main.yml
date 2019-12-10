@@ -38,17 +38,10 @@
         virtualenv_python: python
         virtualenv_site_packages: yes
 
-- name: Create config directory {{ config_dir_path }}
-  file:
-    path: "{{ config_dir_path }}"
-    state: directory
-    mode: 0777
-    recurse: yes
-
-- name: Create app config file {{ config_dir_path }}/rest.ini
+- name: Create app config file {{ config_dir }}/rest.ini
   template:
     src: rest.ini.j2
-    dest: "{{ config_dir_path }}/rest.ini"
+    dest: "{{ config_dir }}/rest.ini"
     mode: 0644
     group: "{{ apache_user }}"
     owner: "{{ apache_user }}"

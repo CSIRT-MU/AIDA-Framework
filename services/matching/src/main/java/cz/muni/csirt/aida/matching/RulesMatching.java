@@ -1,5 +1,7 @@
 package cz.muni.csirt.aida.matching;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -7,6 +9,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.ini4j.Ini;
+import org.ini4j.Profile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,31 +42,45 @@ public class RulesMatching {
 
     private final static Logger logger = LoggerFactory.getLogger(RulesMatching.class);
 
+    @Parameter(names = {"--config-file"}, description = "Path to the config file")
+    private String configFile = "/etc/aida/matching.ini";
+
     @Parameter(names = {"--kafka-brokers"}, description = "List of Kafka bootstrap servers separated by comma")
-    private String kafkaBrokers = "127.0.0.1:9092";
+    private String kafkaBrokers;
 
     @Parameter(names = {"--kafka-consumer-group"}, description = "Kafka consumer group ID")
-    private String kafkaConsumerGroupId = "esper-event-matcher";
+    private String kafkaConsumerGroupId;
 
     @Parameter(names = {"--kafka-input-topic"}, description = "Kafka topic name for incoming IDEA events")
-    private String kafkaInputTopic = "aggregated";
+    private String kafkaInputTopic;
 
     @Parameter(names = {"--kafka-predictions-topic"}, description = "Kafka topic name for predicted IDEA events")
-    private String kafkaPredictionsTopic = "predictions";
+    private String kafkaPredictionsTopic;
 
     @Parameter(names = {"--kafka-observations-topic"},
             description = "Kafka topic name for observations of matched rules")
-    private String kafkaObservationsTopic = "observations";
+    private String kafkaObservationsTopic;
 
     @Parameter(names = {"--sqlite-url"},
-            description = "SQLite URL from which will be rules fetched (example 'jdbc:sqlite:/var/aida/rules/rules.db')",
-            required = true)
+            description = "SQLite URL from which will be rules fetched (example 'jdbc:sqlite:/var/aida/rules/rules.db')")
     private String sqliteUrl;
+
+    @Parameter(names = {"--window-size"}, description = "Size of the Esper processing window in minutes")
+    private Integer windowSize;
+
+    @Parameter(names = {"--match-observations"}, description = "Should the component match and produce observations "
+            + "into the specified observations topic")
+    private Boolean matchObservations;
+
+    @Parameter(names = {"--current-detect-time-of-predictions"}, description = "Set current (actual) detect time for "
+            + "generated predicted alerts. If set to false the detect time of latest antecedent of the rule will be "
+            + "used.")
+    private Boolean currentDetectTimeOfPredictions;
 
     @Parameter(names = {"-h", "--help"}, help = true)
     private boolean help;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         RulesMatching rulesMatching = new RulesMatching();
         JCommander jcommander = JCommander.newBuilder()
                 .addObject(rulesMatching)
@@ -78,7 +96,49 @@ public class RulesMatching {
         rulesMatching.run();
     }
 
-    private Configuration getConfiguration() {
+    private void getConfigurationFromFile() throws IOException {
+        Ini ini = new Ini(new File(configFile));
+
+        Profile.Section kafkaSection = ini.get("kafka");
+
+        if (kafkaBrokers == null) {
+            kafkaBrokers = kafkaSection.get("kafkaBrokers");
+        }
+        if (kafkaConsumerGroupId == null) {
+            kafkaConsumerGroupId = kafkaSection.get("kafkaConsumerGroupId");
+        }
+        if (kafkaInputTopic == null) {
+            kafkaInputTopic = kafkaSection.get("kafkaInputTopic");
+        }
+        if (kafkaPredictionsTopic == null) {
+            kafkaPredictionsTopic = kafkaSection.get("kafkaPredictionsTopic");
+        }
+        if (kafkaObservationsTopic == null) {
+            kafkaObservationsTopic = kafkaSection.get("kafkaObservationsTopic");
+        }
+
+        Profile.Section dbSection = ini.get("db");
+
+        if (sqliteUrl == null) {
+            sqliteUrl = dbSection.get("sqliteUrl");
+        }
+
+        Profile.Section streamingSection = ini.get("streaming");
+
+        if (windowSize == null) {
+            windowSize = Integer.valueOf(streamingSection.get("windowSize"));
+        }
+
+        if (matchObservations == null) {
+            matchObservations = Boolean.valueOf(streamingSection.get("matchObservations"));
+        }
+
+        if (currentDetectTimeOfPredictions == null) {
+            currentDetectTimeOfPredictions = Boolean.valueOf(streamingSection.get("currentDetectTimeOfPredictions"));
+        }
+    }
+
+    private Configuration getEsperConfiguration() {
         Configuration configuration = new Configuration();
         configuration.getCommon().addEventType(Idea.class);
 
@@ -105,7 +165,9 @@ public class RulesMatching {
         return configuration;
     }
 
-    public void run() throws InterruptedException {
+    public void run() throws InterruptedException, IOException {
+
+        getConfigurationFromFile();
 
         // Obtain Rules
 
@@ -115,19 +177,14 @@ public class RulesMatching {
 
         List<EPStatementObjectModel> predictionStatements = rules.stream()
                 .map(RuleStatements::prediction).collect(Collectors.toList());
-        List<EPStatementObjectModel> observationStatements = rules.stream()
-                .map(RuleStatements::observation).collect(Collectors.toList());
 
         logger.info("Following statements for predictions will be deployed:");
         predictionStatements.stream().map(EPStatementObjectModel::toEPL).forEach(logger::info);
 
-        logger.info("Following statements for observation of rules will be deployed:");
-        observationStatements.stream().map(EPStatementObjectModel::toEPL).forEach(logger::info);
-
         // Pack statements into modules
 
         Module windowModule = EsperFacade.wrapInModule(
-                IdeaWindows.createIdeaWindow(),
+                IdeaWindows.createIdeaWindow(windowSize),
                 IdeaWindows.insertIntoIdeaWindow());
         logger.info("Following window will be used as event source:");
         windowModule.getItems().forEach(x -> logger.info(x.getModel().toEPL()));
@@ -136,20 +193,15 @@ public class RulesMatching {
         predictionsModule.setImports(
                 Collections.singleton(cz.muni.csirt.aida.matching.esper.soda.annotations.Rule.class.getName()));
 
-        Module observationsModule = EsperFacade.wrapInModule(observationStatements);
-        observationsModule.setImports(
-                Collections.singleton(cz.muni.csirt.aida.matching.esper.soda.annotations.Rule.class.getName()));
-
         // Compile rules
 
-        Configuration configuration = getConfiguration();
+        Configuration configuration = getEsperConfiguration();
         CompilerArguments compilerArgs = new CompilerArguments(configuration);
 
         EPCompiled windowCompiled = EsperFacade.compile(windowModule, compilerArgs);
         compilerArgs.getPath().add(windowCompiled);
 
         EPCompiled predictionsCompiled = EsperFacade.compile(predictionsModule, compilerArgs);
-        EPCompiled observationsCompiled = EsperFacade.compile(observationsModule, compilerArgs);
 
         // Deploy rules
 
@@ -157,18 +209,45 @@ public class RulesMatching {
 
         EsperFacade.deploy(runtime, windowCompiled);
         EPDeployment predictionsDeployment = EsperFacade.deploy(runtime, predictionsCompiled);
-        EPDeployment observationsDeployment = EsperFacade.deploy(runtime, observationsCompiled);
 
         // Attach listeners
 
-        RuleListener predictionListener = new RuleListener(kafkaBrokers, kafkaPredictionsTopic);
+        RuleListener predictionListener = new RuleListener(kafkaBrokers, kafkaPredictionsTopic, currentDetectTimeOfPredictions);
         for (EPStatement statement : predictionsDeployment.getStatements()) {
             statement.addListener(predictionListener);
         }
 
-        RuleListener observationListener = new RuleListener(kafkaBrokers, kafkaObservationsTopic);
-        for (EPStatement statement : observationsDeployment.getStatements()) {
-            statement.addListener(observationListener);
+        // Create and deploy queries for observations
+
+        if (matchObservations) {
+
+            List<EPStatementObjectModel> observationStatements = rules.stream()
+                    .map(RuleStatements::observation).collect(Collectors.toList());
+
+            logger.info("Following statements for observation of rules will be deployed:");
+            observationStatements.stream().map(EPStatementObjectModel::toEPL).forEach(logger::info);
+
+            // Pack statements into modules
+
+            Module observationsModule = EsperFacade.wrapInModule(observationStatements);
+            observationsModule.setImports(
+                    Collections.singleton(cz.muni.csirt.aida.matching.esper.soda.annotations.Rule.class.getName()));
+
+            // Compile rules
+
+            EPCompiled observationsCompiled = EsperFacade.compile(observationsModule, compilerArgs);
+
+            // Deploy rules
+
+            EPDeployment observationsDeployment = EsperFacade.deploy(runtime, observationsCompiled);
+
+            // Attach listeners
+
+            RuleListener observationListener = new RuleListener(kafkaBrokers, kafkaObservationsTopic, currentDetectTimeOfPredictions);
+            for (EPStatement statement : observationsDeployment.getStatements()) {
+                statement.addListener(observationListener);
+            }
+
         }
 
         // Run until signal is received

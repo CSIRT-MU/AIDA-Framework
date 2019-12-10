@@ -3,3 +3,4 @@
 repository_root: "{{ inventory_dir }}/../.."
 services_dir: "{{ repository_root }}/services"
 commons_dir: "{{ repository_root }}/commons"
+config_dir: "/etc/aida/"

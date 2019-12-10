@@ -8,6 +8,12 @@
     system: yes
     state: present
 
+- name: Create config file {{ feedback_config_file }}
+  template:
+    src: feedback.ini.j2
+    dest: "{{ feedback_config_file }}"
+    mode: 0644
+
 - name: Check for folder {{ feedback_dir }}
   stat:
     path: "{{ feedback_dir }}"

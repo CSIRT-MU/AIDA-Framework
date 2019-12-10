@@ -6,6 +6,7 @@
 import os
 import sys
 import argparse
+import configparser
 import ujson as json
 
 from idea import Idea
@@ -44,33 +45,12 @@ def get_args():
     Argument parser
     """
 
-    argp = argparse.ArgumentParser(
-        description="Set Kafka topic, zookeeper for input and output")
-    argp.add_argument("-i", "--input",
-        default="input",
-        dest="input",
+    argp = argparse.ArgumentParser()
+    argp.add_argument("-c", "--config",
+        default="/etc/aida/aggregation.ini",
+        dest="config",
         action="store",
-        help="set Kafka input topic name")
-    argp.add_argument("-o", "--output",
-        default="aggregated",
-        dest="output",
-        action="store",
-        help="set Kafka output topic name")
-    argp.add_argument("-zi", "--zookeeper-in",
-        default="localhost:2181",
-        dest="zookeeper_in",
-        action="store",
-        help="set zookeeper of input for Kafka")
-    argp.add_argument("--kafka-brokers-out",
-        default="localhost:9092",
-        dest="kafka_brokers_out",
-        action="store",
-        help="set Kafka brokers for output topic")
-    argp.add_argument("-of", "--offset",
-        default="offset01",
-        dest="offset",
-        action="store",
-        help="set offset of Kafka topic")
+        help="set path to configuration file")
 
     return argp.parse_args()
 
@@ -182,23 +162,27 @@ def getAccumulatorValue(accum):
 
 if __name__ == '__main__':
 
+    config = configparser.ConfigParser()
     args = get_args()
+    config.read(args.config)
 
     # Creating Kafka stuffs
-    topic_in = args.input
-    topic_out = args.output
-    zookeper_in = args.zookeeper_in
-    kafka_brokers_out = args.kafka_brokers_out
-    offset = args.offset
+    config_kafka = config['kafka']
+    topic_in = config_kafka['topic_in']
+    topic_out = config_kafka['topic_out']
+    zookeper_in = config_kafka['zookeper_in']
+    kafka_brokers_out = config_kafka['kafka_brokers_out']
+    offset = config_kafka['offset']
 
     # Windows and batch
     # Slide windows has to be the same size as bacth, otherwise applying window on first tuples is needed
-    batch_size = 60
-    slide_size = 60
-    window_duplicate = 300
-    window_continuing = 4200
-    window_overlapping = 300
-    window_nonoverlapping = 300
+    config_streaming = config['streaming']
+    batch_size = int(config_streaming['batch_size'])
+    slide_size = int(config_streaming['slide_size'])
+    window_duplicate = int(config_streaming['window_duplicate'])
+    window_continuing = int(config_streaming['window_continuing'])
+    window_overlapping = int(config_streaming['window_overlapping'])
+    window_nonoverlapping = int(config_streaming['window_nonoverlapping'])
 
     # Creating Spark/Streaming context and conf
     sc = SparkContext(appName=" ".join(sys.argv[0:]))

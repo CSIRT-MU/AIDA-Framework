@@ -1,0 +1,14 @@
+[kafka]
+kafkaBrokers = 127.0.0.1:9092
+kafkaConsumerGroupId = esper-event-matcher
+kafkaInputTopic = aggregated
+kafkaPredictionsTopic = predictions
+kafkaObservationsTopic = observations
+
+[db]
+sqliteUrl = jdbc:sqlite:{{ database_path }}
+
+[streaming]
+windowSize = 60
+matchObservations = true
+currentDetectTimeOfPredictions = true

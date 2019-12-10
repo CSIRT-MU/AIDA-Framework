@@ -7,7 +7,7 @@ After=kafka-topic@aggregated.service kafka-topic@predictions.service kafka-topic
 Type=simple
 User={{ feedback_user }}
 Group={{ feedback_user }}
-ExecStart=/usr/bin/env java -jar {{ feedback_dir }}/feedback.jar --kafka-brokers localhost:9092 --kafka-aggregates-topic aggregated --kafka-predictions-topic predictions --kafka-observations-topic observations
+ExecStart=/usr/bin/env java -jar {{ feedback_dir }}/feedback.jar --config-file {{ feedback_config_file }}
 Restart=on-failure
 SuccessExitStatus=143
 

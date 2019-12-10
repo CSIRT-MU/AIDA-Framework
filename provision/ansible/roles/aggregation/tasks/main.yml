@@ -17,6 +17,12 @@
     requirements: "{{ aggregation_install_dir }}/requirements.txt"
     executable: pip3
 
+- name: Create config file {{ aggregation_config_file }}
+  template:
+    src: aggregation.ini.j2
+    dest: "{{ aggregation_config_file }}"
+    mode: 0644
+
 - name: Create systemd unit file for Aggregation service
   template:
     src: aggregation.service.j2

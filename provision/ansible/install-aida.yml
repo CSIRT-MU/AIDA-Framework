@@ -12,6 +12,12 @@
       alternatives:
         name: java
         path: /usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/bin/java
+    - name: Create config directory {{ config_dir }}
+      file:
+        path: "{{ config_dir }}"
+        state: directory
+        mode: 0777
+        recurse: yes
   roles:
     - name: aida-input
     - name: sanitization

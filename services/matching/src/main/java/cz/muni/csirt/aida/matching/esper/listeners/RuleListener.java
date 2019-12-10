@@ -38,9 +38,11 @@ public class RuleListener implements UpdateListener {
 
     private final Producer<Long, Idea> kafkaProducer;
     private final String outputKafkaTopic;
+    private final boolean currentDetectTimeOfPredictions;
 
-    public RuleListener(String kafkaBroker, String kafkaTopic) {
+    public RuleListener(String kafkaBroker, String kafkaTopic, boolean currentDetectTimeOfPredictions) {
         outputKafkaTopic = kafkaTopic;
+        this.currentDetectTimeOfPredictions = currentDetectTimeOfPredictions;
 
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBroker);
@@ -100,6 +102,10 @@ public class RuleListener implements UpdateListener {
                         predicted.setNode(Collections.singletonList(
                                 new Node(event.getNodeName(), null, null, null, null)
                         ));
+
+                        if (!currentDetectTimeOfPredictions) {
+                            predicted.setDetectTime(getLatestAntecedent(rule, basedOn));
+                        }
 
                         sendToKafka(predicted);
                     }
@@ -199,6 +205,14 @@ public class RuleListener implements UpdateListener {
                 .get().getDetectTime();
 
         return dateDiff(latestAntecedent, earliestConsequent, TimeUnit.SECONDS);
+    }
+
+    private static Date getLatestAntecedent(Rule rule, List<Idea> basedOn) {
+        List<Idea> antecedents = basedOn.subList(0, rule.getAntecedent().size());
+
+        return antecedents.stream()
+                .max(Comparator.comparing(Idea::getDetectTime))
+                .get().getDetectTime();
     }
 
     private static long dateDiff(Date date1, Date date2, TimeUnit timeUnit) {

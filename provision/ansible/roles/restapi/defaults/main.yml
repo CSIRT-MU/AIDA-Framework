@@ -4,4 +4,3 @@ restapi_repository_location: "{{ services_dir }}/restapi"
 restapi_dir: /var/www/restapi
 venv_dir: "{{ restapi_dir }}/venv"
 restapiaida_dir: "{{ restapi_dir }}/restapiaida"
-config_dir_path: /etc/aida/
