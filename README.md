@@ -93,6 +93,12 @@ Martin Husák and Jaroslav Kašpar. 2019. "AIDA Framework: Real-Time Correlation
 
 If you are interested in our work, you might be interested in our papers related to the topic:
 
+[Predictive methods in cyber defense: Current experience and research challenges](https://doi.org/10.1016/j.future.2020.10.006)
+
+[Dataset of intrusion detection alerts from a sharing platform](https://doi.org/10.1016/j.dib.2020.106530)
+
+[Predictive Cyber Situational Awareness and Personalized Blacklisting: A Sequential Rule Mining Approach](https://doi.org/10.1145/3386250)
+
 [Survey of Attack Projection, Prediction, and Forecasting in Cyber Security](http://dx.doi.org/10.1109/COMST.2018.2871866)
 
 [Towards Predicting Cyber Attacks Using Information Exchange and Data Mining](http://dx.doi.org/10.1109/IWCMC.2018.8450512)
