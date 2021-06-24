@@ -1,6 +1,7 @@
 ---
-- name: Install Apache Kafka
-  include_tasks: install.yml
+- block:
+  - name: Install Apache Kafka
+    include_tasks: install.yml
   become: yes
 
 - name: Start Kafka

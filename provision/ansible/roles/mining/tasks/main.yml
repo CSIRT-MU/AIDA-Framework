@@ -1,4 +1,5 @@
 ---
-- name: Install Mining binary
-  include_tasks: install.yml
+- block:
+  - name: Install Mining binary
+    include_tasks: install.yml
   become: yes
