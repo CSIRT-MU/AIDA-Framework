@@ -127,7 +127,7 @@ public class RuleListener implements UpdateListener {
                     observation.setAdditionalProperty("mitigationTime", getMitigationTime(rule, basedOn));
 
                     if (!currentDetectTimeOfPredictions) {
-                        observation.setDetectTime(getMitigationTime(rule, basedOn));
+                        observation.setDetectTime(getEarliestConsequent(rule, basedOn));
                     }
                     
                     sendToKafka(observation);
@@ -209,6 +209,14 @@ public class RuleListener implements UpdateListener {
                 .get().getDetectTime();
 
         return dateDiff(latestAntecedent, earliestConsequent, TimeUnit.SECONDS);
+    }
+    
+    private static long getEarliestConsequent(Rule rule, List<Idea> basedOn) {
+        List<Idea> consequences = basedOn.subList(rule.getAntecedent().size(), basedOn.size());
+
+        return consequences.stream()
+                .min(Comparator.comparing(Idea::getDetectTime))
+                .get().getDetectTime();
     }
 
     private static Date getLatestAntecedent(Rule rule, List<Idea> basedOn) {
