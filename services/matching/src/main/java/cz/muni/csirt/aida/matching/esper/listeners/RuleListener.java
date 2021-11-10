@@ -127,7 +127,7 @@ public class RuleListener implements UpdateListener {
                     observation.setAdditionalProperty("mitigationTime", getMitigationTime(rule, basedOn));
 
                     if (!currentDetectTimeOfPredictions) {
-                        observation.setDetectTime(getLatestAntecedent(rule, basedOn));
+                        observation.setDetectTime(getMitigationTime(rule, basedOn));
                     }
                     
                     sendToKafka(observation);
