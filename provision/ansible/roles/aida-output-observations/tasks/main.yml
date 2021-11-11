@@ -1,0 +1,24 @@
+---
+
+- name: Create observations file if not exists
+  copy:
+    content: ""
+    dest: "{{ observations_file_path }}"
+    force: no
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_user }}"
+    mode: 0666
+
+- name: Create systemd unit file for aida-output-observations service
+  template:
+    src: aida-output-observations.service.j2
+    dest: /etc/systemd/system/aida-output-observations.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Start aida-output-observations service
+  service:
+    name: aida-output-observations
+    state: started
+    enabled: yes

@@ -9,16 +9,16 @@
     group: "{{ kafka_user }}"
     mode: 0666
 
-- name: Create systemd unit file for aida-output service
+- name: Create systemd unit file for aida-output-predictions service
   template:
-    src: aida-output.service.j2
-    dest: /etc/systemd/system/aida-output.service
+    src: aida-output-predictions.service.j2
+    dest: /etc/systemd/system/aida-output-predictions.service
     mode: 0644
     owner: root
     group: root
 
-- name: Start aida-output service
+- name: Start aida-output-predictions service
   service:
-    name: aida-output
+    name: aida-output-predictions
     state: started
     enabled: yes

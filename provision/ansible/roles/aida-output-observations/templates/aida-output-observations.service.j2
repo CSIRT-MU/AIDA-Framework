@@ -1,0 +1,15 @@
+[Unit]
+Description=AIDA output service - saving observed messages from Kafka into file {{ observations_file_path }}
+Requires=kafka-topic@observations.service
+After=network-online.target kafka-topic@observations.service
+
+[Service]
+Type=simple
+User={{ kafka_user }}
+Group={{ kafka_user }}
+ExecStart=/bin/sh -c "{{ kafka_dir }}/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic observations >> {{ observations_file_path }}"
+Restart=on-failure
+SuccessExitStatus=130
+
+[Install]
+WantedBy=multi-user.target

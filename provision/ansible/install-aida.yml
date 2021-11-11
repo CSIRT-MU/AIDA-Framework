@@ -24,6 +24,7 @@
     - name: aggregation
     - name: mining
     - name: matching
-    - name: aida-output
+    - name: aida-output-predictions
+    - name: aida-output-observations
     - name: restapi
     - name: feedback
