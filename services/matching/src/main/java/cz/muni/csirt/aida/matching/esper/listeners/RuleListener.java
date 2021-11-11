@@ -211,7 +211,7 @@ public class RuleListener implements UpdateListener {
         return dateDiff(latestAntecedent, earliestConsequent, TimeUnit.SECONDS);
     }
     
-    private static long getEarliestConsequent(Rule rule, List<Idea> basedOn) {
+    private static Date getEarliestConsequent(Rule rule, List<Idea> basedOn) {
         List<Idea> consequences = basedOn.subList(rule.getAntecedent().size(), basedOn.size());
 
         return consequences.stream()
